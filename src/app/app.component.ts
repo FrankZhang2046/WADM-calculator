@@ -33,6 +33,7 @@ const ELEMENT_DATA: any[] = [
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  public dragInProgress: boolean = false;
   testMethod($event: Event, payload: any) {
     console.log(`test method called`, payload);
   }
@@ -51,7 +52,7 @@ export class AppComponent {
   dataSource = new MatTableDataSource(ELEMENT_DATA);
   @ViewChild(MatSort) sort!: MatSort;
 
-  previousIndex!: number;
+  previousIndex!: number | undefined;
 
   ngOnInit() {
     this.setDisplayedColumns();
@@ -74,9 +75,10 @@ export class AppComponent {
   // dropListDropped(event: CdkDropList, index: number) {
   dropListDropped(event: any, index: number) {
     console.log(`event is:`, event);
-    if (event) {
+    if (event && this.previousIndex !== undefined) {
       moveItemInArray(this.columns, this.previousIndex, index);
       this.setDisplayedColumns();
+      this.previousIndex = undefined;
     }
   }
 }
