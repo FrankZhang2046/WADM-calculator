@@ -33,6 +33,9 @@ const ELEMENT_DATA: any[] = [
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  testMethod($event: Event, payload: any) {
+    console.log(`test method called`, payload);
+  }
   dragEnded($event: CdkDragEnd<any>) {
     console.log(`dragEnded event: `, $event);
   }
@@ -69,11 +72,11 @@ export class AppComponent {
   }
 
   // dropListDropped(event: CdkDropList, index: number) {
-  dropListDropped(event: any) {
+  dropListDropped(event: any, index: number) {
     console.log(`event is:`, event);
     if (event) {
-      moveItemInArray(this.columns, event.previousIndex, event.currentIndex);
-      // this.setDisplayedColumns();
+      moveItemInArray(this.columns, this.previousIndex, index);
+      this.setDisplayedColumns();
     }
   }
 }
