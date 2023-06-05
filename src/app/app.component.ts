@@ -1,5 +1,6 @@
 import {
   CdkDragDrop,
+  CdkDragEnd,
   CdkDragStart,
   CdkDropList,
   moveItemInArray,
@@ -32,6 +33,9 @@ const ELEMENT_DATA: any[] = [
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  dragEnded($event: CdkDragEnd<any>) {
+    console.log(`dragEnded event: `, $event);
+  }
   title = 'Material Table column drag and drop';
 
   columns: any[] = [
