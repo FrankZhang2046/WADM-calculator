@@ -1,10 +1,12 @@
 <table>
     <tbody>
         <tr *ngFor="let row of sampleData">
-            <th>{{row.fieldName}}</th>
-            <td class="text-blue-600" *ngFor="let item of row.fieldValues">
+            <th class="text-left">{{row.fieldName}}</th>
+            <!-- <td class="text-blue-600 text-center w-20" *ngFor="let item of row.fieldValues">
                 {{item}}
-            </td>
+            </td> -->
+            <input class="border-solid" *ngFor="let item of row.fieldValues" mat-input title="fuck" label="what-ever"
+                type="number">
         </tr>
     </tbody>
 </table>
