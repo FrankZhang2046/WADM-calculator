@@ -6,7 +6,11 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import {
+  MatTable,
+  MatTableDataSource,
+  MatTableModule,
+} from '@angular/material/table';
 import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -33,6 +37,32 @@ const ELEMENT_DATA: any[] = [
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  @ViewChild(MatTable) public table!: MatTable<any>;
+  rowDragStartedHandler($event: CdkDragStart<any>, index: number) {
+    console.log(`row dragStarted event, index is: `, index);
+    this.previousRowIndex = index;
+  }
+  rowDropMethod($event: any, index: number) {
+    console.log(`dropMethod event: `, index);
+    if ($event && this.previousRowIndex !== undefined) {
+      moveItemInArray(ELEMENT_DATA, this.previousRowIndex, index);
+      console.log(ELEMENT_DATA);
+      this.table.renderRows();
+      this.previousRowIndex = undefined;
+    }
+  }
+
+  // generate a list of self-help book titles
+  public bookTitles: string[] = [
+    'Think and Grow Rich',
+    'Psycho Cybernetics',
+    'The Power of Habit',
+    'The 4 Hour Work Week',
+    'The Lean Startup',
+    'The Big Short',
+    'The Road to React',
+    'The Pragmatic Programmer',
+  ];
   public dragInProgress: boolean = false;
   testMethod($event: Event, payload: any) {
     console.log(`test method called`, payload);
@@ -52,7 +82,8 @@ export class AppComponent {
   dataSource = new MatTableDataSource(ELEMENT_DATA);
   @ViewChild(MatSort) sort!: MatSort;
 
-  previousIndex!: number | undefined;
+  previousColumnIndex!: number | undefined;
+  previousRowIndex!: number | undefined;
 
   ngOnInit() {
     this.setDisplayedColumns();
@@ -69,16 +100,16 @@ export class AppComponent {
   dragStarted(event: CdkDragStart, index: number) {
     console.log(`dragStarted event: `, event, index);
 
-    this.previousIndex = index;
+    this.previousColumnIndex = index;
   }
 
   // dropListDropped(event: CdkDropList, index: number) {
   dropListDropped(event: any, index: number) {
     console.log(`event is:`, event);
-    if (event && this.previousIndex !== undefined) {
-      moveItemInArray(this.columns, this.previousIndex, index);
+    if (event && this.previousColumnIndex !== undefined) {
+      moveItemInArray(this.columns, this.previousColumnIndex, index);
       this.setDisplayedColumns();
-      this.previousIndex = undefined;
+      this.previousColumnIndex = undefined;
     }
   }
 }
