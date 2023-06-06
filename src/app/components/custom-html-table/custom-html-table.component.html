@@ -1,1 +1,10 @@
-<p>custom-html-table works!</p>
+<table>
+    <tbody>
+        <tr *ngFor="let row of sampleData">
+            <th>{{row.fieldName}}</th>
+            <td *ngFor="let item of row.fieldValues">
+                {{item}}
+            </td>
+        </tr>
+    </tbody>
+</table>

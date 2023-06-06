@@ -10,8 +10,17 @@ import { CommonModule } from '@angular/common';
 })
 export class CustomHtmlTableComponent {
   public sampleData = [
-    { taste: [{ weight: 10 }, { pizza: 8 }, { 'food box': 6 }] },
-    { healthiness: [{ weight: 8 }, { pizza: 6 }, { 'food box': 9 }] },
-    { cost: [{ weight: 6 }, { pizza: 7 }, { 'food box': 10 }] },
+    {
+      fieldName: 'Taste',
+      fieldValues: [10, 8, 6],
+    },
+    {
+      fieldName: 'Healthiness',
+      fieldValues: [9, 6, 7],
+    },
+    {
+      fieldName: 'Cost',
+      fieldValues: [10, 7, 9],
+    },
   ];
 }
