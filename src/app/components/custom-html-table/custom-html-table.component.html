@@ -1,12 +1,29 @@
 <table>
+    <thead>
+        <tr>
+            <th colspan="2"></th>
+            <th colspan="2">{{"options" | titlecase}}</th>
+        </tr>
+        <tr>
+            <th *ngFor="let column of columnData">{{column | titlecase }}</th>
+        </tr>
+    </thead>
     <tbody>
-        <tr *ngFor="let row of sampleData">
+        <tr *ngFor="let row of tableData">
             <th class="text-left">{{row.fieldName}}</th>
-            <!-- <td class="text-blue-600 text-center w-20" *ngFor="let item of row.fieldValues">
+            <td class="text-blue-600 text-center w-20" *ngFor="let item of row.fieldValues">
                 {{item}}
-            </td> -->
-            <input class="border-solid" *ngFor="let item of row.fieldValues" mat-input title="fuck" label="what-ever"
-                type="number">
+            </td>
+            <!-- <input class="border-solid" *ngFor="let item of row.fieldValues" mat-input title="fuck" label="what-ever"
+                type="number"> -->
         </tr>
     </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="2">{{"results" | titlecase}}</th>
+            <th>777</th>
+            <th>888</th>
+        </tr>
+    </tfoot>
 </table>
+<button mat-button>{{"calculate" | titlecase}}</button>

@@ -10,7 +10,8 @@ import { MatInputModule } from '@angular/material/input';
   styleUrls: ['./custom-html-table.component.scss'],
 })
 export class CustomHtmlTableComponent {
-  public sampleData = [
+  public columnData = ['criteria', 'weight', 'pizza', 'food box'];
+  public tableData = [
     {
       fieldName: 'Taste',
       fieldValues: [10, 8, 6],
