@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-custom-html-table',
   standalone: true,
-  imports: [CommonModule, MatInputModule],
+  imports: [CommonModule, MatInputModule, MatButtonModule],
   templateUrl: './custom-html-table.component.html',
   styleUrls: ['./custom-html-table.component.scss'],
 })
