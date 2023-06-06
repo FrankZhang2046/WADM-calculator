@@ -5,8 +5,11 @@
                 <th colspan="2"></th>
                 <th [colSpan]="3">{{"options" | titlecase}}</th>
             </tr>
-            <tr>
-                <th *ngFor="let column of columnData">{{column | titlecase }}</th>
+            <tr cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="testMethod($event)">
+                <th>{{"criteria" | titlecase}}</th>
+                <th cdkDrag cdkDragLockAxis="x" [cdkDragDisabled]="column==='weight'" *ngFor="let column of columnData">
+                    {{column | titlecase
+                    }}</th>
             </tr>
         </thead>
         <tbody>
