@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,12 +26,33 @@ import {
   templateUrl: './custom-html-table.component.html',
   styleUrls: ['./custom-html-table.component.scss'],
 })
-export class CustomHtmlTableComponent {
+export class CustomHtmlTableComponent implements OnInit {
   public displayResults: boolean = false;
   public columnDropMethod($event: CdkDragDrop<string[]>) {
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
     this.swapColumnsForTableData($event.previousIndex, $event.currentIndex);
+  }
+
+  public ngOnInit(): void {
+    this.seedTable();
+  }
+
+  /*
+    when the table is empty, populate the table with some startup data
+  */
+  private seedTable() {
+    if (this.columnData.length === 0) {
+      this.columnData.push({ columnName: 'Option 1', result: null });
+      this.columnData.push({ columnName: 'Option 2', result: null });
+    }
+    if (this.tableData.length === 0) {
+      this.tableData.push({
+        fieldName: 'Criterion 1',
+        fieldValues: [null, null],
+        fieldWeight: null,
+      });
+    }
   }
 
   // row drop method shifts the order of the tableData array around
@@ -50,29 +71,9 @@ export class CustomHtmlTableComponent {
     });
   }
 
-  public columnData: ColumnHeaderData[] = [
-    { columnName: 'one', result: null },
-    { columnName: 'two', result: null },
-    { columnName: 'three', result: null },
-  ];
-  public tableData: TableRowData[] = [
-    {
-      fieldName: 'Taste',
-      fieldValues: [1, 2, 3],
-      fieldWeight: 10,
-    },
-    {
-      fieldName: 'Healthiness',
-      fieldValues: [1, 2, 3],
-      fieldWeight: 9,
-    },
-    {
-      fieldName: 'Cost',
-      fieldValues: [1, 2, 3],
-      fieldWeight: 10,
-    },
-  ];
-  public resultsData: number[] = [];
+  public columnData: ColumnHeaderData[] = [];
+  public tableData: TableRowData[] = [];
+
   public addCandidate(): void {
     this.columnData.push({ columnName: 'new', result: null });
     this.tableData.forEach((tableData) => {
