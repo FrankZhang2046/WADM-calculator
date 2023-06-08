@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import {Component} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
 import {
   CdkDragDrop,
   DragDropModule,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
+import TableRowData from "../../models/table-row-data.model";
 
 @Component({
   selector: 'app-custom-html-table',
@@ -16,16 +17,27 @@ import {
   styleUrls: ['./custom-html-table.component.scss'],
 })
 export class CustomHtmlTableComponent {
-  testMethod($event: any) {
+  columnDropMethod($event: any) {
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
-
-    console.log($event);
+    this.swapColumnsForTableData($event.previousIndex, $event.currentIndex);
   }
+
   public previousColIndex!: number | undefined;
+
   dragStartedMethod(index: number) {
     this.previousColIndex = index;
   }
+
+  /*
+    after column name swap, swap the indices for each table data's fieldValues array
+   */
+  public swapColumnsForTableData(fromIndex: number, toIndex: number) {
+    this.tableData.forEach((tableData) => {
+      moveItemInArray(tableData.fieldValues, fromIndex, toIndex);
+    });
+  }
+
   columnDroppedMethod(index: number) {
     if (this.previousColIndex) {
       moveItemInArray(this.columnData, this.previousColIndex, index);
@@ -33,19 +45,22 @@ export class CustomHtmlTableComponent {
       this.previousColIndex = undefined;
     }
   }
-  public columnData = ['weight', 'one', 'two', 'three'];
-  public tableData = [
+
+  public columnData = ['one', 'two', 'three'];
+  // declare a new variable to hold the weight data
+  public weightData: number[] = [10, 9, 10];
+  public tableData: TableRowData[] = [
     {
       fieldName: 'Taste',
-      fieldValues: [10, 8, 6, 4],
+      fieldValues: [1, 2, 3],
     },
     {
       fieldName: 'Healthiness',
-      fieldValues: [9, 6, 7, 4],
+      fieldValues: [1, 2, 3],
     },
     {
       fieldName: 'Cost',
-      fieldValues: [10, 7, 9, 4],
+      fieldValues: [1, 2, 3],
     },
   ];
   public resultsData: number[] = [];
