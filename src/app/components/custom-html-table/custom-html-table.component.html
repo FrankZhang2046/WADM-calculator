@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th colspan="2"></th>
-        <th [colSpan]="3">{{"options" | titlecase}}</th>
+        <th [colSpan]="columnData.length">{{"options" | titlecase}}</th>
       </tr>
       <tr cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="columnDropMethod($event)">
         <th>{{"criteria" | titlecase}}</th>
@@ -13,6 +13,7 @@
             {{column.columnName| titlecase
             }}</th>
         </ng-container>
+        <button mat-flat-button color="primary" (click)="addCandidate()">add candidate</button>
       </tr>
     </thead>
     <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">

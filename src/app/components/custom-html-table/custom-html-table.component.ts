@@ -65,4 +65,10 @@ export class CustomHtmlTableComponent {
     },
   ];
   public resultsData: number[] = [];
+  public addCandidate(): void {
+    this.columnData.push({ columnName: 'new', result: null });
+    this.tableData.forEach((tableData) => {
+      tableData.fieldValues.push(null);
+    });
+  }
 }
