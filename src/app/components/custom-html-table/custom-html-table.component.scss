@@ -4,6 +4,16 @@ input {
 
 th.add-criterion{
     border: none;
+    .button-container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    div {
+        min-width: 400px;
+        width: 100%;
+    }
     
 
 }
