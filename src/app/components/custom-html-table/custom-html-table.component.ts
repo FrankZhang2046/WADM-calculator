@@ -1,13 +1,16 @@
-import {Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import {
   CdkDragDrop,
   DragDropModule,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import TableRowData from "../../models/table-row-data.model";
+import {
+  ColumnHeaderData,
+  TableRowData,
+} from '../../models/table-row-data.model';
 
 @Component({
   selector: 'app-custom-html-table',
@@ -17,17 +20,18 @@ import TableRowData from "../../models/table-row-data.model";
   styleUrls: ['./custom-html-table.component.scss'],
 })
 export class CustomHtmlTableComponent {
-  columnDropMethod($event: any) {
+  public columnDropMethod($event: CdkDragDrop<string[]>) {
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
     this.swapColumnsForTableData($event.previousIndex, $event.currentIndex);
   }
 
-  public previousColIndex!: number | undefined;
-
-  dragStartedMethod(index: number) {
-    this.previousColIndex = index;
+  // row drop method shifts the order of the tableData array around
+  public rowDropMethod($event: CdkDragDrop<TableRowData[]>) {
+    moveItemInArray(this.tableData, $event.previousIndex, $event.currentIndex);
   }
+
+  public previousColIndex!: number | undefined;
 
   /*
     after column name swap, swap the indices for each table data's fieldValues array
@@ -38,29 +42,26 @@ export class CustomHtmlTableComponent {
     });
   }
 
-  columnDroppedMethod(index: number) {
-    if (this.previousColIndex) {
-      moveItemInArray(this.columnData, this.previousColIndex, index);
-      console.log(`updated array: `, this.columnData);
-      this.previousColIndex = undefined;
-    }
-  }
-
-  public columnData = ['one', 'two', 'three'];
-  // declare a new variable to hold the weight data
-  public weightData: number[] = [10, 9, 10];
+  public columnData: ColumnHeaderData[] = [
+    { columnName: 'one', result: null },
+    { columnName: 'two', result: null },
+    { columnName: 'three', result: null },
+  ];
   public tableData: TableRowData[] = [
     {
       fieldName: 'Taste',
       fieldValues: [1, 2, 3],
+      fieldWeight: 10,
     },
     {
       fieldName: 'Healthiness',
       fieldValues: [1, 2, 3],
+      fieldWeight: 9,
     },
     {
       fieldName: 'Cost',
       fieldValues: [1, 2, 3],
+      fieldWeight: 10,
     },
   ];
   public resultsData: number[] = [];
