@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,12 +26,33 @@ import {
   templateUrl: './custom-html-table.component.html',
   styleUrls: ['./custom-html-table.component.scss'],
 })
-export class CustomHtmlTableComponent {
+export class CustomHtmlTableComponent implements OnInit {
   public displayResults: boolean = false;
   public columnDropMethod($event: CdkDragDrop<string[]>) {
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
     this.swapColumnsForTableData($event.previousIndex, $event.currentIndex);
+  }
+
+  public ngOnInit(): void {
+    this.seedTable();
+  }
+
+  /*
+    when the table is empty, populate the table with some startup data
+  */
+  private seedTable() {
+    if (this.columnData.length === 0) {
+      this.columnData.push({ columnName: 'Option 1', result: null });
+      this.columnData.push({ columnName: 'Option 2', result: null });
+    }
+    if (this.tableData.length === 0) {
+      this.tableData.push({
+        fieldName: 'Criterion 1',
+        fieldValues: [null, null],
+        fieldWeight: null,
+      });
+    }
   }
 
   // row drop method shifts the order of the tableData array around
