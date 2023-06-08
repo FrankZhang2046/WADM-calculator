@@ -1,13 +1,13 @@
-import {Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import {
   CdkDragDrop,
   DragDropModule,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import {TableRowData} from "../../models/table-row-data.model";
+import { TableRowData } from '../../models/table-row-data.model';
 
 @Component({
   selector: 'app-custom-html-table',
@@ -17,10 +17,15 @@ import {TableRowData} from "../../models/table-row-data.model";
   styleUrls: ['./custom-html-table.component.scss'],
 })
 export class CustomHtmlTableComponent {
-  columnDropMethod($event: any) {
+  public columnDropMethod($event: CdkDragDrop<string[]>) {
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
     this.swapColumnsForTableData($event.previousIndex, $event.currentIndex);
+  }
+
+  // row drop method shifts the order of the tableData array around
+  public rowDropMethod($event: CdkDragDrop<TableRowData[]>) {
+    moveItemInArray(this.tableData, $event.previousIndex, $event.currentIndex);
   }
 
   public previousColIndex!: number | undefined;

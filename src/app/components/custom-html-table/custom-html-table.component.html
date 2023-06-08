@@ -1,38 +1,37 @@
 <div class="flex flex-col w-fit">
   <table>
     <thead>
-    <tr>
-      <th colspan="2"></th>
-      <th [colSpan]="3">{{"options" | titlecase}}</th>
-    </tr>
-    <tr cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="columnDropMethod($event)">
-      <th>{{"criteria" | titlecase}}</th>
-      <th>{{"weight" | titlecase}}</th>
-      <ng-container *ngFor="let column of columnData">
-        <th cdkDrag (mousedown)="$event.stopPropagation();" cdkDragLockAxis="x" *ngIf="column!=='weight'"
-        >
-          {{column | titlecase
-          }}</th>
-      </ng-container>
-    </tr>
+      <tr>
+        <th colspan="2"></th>
+        <th [colSpan]="3">{{"options" | titlecase}}</th>
+      </tr>
+      <tr cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="columnDropMethod($event)">
+        <th>{{"criteria" | titlecase}}</th>
+        <th>{{"weight" | titlecase}}</th>
+        <ng-container *ngFor="let column of columnData">
+          <th cdkDrag (mousedown)="$event.stopPropagation();" cdkDragLockAxis="x" *ngIf="column!=='weight'">
+            {{column | titlecase
+            }}</th>
+        </ng-container>
+      </tr>
     </thead>
-    <tbody>
-    <tr *ngFor="let row of tableData; let weightIndex = index;">
-      <th class="text-left">{{row.fieldName}}</th>
-      <td class="text-center text-blue-600">{{row.fieldWeight}}</td>
-      <td class="text-blue-600 text-center w-20" *ngFor="let item of row.fieldValues">
-        {{item}}
-      </td>
-      <!-- <input class="border-solid" *ngFor="let item of row.fieldValues" mat-input title="fuck" label="what-ever"
+    <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">
+      <tr cdkDrag *ngFor="let row of tableData; let weightIndex = index;" class="table-row">
+        <th class="text-left">{{row.fieldName}}</th>
+        <td class="text-center text-blue-600">{{row.fieldWeight}}</td>
+        <td class="text-blue-600 text-center w-20" *ngFor="let item of row.fieldValues">
+          {{item}}
+        </td>
+        <!-- <input class="border-solid" *ngFor="let item of row.fieldValues" mat-input title="fuck" label="what-ever"
       type="number"> -->
-    </tr>
+      </tr>
     </tbody>
     <tfoot>
-    <tr>
-      <th colspan="2">{{"results" | titlecase}}</th>
-      <td>777</td>
-      <td>888</td>
-    </tr>
+      <tr>
+        <th colspan="2">{{"results" | titlecase}}</th>
+        <td>777</td>
+        <td>888</td>
+      </tr>
     </tfoot>
   </table>
   <button mat-flat-button color="primary">{{"calculate" | titlecase}}</button>
