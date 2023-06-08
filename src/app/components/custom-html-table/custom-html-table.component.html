@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th colspan="2"></th>
-        <th [colSpan]="columnData.length">{{"options" | titlecase}}</th>
+        <th [colSpan]="columnData.length" class="bg-green-600">{{"options" | titlecase}}</th>
       </tr>
       <tr cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="columnDropMethod($event)">
         <th>{{"criteria" | titlecase}}</th>
