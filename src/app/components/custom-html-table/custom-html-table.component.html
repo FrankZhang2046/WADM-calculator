@@ -19,7 +19,7 @@
     <tbody>
     <tr *ngFor="let row of tableData; let weightIndex = index;">
       <th class="text-left">{{row.fieldName}}</th>
-      <td class="text-center text-blue-600">{{weightData[row.fieldName | lowercase]}}</td>
+      <td class="text-center text-blue-600">{{row.fieldWeight}}</td>
       <td class="text-blue-600 text-center w-20" *ngFor="let item of row.fieldValues">
         {{item}}
       </td>
