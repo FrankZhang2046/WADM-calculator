@@ -50,29 +50,9 @@ export class CustomHtmlTableComponent {
     });
   }
 
-  public columnData: ColumnHeaderData[] = [
-    { columnName: 'one', result: null },
-    { columnName: 'two', result: null },
-    { columnName: 'three', result: null },
-  ];
-  public tableData: TableRowData[] = [
-    {
-      fieldName: 'Taste',
-      fieldValues: [1, 2, 3],
-      fieldWeight: 10,
-    },
-    {
-      fieldName: 'Healthiness',
-      fieldValues: [1, 2, 3],
-      fieldWeight: 9,
-    },
-    {
-      fieldName: 'Cost',
-      fieldValues: [1, 2, 3],
-      fieldWeight: 10,
-    },
-  ];
-  public resultsData: number[] = [];
+  public columnData: ColumnHeaderData[] = [];
+  public tableData: TableRowData[] = [];
+
   public addCandidate(): void {
     this.columnData.push({ columnName: 'new', result: null });
     this.tableData.forEach((tableData) => {
