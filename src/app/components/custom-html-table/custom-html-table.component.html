@@ -16,7 +16,6 @@
         <button class="opacity-40 hover:opacity-100" mat-icon-button color="primary" (click)="addCandidate()">
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-flat-button class="add-row-btn" (click)="addRow()">add row</button>
       </tr>
     </thead>
     <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">
@@ -28,6 +27,15 @@
         </td>
         <!-- <input class="border-solid" *ngFor="let item of row.fieldValues" mat-input title="fuck" label="what-ever"
       type="number"> -->
+      </tr>
+      <tr>
+        <th class="add-criterion" [colSpan]="columnData.length + 2">
+          <button (click)="addRow()" class="opacity-40 hover:opacity-100" mat-flat-button color="primary" colspan="5">
+            <mat-icon>add</mat-icon>
+            {{"add criterion" | titlecase}}
+          </button>
+
+        </th>
       </tr>
     </tbody>
     <tfoot>
