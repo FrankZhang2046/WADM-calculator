@@ -14,6 +14,7 @@
             }}</th>
         </ng-container>
         <button mat-flat-button color="primary" (click)="addCandidate()">add candidate</button>
+        <button mat-flat-button class="add-row-btn" (click)="addRow()">add row</button>
       </tr>
     </thead>
     <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">

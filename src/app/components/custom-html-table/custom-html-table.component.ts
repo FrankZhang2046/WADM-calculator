@@ -71,4 +71,11 @@ export class CustomHtmlTableComponent {
       tableData.fieldValues.push(null);
     });
   }
+  public addRow(): void {
+    this.tableData.push({
+      fieldName: 'new',
+      fieldValues: Array(this.columnData.length).fill(null),
+      fieldWeight: null,
+    });
+  }
 }
