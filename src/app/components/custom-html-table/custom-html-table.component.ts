@@ -7,7 +7,7 @@ import {
   DragDropModule,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import TableRowData from "../../models/table-row-data.model";
+import {CriterionWeight, TableRowData} from "../../models/table-row-data.model";
 
 @Component({
   selector: 'app-custom-html-table',
@@ -47,8 +47,18 @@ export class CustomHtmlTableComponent {
   }
 
   public columnData = ['one', 'two', 'three'];
-  // declare a new variable to hold the weight data
-  public weightData: number[] = [10, 9, 10];
+  // maybe this data structure could be a dictionary
+  /*
+      interface CriterionWeight {
+        fieldName: string;
+        fieldWeight: number;
+      }
+   */
+  public weightData: CriterionWeight = {
+    taste: 10,
+    healthiness: 9,
+    cost: 10,
+  }
   public tableData: TableRowData[] = [
     {
       fieldName: 'Taste',
