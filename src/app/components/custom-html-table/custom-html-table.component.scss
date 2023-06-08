@@ -2,6 +2,22 @@ input {
     border: solid 1px grey;
 }
 
+th.add-criterion{
+    border: none;
+    .button-container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    div {
+        min-width: 400px;
+        width: 100%;
+    }
+    
+
+}
+
 td, th {
     border: 1px solid #ddd;
     padding: 8px;
@@ -13,4 +29,8 @@ td, th {
 .table-row {
     background-color: white;
     width: fit-content;
+}
+
+.add-row-btn {
+    background-color: green !important;
 }

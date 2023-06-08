@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th colspan="2"></th>
-        <th [colSpan]="3">{{"options" | titlecase}}</th>
+        <th [colSpan]="columnData.length" class="bg-green-600">{{"options" | titlecase}}</th>
       </tr>
       <tr cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="columnDropMethod($event)">
         <th>{{"criteria" | titlecase}}</th>
@@ -13,6 +13,9 @@
             {{column.columnName| titlecase
             }}</th>
         </ng-container>
+        <button class="opacity-40 hover:opacity-100" mat-icon-button color="primary" (click)="addCandidate()">
+          <mat-icon>add</mat-icon>
+        </button>
       </tr>
     </thead>
     <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">
@@ -25,14 +28,27 @@
         <!-- <input class="border-solid" *ngFor="let item of row.fieldValues" mat-input title="fuck" label="what-ever"
       type="number"> -->
       </tr>
-    </tbody>
-    <tfoot>
-      <tr>
+
+      <tr *ngIf="displayResults">
         <th colspan="2">{{"results" | titlecase}}</th>
         <td>777</td>
         <td>888</td>
       </tr>
+      <tr>
+        <th class="add-criterion" [colSpan]="columnData.length + 2">
+          <div class="button-container">
+            <button (click)="addRow()" mat-flat-button color="white" class="opacity-40 hover:opacity-100">
+              <mat-icon>add</mat-icon>
+              {{"add criterion" | titlecase}}
+            </button>
+            <button class="ml-4" mat-mini-fab color="primary" (click)="displayResults=true">
+              <mat-icon>calculate</mat-icon>
+            </button>
+          </div>
+        </th>
+      </tr>
+    </tbody>
+    <tfoot>
     </tfoot>
   </table>
-  <button mat-flat-button color="primary">{{"calculate" | titlecase}}</button>
 </div>

@@ -1,7 +1,8 @@
 export interface TableRowData {
   fieldName: string;
-  fieldValues: number[];
-  fieldWeight: number;
+  // fieldValues is an array consisting of numbers, or null values
+  fieldValues: (number | null)[];
+  fieldWeight: number | null;
 }
 
 export interface ColumnHeaderData {
