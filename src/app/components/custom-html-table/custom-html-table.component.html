@@ -9,8 +9,8 @@
         <th>{{"criteria" | titlecase}}</th>
         <th>{{"weight" | titlecase}}</th>
         <ng-container *ngFor="let column of columnData">
-          <th cdkDrag (mousedown)="$event.stopPropagation();" cdkDragLockAxis="x" *ngIf="column!=='weight'">
-            {{column | titlecase
+          <th class="draggable-cell" cdkDrag (mousedown)="$event.stopPropagation();" cdkDragLockAxis="x">
+            {{column.columnName| titlecase
             }}</th>
         </ng-container>
       </tr>

@@ -7,7 +7,10 @@ import {
   DragDropModule,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
-import { TableRowData } from '../../models/table-row-data.model';
+import {
+  ColumnHeaderData,
+  TableRowData,
+} from '../../models/table-row-data.model';
 
 @Component({
   selector: 'app-custom-html-table',
@@ -30,10 +33,6 @@ export class CustomHtmlTableComponent {
 
   public previousColIndex!: number | undefined;
 
-  dragStartedMethod(index: number) {
-    this.previousColIndex = index;
-  }
-
   /*
     after column name swap, swap the indices for each table data's fieldValues array
    */
@@ -43,15 +42,11 @@ export class CustomHtmlTableComponent {
     });
   }
 
-  columnDroppedMethod(index: number) {
-    if (this.previousColIndex) {
-      moveItemInArray(this.columnData, this.previousColIndex, index);
-      console.log(`updated array: `, this.columnData);
-      this.previousColIndex = undefined;
-    }
-  }
-
-  public columnData = ['one', 'two', 'three'];
+  public columnData: ColumnHeaderData[] = [
+    { columnName: 'one', result: null },
+    { columnName: 'two', result: null },
+    { columnName: 'three', result: null },
+  ];
   public tableData: TableRowData[] = [
     {
       fieldName: 'Taste',
