@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import {
   CdkDragDrop,
   DragDropModule,
@@ -15,11 +16,18 @@ import {
 @Component({
   selector: 'app-custom-html-table',
   standalone: true,
-  imports: [CommonModule, MatInputModule, MatButtonModule, DragDropModule],
+  imports: [
+    CommonModule,
+    MatInputModule,
+    MatButtonModule,
+    DragDropModule,
+    MatIconModule,
+  ],
   templateUrl: './custom-html-table.component.html',
   styleUrls: ['./custom-html-table.component.scss'],
 })
 export class CustomHtmlTableComponent {
+  public displayResults: boolean = false;
   public columnDropMethod($event: CdkDragDrop<string[]>) {
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);

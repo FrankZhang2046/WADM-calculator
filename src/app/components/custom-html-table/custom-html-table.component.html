@@ -13,7 +13,9 @@
             {{column.columnName| titlecase
             }}</th>
         </ng-container>
-        <button mat-flat-button color="primary" (click)="addCandidate()">add candidate</button>
+        <button class="opacity-40 hover:opacity-100" mat-icon-button color="primary" (click)="addCandidate()">
+          <mat-icon>add</mat-icon>
+        </button>
         <button mat-flat-button class="add-row-btn" (click)="addRow()">add row</button>
       </tr>
     </thead>
@@ -29,12 +31,13 @@
       </tr>
     </tbody>
     <tfoot>
-      <tr>
+      <tr *ngIf="displayResults">
         <th colspan="2">{{"results" | titlecase}}</th>
         <td>777</td>
         <td>888</td>
       </tr>
     </tfoot>
   </table>
-  <button mat-flat-button color="primary">{{"calculate" | titlecase}}</button>
+  <button class="w-60 mt-6" mat-flat-button color="primary" (click)="displayResults=true">{{"calculate" |
+    titlecase}}</button>
 </div>
