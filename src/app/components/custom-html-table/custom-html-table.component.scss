@@ -2,7 +2,7 @@ input {
     border: solid 1px grey;
 }
 
-th.add-criterion{
+th.add-criterion {
     border: none;
     .button-container {
         width: 100%;
@@ -14,11 +14,10 @@ th.add-criterion{
         min-width: 400px;
         width: 100%;
     }
-    
-
 }
 
-td, th {
+td,
+th {
     border: 1px solid #ddd;
     padding: 8px;
 }
