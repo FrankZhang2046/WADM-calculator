@@ -1,21 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { DraggableTableComponent } from './draggable-table.component';
+import { DraggableTableComponent } from "./draggable-table.component";
 
-describe('DraggableTableComponent', () => {
-  let component: DraggableTableComponent;
-  let fixture: ComponentFixture<DraggableTableComponent>;
+describe("DraggableTableComponent", () => {
+    let component: DraggableTableComponent;
+    let fixture: ComponentFixture<DraggableTableComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [DraggableTableComponent]
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [DraggableTableComponent],
+        });
+        fixture = TestBed.createComponent(DraggableTableComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
-    fixture = TestBed.createComponent(DraggableTableComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it("should create", () => {
+        expect(component).toBeTruthy();
+    });
 });

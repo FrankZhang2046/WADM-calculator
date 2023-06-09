@@ -1,33 +1,33 @@
 <mat-table
-  #table
-  [dataSource]="dataSource"
-  class="mat-elevation-z8"
-  cdkDropListGroup
+    #table
+    [dataSource]="dataSource"
+    class="mat-elevation-z8"
+    cdkDropListGroup
 >
-  <ng-container
-    *ngFor="let column of columns; let i = index"
-    [matColumnDef]="column.field"
-  >
-    <div cdkDropList cdkDropListOrientation="horizontal">
-      <mat-header-cell
-        (mouseup)="dropListDropped($event, i)"
-        *matHeaderCellDef
-        cdkDrag
-        cdkDragLockAxis="x"
-        (cdkDragStarted)="dragStarted($event, i)"
-      >
-        {{ column.field }}
-      </mat-header-cell>
+    <ng-container
+        *ngFor="let column of columns; let i = index"
+        [matColumnDef]="column.field"
+    >
+        <div cdkDropList cdkDropListOrientation="horizontal">
+            <mat-header-cell
+                (mouseup)="dropListDropped($event, i)"
+                *matHeaderCellDef
+                cdkDrag
+                cdkDragLockAxis="x"
+                (cdkDragStarted)="dragStarted($event, i)"
+            >
+                {{ column.field }}
+            </mat-header-cell>
+        </div>
+        <mat-cell *matCellDef="let row"> {{ row[column.field] }} </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <div cdkDropList cdkDropListOrientation="vertical">
+        <mat-row
+            cdkDrag
+            *matRowDef="let row; columns: displayedColumns; let j = index"
+            (cdkDragStarted)="rowDragStartedHandler($event, j)"
+            (mouseup)="rowDropMethod($event, j)"
+        ></mat-row>
     </div>
-    <mat-cell *matCellDef="let row"> {{ row[column.field] }} </mat-cell>
-  </ng-container>
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <div cdkDropList cdkDropListOrientation="vertical">
-    <mat-row
-      cdkDrag
-      *matRowDef="let row; columns: displayedColumns; let j = index"
-      (cdkDragStarted)="rowDragStartedHandler($event, j)"
-      (mouseup)="rowDropMethod($event, j)"
-    ></mat-row>
-  </div>
 </mat-table>
