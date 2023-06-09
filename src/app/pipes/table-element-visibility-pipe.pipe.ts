@@ -14,6 +14,7 @@ export class TableElementVisibilityPipePipe implements PipeTransform {
     targetTableElement: TableOperationConstants,
     targetIdx: number
   ): boolean {
+    console.log(`in pipe: `, ...arguments);
     if (modifiedTableElementIdx.tableElement === null) {
       return true;
     } else {

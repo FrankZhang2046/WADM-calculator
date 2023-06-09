@@ -35,13 +35,13 @@ export class CustomHtmlTableComponent implements OnInit {
   public tableOperationConstants = TableOperationConstants;
   public submitForm() {
     switch (this.modifiedTableElementIdx.tableElement) {
-      case TableOperationConstants.columnHeader:
+      case this.tableOperationConstants.columnHeader:
         this.columnHeaderRenamingFormControl.reset();
         // todo extract the reusable part into methods
         this.modifiedTableElementIdx.tableElement = null;
         this.modifiedTableElementIdx.idx = null;
         break;
-      case TableOperationConstants.rowHeader:
+      case this.tableOperationConstants.rowHeader:
         this.columnHeaderRenamingFormControl.reset();
         this.modifiedTableElementIdx.tableElement = null;
         this.modifiedTableElementIdx.idx = null;
@@ -73,22 +73,25 @@ export class CustomHtmlTableComponent implements OnInit {
     this.seedTable();
 
     this.columnHeaderRenamingFormControl.valueChanges.subscribe((value) => {
-      if (
-        this.modifiedTableElementIdx.tableElement ===
-        TableOperationConstants.columnHeader
-      ) {
-        if (value) {
-          this.columnData[
-            this.modifiedTableElementIdx.idx as number
-          ].columnName = value;
-        }
-      } else if (
-        this.modifiedTableElementIdx.tableElement ===
-        this.tableOperationConstants.rowHeader
-      ) {
-        if (value) {
-          this.tableData[this.modifiedTableElementIdx.idx as number].fieldName =
-            value;
+      if (value) {
+        if (
+          this.modifiedTableElementIdx.tableElement ===
+          TableOperationConstants.columnHeader
+        ) {
+          if (value) {
+            this.columnData[
+              this.modifiedTableElementIdx.idx as number
+            ].columnName = value;
+          }
+        } else if (
+          this.modifiedTableElementIdx.tableElement ===
+          this.tableOperationConstants.rowHeader
+        ) {
+          if (value) {
+            this.tableData[
+              this.modifiedTableElementIdx.idx as number
+            ].fieldName = value;
+          }
         }
       }
     });
