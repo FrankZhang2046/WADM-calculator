@@ -14,11 +14,13 @@ import {
   TableRowData,
 } from '../../models/table-row-data.model';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TableElementVisibilityPipePipe } from 'src/app/pipes/table-element-visibility-pipe.pipe';
 
 @Component({
   selector: 'app-custom-html-table',
   standalone: true,
   imports: [
+    TableElementVisibilityPipePipe,
     CommonModule,
     MatInputModule,
     MatButtonModule,
@@ -35,7 +37,14 @@ export class CustomHtmlTableComponent implements OnInit {
     switch (this.modifiedTableElementIdx.tableElement) {
       case TableOperationConstants.columnHeader:
         this.columnHeaderRenamingFormControl.reset();
+        // todo extract the reusable part into methods
         this.modifiedTableElementIdx.tableElement = null;
+        this.modifiedTableElementIdx.idx = null;
+        break;
+      case TableOperationConstants.rowHeader:
+        this.columnHeaderRenamingFormControl.reset();
+        this.modifiedTableElementIdx.tableElement = null;
+        this.modifiedTableElementIdx.idx = null;
         break;
       default:
         break;
@@ -72,6 +81,14 @@ export class CustomHtmlTableComponent implements OnInit {
           this.columnData[
             this.modifiedTableElementIdx.idx as number
           ].columnName = value;
+        }
+      } else if (
+        this.modifiedTableElementIdx.tableElement ===
+        this.tableOperationConstants.rowHeader
+      ) {
+        if (value) {
+          this.tableData[this.modifiedTableElementIdx.idx as number].fieldName =
+            value;
         }
       }
     });
@@ -137,14 +154,6 @@ export class CustomHtmlTableComponent implements OnInit {
     idx: number | number[]
   ) {
     this.modifiedTableElementIdx = { tableElement, idx };
-    // have to defer the action to the next loop otherwise the ViewChild will be undefined
-    setTimeout(() => {
-      this.headerRenamingInputComponent.focus();
-    });
-  }
-
-  public renameRowHeader(rowIdx: number) {
-    // this.rowHeaderModifiedIdx = rowIdx;
     // have to defer the action to the next loop otherwise the ViewChild will be undefined
     setTimeout(() => {
       this.headerRenamingInputComponent.focus();
