@@ -9,8 +9,11 @@
         <th>{{"criteria" | titlecase}}</th>
         <th>{{"weight" | titlecase}}</th>
         <ng-container *ngFor="let column of columnData; let colIdx = index;">
-          <th *ngIf="colIdx !== headerBeingModified else headerRenameInputComponent" class="draggable-cell" cdkDrag
-            (mousedown)="$event.stopPropagation();" cdkDragLockAxis="x" (dblclick)="renameColumnHeader(colIdx)">
+          <th
+            *ngIf="modifiedTableElementIdx.tableElement === null || (
+            modifiedTableElementIdx.tableElement === tableOperationConstants.columnHeader && colIdx !== modifiedTableElementIdx.idx) else headerRenameInputComponent"
+            class="draggable-cell" cdkDrag (mousedown)="$event.stopPropagation();" cdkDragLockAxis="x"
+            (dblclick)="modifyTableElement(tableOperationConstants.columnHeader, colIdx)">
             {{column.columnName| titlecase
             }}</th>
         </ng-container>
@@ -55,7 +58,6 @@
 </div>
 
 <ng-template #headerRenameInputComponent>
-  <input #columnHeaderInput matInput placeholder="option name..."
-    (keydown.enter)="submitForm(tableOperationConstants.columnHeader)" [formControl]="columnHeaderRenamingFormControl"
-    label="header-rename" type="text" />
+  <input #headerRenamingInputComponent matInput placeholder="option name..." (keydown.enter)="submitForm()"
+    [formControl]="columnHeaderRenamingFormControl" label="header-rename" type="text" />
 </ng-template>

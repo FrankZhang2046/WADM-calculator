@@ -31,28 +31,29 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 })
 export class CustomHtmlTableComponent implements OnInit {
   public tableOperationConstants = TableOperationConstants;
-  public submitForm(tableElement: TableOperationConstants) {
-    switch (tableElement) {
+  public submitForm() {
+    switch (this.modifiedTableElementIdx.tableElement) {
       case TableOperationConstants.columnHeader:
         this.columnHeaderRenamingFormControl.reset();
-        this.headerBeingModified = null;
+        this.modifiedTableElementIdx.tableElement = null;
         break;
       default:
         break;
     }
   }
-  @ViewChild(MatInput) public columnHeaderInput!: MatInput;
-  public renameColumnHeader(colIdx: number) {
-    this.headerBeingModified = colIdx;
-    // have to defer the action to the next loop otherwise the ViewChild will be undefined
-    setTimeout(() => {
-      this.columnHeaderInput.focus();
-    });
-  }
+  @ViewChild(MatInput) public headerRenamingInputComponent!: MatInput;
   public displayResults: boolean = false;
-  public headerBeingModified: number | null = null;
+  // public columnHeaderModifiedIdx: number | null = null;
   // formControl for the column header renaming input component
   public columnHeaderRenamingFormControl = new FormControl<string>('');
+  public modifiedTableElementIdx: {
+    tableElement: TableOperationConstants | null;
+    idx: number | null | number[];
+  } = { tableElement: null, idx: null };
+  public rowHeaderRenamingFormControl = new FormControl<string>('');
+  /*
+    event handler when the user drag and drops to change the order of column headers
+  */
   public columnDropMethod($event: CdkDragDrop<string[]>) {
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
@@ -63,9 +64,14 @@ export class CustomHtmlTableComponent implements OnInit {
     this.seedTable();
 
     this.columnHeaderRenamingFormControl.valueChanges.subscribe((value) => {
-      if (this.headerBeingModified !== null) {
+      if (
+        this.modifiedTableElementIdx.tableElement ===
+        TableOperationConstants.columnHeader
+      ) {
         if (value) {
-          this.columnData[this.headerBeingModified].columnName = value;
+          this.columnData[
+            this.modifiedTableElementIdx.idx as number
+          ].columnName = value;
         }
       }
     });
@@ -112,13 +118,36 @@ export class CustomHtmlTableComponent implements OnInit {
     this.tableData.forEach((tableData) => {
       tableData.fieldValues.push(null);
     });
-    this.renameColumnHeader(this.columnData.length - 1);
+    // * prompt user to rename the new column header immediately after creation
+    this.modifyTableElement(
+      TableOperationConstants.columnHeader,
+      this.columnData.length - 1
+    );
   }
   public addRow(): void {
     this.tableData.push({
       fieldName: 'new',
       fieldValues: Array(this.columnData.length).fill(null),
       fieldWeight: null,
+    });
+  }
+
+  public modifyTableElement(
+    tableElement: TableOperationConstants,
+    idx: number | number[]
+  ) {
+    this.modifiedTableElementIdx = { tableElement, idx };
+    // have to defer the action to the next loop otherwise the ViewChild will be undefined
+    setTimeout(() => {
+      this.headerRenamingInputComponent.focus();
+    });
+  }
+
+  public renameRowHeader(rowIdx: number) {
+    // this.rowHeaderModifiedIdx = rowIdx;
+    // have to defer the action to the next loop otherwise the ViewChild will be undefined
+    setTimeout(() => {
+      this.headerRenamingInputComponent.focus();
     });
   }
 }
