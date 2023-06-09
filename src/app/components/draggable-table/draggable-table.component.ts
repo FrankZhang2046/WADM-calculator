@@ -37,10 +37,12 @@ const ELEMENT_DATA: any[] = [
 })
 export class DraggableTableComponent {
   @ViewChild(MatTable) public table!: MatTable<any>;
+
   rowDragStartedHandler($event: CdkDragStart<any>, index: number) {
     console.log(`row dragStarted event, index is: `, index);
     this.previousRowIndex = index;
   }
+
   rowDropMethod($event: any, index: number) {
     console.log(`dropMethod event: `, index);
     if ($event && this.previousRowIndex !== undefined) {
@@ -50,14 +52,7 @@ export class DraggableTableComponent {
       this.previousRowIndex = undefined;
     }
   }
-  public dragInProgress: boolean = false;
-  testMethod($event: Event, payload: any) {
-    console.log(`test method called`, payload);
-  }
-  dragEnded($event: CdkDragEnd<any>) {
-    console.log(`dragEnded event: `, $event);
-  }
-  title = 'Material Table column drag and drop';
+
   columns: any[] = [
     { field: 'position' },
     { field: 'name' },
@@ -77,9 +72,9 @@ export class DraggableTableComponent {
   }
 
   setDisplayedColumns() {
-    this.columns.forEach((colunm, index) => {
-      colunm.index = index;
-      this.displayedColumns[index] = colunm.field;
+    this.columns.forEach((column, index) => {
+      column.index = index;
+      this.displayedColumns[index] = column.field;
     });
   }
 

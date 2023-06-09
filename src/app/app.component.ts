@@ -16,16 +16,4 @@ import { CustomHtmlTableComponent } from './components/custom-html-table/custom-
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  // generate a list of self-help book titles
-  public bookTitles: string[] = [
-    'Think and Grow Rich',
-    'Psycho Cybernetics',
-    'The Power of Habit',
-    'The 4 Hour Work Week',
-    'The Lean Startup',
-    'The Big Short',
-    'The Road to React',
-    'The Pragmatic Programmer',
-  ];
-}
+export class AppComponent {}
