@@ -10,7 +10,7 @@
         <th>{{"weight" | titlecase}}</th>
         <ng-container *ngFor="let column of columnData; let colIdx = index;">
           <th
-            *ngIf="( modifiedTableElementIdx | tableElementVisibilityPipe:tableOperationConstants.columnHeader: colIdx ) else headerRenameInputTemplate "
+            *ngIf="!(modifiedTableElementIdx.tableElement===tableOperationConstants.columnHeader && modifiedTableElementIdx.idx === colIdx) else headerRenameInputTemplate "
             class="draggable-cell" cdkDrag (mousedown)="$event.stopPropagation();" cdkDragLockAxis="x"
             (dblclick)="modifyTableElement(tableOperationConstants.columnHeader, colIdx)">
             {{column.columnName| titlecase
@@ -25,7 +25,7 @@
       <tr cdkDrag *ngFor="let row of tableData; let weightIndex = index;" class="table-row">
         <!-- implement table header modification for row headers -->
         <th class="text-left"
-          *ngIf="( modifiedTableElementIdx | tableElementVisibilityPipe:tableOperationConstants.rowHeader: weightIndex ) else headerRenameInputTemplate"
+          *ngIf="!(modifiedTableElementIdx.tableElement === tableOperationConstants.rowHeader && modifiedTableElementIdx.idx === weightIndex) else headerRenameInputTemplate"
           (dblclick)="modifyTableElement(tableOperationConstants.rowHeader, weightIndex)">
           {{row.fieldName}}</th>
         <td class="text-center text-blue-600">{{row.fieldWeight}}</td>

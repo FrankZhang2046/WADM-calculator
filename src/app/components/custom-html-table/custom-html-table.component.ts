@@ -14,13 +14,11 @@ import {
   TableRowData,
 } from '../../models/table-row-data.model';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TableElementVisibilityPipePipe } from 'src/app/pipes/table-element-visibility-pipe.pipe';
 
 @Component({
   selector: 'app-custom-html-table',
   standalone: true,
   imports: [
-    TableElementVisibilityPipePipe,
     CommonModule,
     MatInputModule,
     MatButtonModule,
@@ -78,20 +76,15 @@ export class CustomHtmlTableComponent implements OnInit {
           this.modifiedTableElementIdx.tableElement ===
           TableOperationConstants.columnHeader
         ) {
-          if (value) {
-            this.columnData[
-              this.modifiedTableElementIdx.idx as number
-            ].columnName = value;
-          }
+          this.columnData[
+            this.modifiedTableElementIdx.idx as number
+          ].columnName = value;
         } else if (
           this.modifiedTableElementIdx.tableElement ===
           this.tableOperationConstants.rowHeader
         ) {
-          if (value) {
-            this.tableData[
-              this.modifiedTableElementIdx.idx as number
-            ].fieldName = value;
-          }
+          this.tableData[this.modifiedTableElementIdx.idx as number].fieldName =
+            value;
         }
       }
     });
@@ -150,6 +143,11 @@ export class CustomHtmlTableComponent implements OnInit {
       fieldValues: Array(this.columnData.length).fill(null),
       fieldWeight: null,
     });
+    // * prompt user to rename the new option immediately after creation
+    this.modifyTableElement(
+      TableOperationConstants.rowHeader,
+      this.tableData.length - 1
+    );
   }
 
   public modifyTableElement(
