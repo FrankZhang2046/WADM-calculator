@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
+import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import {
@@ -12,6 +12,7 @@ import {
   ColumnHeaderData,
   TableRowData,
 } from '../../models/table-row-data.model';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-custom-html-table',
@@ -21,13 +22,30 @@ import {
     MatInputModule,
     MatButtonModule,
     DragDropModule,
+    ReactiveFormsModule,
     MatIconModule,
   ],
   templateUrl: './custom-html-table.component.html',
   styleUrls: ['./custom-html-table.component.scss'],
 })
 export class CustomHtmlTableComponent implements OnInit {
+  public submitForm() {
+    this.columnHeaderRenamingFormControl.reset();
+    this.headerBeingModified = null;
+  }
+  @ViewChild(MatInput) public columnHeaderInput!: MatInput;
+  public renameColumnHeader(colIdx: number) {
+    this.headerBeingModified = colIdx;
+    // write a settimeout function and delay action for 500 ms
+    setTimeout(() => {
+      this.columnHeaderInput.focus();
+      console.log(`input is focused: `, this.columnHeaderInput.focused);
+    });
+  }
   public displayResults: boolean = false;
+  public headerBeingModified: number | null = null;
+  // formControl for the column header renaming input component
+  public columnHeaderRenamingFormControl = new FormControl<string>('');
   public columnDropMethod($event: CdkDragDrop<string[]>) {
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
@@ -36,6 +54,14 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public ngOnInit(): void {
     this.seedTable();
+
+    this.columnHeaderRenamingFormControl.valueChanges.subscribe((value) => {
+      if (this.headerBeingModified !== null) {
+        if (value) {
+          this.columnData[this.headerBeingModified].columnName = value;
+        }
+      }
+    });
   }
 
   /*

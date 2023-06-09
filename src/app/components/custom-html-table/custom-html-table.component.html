@@ -8,8 +8,9 @@
       <tr cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="columnDropMethod($event)">
         <th>{{"criteria" | titlecase}}</th>
         <th>{{"weight" | titlecase}}</th>
-        <ng-container *ngFor="let column of columnData">
-          <th class="draggable-cell" cdkDrag (mousedown)="$event.stopPropagation();" cdkDragLockAxis="x">
+        <ng-container *ngFor="let column of columnData; let colIdx = index;">
+          <th *ngIf="colIdx !== headerBeingModified else headerRenameInputComponent" class="draggable-cell" cdkDrag
+            (mousedown)="$event.stopPropagation();" cdkDragLockAxis="x" (dblclick)="renameColumnHeader(colIdx)">
             {{column.columnName| titlecase
             }}</th>
         </ng-container>
@@ -52,3 +53,8 @@
     </tfoot>
   </table>
 </div>
+
+<ng-template #headerRenameInputComponent>
+  <input #columnHeaderInput matInput placeholder="option name..." (keydown.enter)="submitForm()"
+    [formControl]="columnHeaderRenamingFormControl" label="header-rename" type="text" />
+</ng-template>
