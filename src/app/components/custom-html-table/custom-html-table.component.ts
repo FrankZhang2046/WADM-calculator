@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TableOperationConstants } from 'src/app/models/enums';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,17 +30,23 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./custom-html-table.component.scss'],
 })
 export class CustomHtmlTableComponent implements OnInit {
-  public submitForm() {
-    this.columnHeaderRenamingFormControl.reset();
-    this.headerBeingModified = null;
+  public tableOperationConstants = TableOperationConstants;
+  public submitForm(tableElement: TableOperationConstants) {
+    switch (tableElement) {
+      case TableOperationConstants.columnHeader:
+        this.columnHeaderRenamingFormControl.reset();
+        this.headerBeingModified = null;
+        break;
+      default:
+        break;
+    }
   }
   @ViewChild(MatInput) public columnHeaderInput!: MatInput;
   public renameColumnHeader(colIdx: number) {
     this.headerBeingModified = colIdx;
-    // write a settimeout function and delay action for 500 ms
+    // have to defer the action to the next loop otherwise the ViewChild will be undefined
     setTimeout(() => {
       this.columnHeaderInput.focus();
-      console.log(`input is focused: `, this.columnHeaderInput.focused);
     });
   }
   public displayResults: boolean = false;

@@ -55,6 +55,7 @@
 </div>
 
 <ng-template #headerRenameInputComponent>
-  <input #columnHeaderInput matInput placeholder="option name..." (keydown.enter)="submitForm()"
-    [formControl]="columnHeaderRenamingFormControl" label="header-rename" type="text" />
+  <input #columnHeaderInput matInput placeholder="option name..."
+    (keydown.enter)="submitForm(tableOperationConstants.columnHeader)" [formControl]="columnHeaderRenamingFormControl"
+    label="header-rename" type="text" />
 </ng-template>
