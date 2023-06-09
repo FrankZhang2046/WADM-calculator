@@ -112,6 +112,7 @@ export class CustomHtmlTableComponent implements OnInit {
     this.tableData.forEach((tableData) => {
       tableData.fieldValues.push(null);
     });
+    this.renameColumnHeader(this.columnData.length - 1);
   }
   public addRow(): void {
     this.tableData.push({
