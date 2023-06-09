@@ -30,40 +30,39 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./custom-html-table.component.scss'],
 })
 export class CustomHtmlTableComponent implements OnInit {
-    public tableOperationConstants = TableOperationConstants;
+  public tableOperationConstants = TableOperationConstants;
 
-    public submitForm() {
-        switch (this.modifiedTableElementIdx.tableElement) {
-            case this.tableOperationConstants.columnHeader:
-                this.columnHeaderRenamingFormControl.reset();
-                this.resetModifiedTableElementDict();
-                break;
-            case this.tableOperationConstants.rowHeader:
-                this.columnHeaderRenamingFormControl.reset();
-                this.resetModifiedTableElementDict();
-                break;
-            default:
-                break;
-        }
+  public submitForm() {
+    switch (this.modifiedTableElementIdx.tableElement) {
+      case this.tableOperationConstants.columnHeader:
+        this.resetAfterFormSubmission();
+        break;
+      case this.tableOperationConstants.rowHeader:
+        this.resetAfterFormSubmission();
+        break;
+      default:
+        break;
     }
+  }
 
-    public resetModifiedTableElementDict(): void {
-        this.modifiedTableElementIdx.tableElement = null;
-        this.modifiedTableElementIdx.idx = null;
-    }
+  public resetAfterFormSubmission(): void {
+    this.columnHeaderRenamingFormControl.reset();
+    this.modifiedTableElementIdx.tableElement = null;
+    this.modifiedTableElementIdx.idx = null;
+  }
 
-    @ViewChild(MatInput) public headerRenamingInputComponent!: MatInput;
-    public displayResults: boolean = false;
-    // public columnHeaderModifiedIdx: number | null = null;
-    // formControl for the column header renaming input component
-    public columnHeaderRenamingFormControl = new FormControl<string>("");
-    public modifiedTableElementIdx: {
-        tableElement: TableOperationConstants | null;
-        idx: number | null | number[];
-    } = { tableElement: null, idx: null };
-    public rowHeaderRenamingFormControl = new FormControl<string>("");
+  @ViewChild(MatInput) public headerRenamingInputComponent!: MatInput;
+  public displayResults: boolean = false;
+  // public columnHeaderModifiedIdx: number | null = null;
+  // formControl for the column header renaming input component
+  public columnHeaderRenamingFormControl = new FormControl<string>('');
+  public modifiedTableElementIdx: {
+    tableElement: TableOperationConstants | null;
+    idx: number | null | number[];
+  } = { tableElement: null, idx: null };
+  public rowHeaderRenamingFormControl = new FormControl<string>('');
 
-    /*
+  /*
     event handler when the user drag and drops to change the order of column headers
   */
   public columnDropMethod($event: CdkDragDrop<string[]>) {
