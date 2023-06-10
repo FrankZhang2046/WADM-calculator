@@ -1,166 +1,165 @@
 <div class="flex flex-col w-fit">
-    <table>
-        <thead>
-            <tr>
-                <th colspan="2"></th>
-                <th [colSpan]="columnData.length" class="bg-green-600">
-                    {{ "options" | titlecase }}
-                </th>
-            </tr>
-            <tr
-                cdkDropList
-                cdkDropListOrientation="horizontal"
-                (cdkDropListDropped)="columnDropMethod($event)"
-            >
-                <th>{{ "criteria" | titlecase }}</th>
-                <th>{{ "weight" | titlecase }}</th>
-                <ng-container
-                    *ngFor="let column of columnData; let colIdx = index"
-                >
-                    <th
-                        *ngIf="
-                            !(
-                                modifiedTableElementIdx.tableElement ===
-                                    tableOperationConstants.columnHeader &&
-                                modifiedTableElementIdx.idx === colIdx
-                            );
-                            else headerRenameInputTemplate
-                        "
-                        class="draggable-cell"
-                        cdkDrag
-                        (mousedown)="$event.stopPropagation()"
-                        cdkDragLockAxis="x"
-                        (dblclick)="
-                            modifyTableElement(
-                                tableOperationConstants.columnHeader,
-                                colIdx
-                            )
-                        "
-                    >
-                        {{ column.columnName | titlecase }}
-                    </th>
-                </ng-container>
-                <button
-                    class="opacity-40 hover:opacity-100"
-                    mat-icon-button
-                    color="primary"
-                    (click)="addCandidate()"
-                >
-                    <mat-icon>add</mat-icon>
-                </button>
-            </tr>
-        </thead>
-        <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">
-            <tr
-                cdkDrag
-                *ngFor="let row of tableData; let weightIndex = index"
-                class="table-row"
-            >
-                <!-- implement table header modification for row headers -->
-                <th
-                    class="text-left"
-                    *ngIf="
-                        !(
-                            modifiedTableElementIdx.tableElement ===
-                                tableOperationConstants.rowHeader &&
-                            modifiedTableElementIdx.idx === weightIndex
-                        );
-                        else headerRenameInputTemplate
-                    "
-                    (dblclick)="
-                        modifyTableElement(
-                            tableOperationConstants.rowHeader,
-                            weightIndex
-                        )
-                    "
-                >
-                    {{ row.fieldName }}
-                </th>
-                <td class="text-center text-blue-600">{{ row.fieldWeight }}</td>
-                <ng-container
-                    *ngFor="let item of row.fieldValues; let cellIdx = index"
-                >
-                    <td
-                        *ngIf="
-                            !(
-                                modifiedTableElementIdx.tableElement ===
-                                    tableOperationConstants.cell &&
-                                (modifiedTableElementIdx.idx
-                                    | assertArrayEquality
-                                        : [weightIndex, cellIdx])
-                            );
-                            else tableDataUpdateInputTemplate
-                        "
-                        class="text-blue-600 text-center w-20"
-                        (dblclick)="
-                            modifyTableElement(tableOperationConstants.cell, [
-                                weightIndex,
-                                cellIdx
-                            ])
-                        "
-                    >
-                        {{ item }}
-                    </td>
-                </ng-container>
-            </tr>
+  <table>
+    <thead>
+      <tr>
+        <th colspan="2"></th>
+        <th [colSpan]="columnData.length" class="bg-green-600">
+          {{ "options" | titlecase }}
+        </th>
+      </tr>
+      <tr
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        (cdkDropListDropped)="columnDropMethod($event)"
+      >
+        <th>{{ "criteria" | titlecase }}</th>
+        <th>{{ "weight" | titlecase }}</th>
+        <ng-container *ngFor="let column of columnData; let colIdx = index">
+          <th
+            *ngIf="
+              !(
+                modifiedTableElementIdx.tableElement ===
+                  tableOperationConstants.columnHeader &&
+                modifiedTableElementIdx.idx === colIdx
+              );
+              else headerRenameInputTemplate
+            "
+            class="draggable-cell"
+            cdkDrag
+            (mousedown)="$event.stopPropagation()"
+            cdkDragLockAxis="x"
+            (dblclick)="
+              modifyTableElement(tableOperationConstants.columnHeader, colIdx)
+            "
+          >
+            {{ column.columnName | titlecase }}
+          </th>
+        </ng-container>
+        <button
+          class="opacity-40 hover:opacity-100"
+          mat-icon-button
+          color="primary"
+          (click)="addCandidate()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </tr>
+    </thead>
+    <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">
+      <tr
+        cdkDrag
+        *ngFor="let row of tableData; let weightIndex = index"
+        class="table-row"
+      >
+        <!-- implement table header modification for row headers -->
+        <th
+          class="text-left"
+          *ngIf="
+            !(
+              modifiedTableElementIdx.tableElement ===
+                tableOperationConstants.rowHeader &&
+              modifiedTableElementIdx.idx === weightIndex
+            );
+            else headerRenameInputTemplate
+          "
+          (dblclick)="
+            modifyTableElement(tableOperationConstants.rowHeader, weightIndex)
+          "
+        >
+          {{ row.fieldName }}
+        </th>
+        <td class="text-center text-blue-600">{{ row.fieldWeight }}</td>
+        <ng-container
+          *ngFor="
+            let item of row.fieldValues;
+            let cellIdx = index;
+            trackBy: trackByFn
+          "
+        >
+          <td
+            *ngIf="
+              !(
+                modifiedTableElementIdx.tableElement ===
+                  tableOperationConstants.cell &&
+                (modifiedTableElementIdx.idx
+                  | assertArrayEquality : [weightIndex, cellIdx])
+              );
+              else tableDataUpdateInputTemplate
+            "
+            class="text-blue-600 text-center w-20"
+            (dblclick)="
+              modifyTableElement(tableOperationConstants.cell, [
+                weightIndex,
+                cellIdx
+              ])
+            "
+          >
+            {{ item }}
+          </td>
+        </ng-container>
+      </tr>
 
-            <tr *ngIf="displayResults">
-                <th colspan="2">{{ "results" | titlecase }}</th>
-                <td>777</td>
-                <td>888</td>
-            </tr>
-            <tr>
-                <th class="add-criterion" [colSpan]="columnData.length + 2">
-                    <div class="button-container">
-                        <button
-                            (click)="addRow()"
-                            mat-flat-button
-                            color="white"
-                            class="opacity-40 hover:opacity-100"
-                        >
-                            <mat-icon>add</mat-icon>
-                            {{ "add criterion" | titlecase }}
-                        </button>
-                        <button
-                            class="ml-4"
-                            mat-mini-fab
-                            color="primary"
-                            (click)="displayResults = true"
-                        >
-                            <mat-icon>calculate</mat-icon>
-                        </button>
-                    </div>
-                </th>
-            </tr>
-        </tbody>
-        <tfoot></tfoot>
-    </table>
+      <tr *ngIf="displayResults">
+        <th colspan="2">{{ "results" | titlecase }}</th>
+        <td>777</td>
+        <td>888</td>
+      </tr>
+      <tr>
+        <th class="add-criterion" [colSpan]="columnData.length + 2">
+          <div class="button-container">
+            <button
+              (click)="addRow()"
+              mat-flat-button
+              color="white"
+              class="opacity-40 hover:opacity-100"
+            >
+              <mat-icon>add</mat-icon>
+              {{ "add criterion" | titlecase }}
+            </button>
+            <button
+              class="ml-4"
+              mat-mini-fab
+              color="primary"
+              (click)="displayResults = true"
+            >
+              <mat-icon>calculate</mat-icon>
+            </button>
+          </div>
+        </th>
+      </tr>
+    </tbody>
+    <tfoot></tfoot>
+  </table>
 </div>
 
 <ng-template #headerRenameInputTemplate>
+  <th>
     <input
-        #headerRenamingInputComponent
-        matInput
-        placeholder="option name..."
-        (keydown.enter)="submitForm()"
-        (focusout)="inputFocusOutHandler()"
-        [formControl]="headerRenamingFormControl"
-        label="header-rename"
-        type="text"
+      #headerRenamingInputComponent
+      matInput
+      placeholder="option name..."
+      (keydown.enter)="submitForm()"
+      (focusout)="inputFocusOutHandler()"
+      [formControl]="headerRenamingFormControl"
+      label="header-rename"
+      type="text"
     />
+  </th>
 </ng-template>
 <ng-template #tableDataUpdateInputTemplate>
+  <th>
     <input
-        #tableDataUpdateInputComponent
-        matInput
-        placeholder="update data..."
-        (keydown.enter)="submitForm()"
-        (focusout)="inputFocusOutHandler()"
-        [formControl]="tableDataUpdateFormControl"
-        label="header-rename"
-        type="number"
+      #tableDataUpdateInputComponent
+      matInput
+      placeholder="update data..."
+      (keydown.enter)="submitForm()"
+      (focusout)="inputFocusOutHandler()"
+      [formControl]="tableDataUpdateFormControl"
+      label="header-rename"
+      type="number"
     />
     <div class="text-red-500" *ngIf="tableDataUpdateFormControl.invalid">
-        something's wrong
+      something's wrong
     </div>
+  </th>
 </ng-template>

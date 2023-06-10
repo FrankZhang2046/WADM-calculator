@@ -126,9 +126,6 @@ export class CustomHtmlTableComponent implements OnInit {
               this.modifiedTableElementIdx.idx[0] as number
             ].fieldValues[this.modifiedTableElementIdx.idx[1] as number] =
               value;
-            setTimeout(() => {
-              this.tableDataUpdateInputComponent.focus();
-            }, 0);
           }
         }
       });
@@ -169,6 +166,9 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public columnData: ColumnHeaderData[] = [];
   public tableData: TableRowData[] = [];
+  public trackByFn(index: number, item: any): number {
+    return index;
+  }
 
   public addCandidate(): void {
     this.columnData.push({ columnName: "new", result: null });
