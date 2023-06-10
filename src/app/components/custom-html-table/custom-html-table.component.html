@@ -14,7 +14,13 @@
       >
         <th>{{ "criteria" | titlecase }}</th>
         <th>{{ "weight" | titlecase }}</th>
-        <ng-container *ngFor="let column of columnData; let colIdx = index">
+        <ng-container
+          *ngFor="
+            let column of columnData;
+            let colIdx = index;
+            trackBy: trackByFn
+          "
+        >
           <th
             *ngIf="
               !(
@@ -117,7 +123,7 @@
               {{ "add criterion" | titlecase }}
             </button>
             <button
-              class="ml-4"
+              class="ml-4 opacity-50 hover:opacity-100"
               mat-mini-fab
               color="primary"
               (click)="displayResults = true"
