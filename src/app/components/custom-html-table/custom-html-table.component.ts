@@ -13,8 +13,14 @@ import {
     ColumnHeaderData,
     TableRowData,
 } from "../../models/table-row-data.model";
-import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+    FormControl,
+    FormsModule,
+    ReactiveFormsModule,
+    Validators,
+} from "@angular/forms";
 import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe";
+import { debounceTime } from "rxjs";
 
 @Component({
     selector: "app-custom-html-table",
@@ -73,7 +79,10 @@ export class CustomHtmlTableComponent implements OnInit {
     public displayResults: boolean = false;
     // formControl for the column header renaming input component
     public headerRenamingFormControl = new FormControl<string>("");
-    public tableDataUpdateFormControl = new FormControl<number | null>(null);
+    public tableDataUpdateFormControl = new FormControl<number | null>(null, [
+        Validators.max(10),
+        Validators.min(1),
+    ]);
     public modifiedTableElementIdx: {
         tableElement: TableOperationConstants | null;
         idx: number | null | number[];
@@ -115,21 +124,30 @@ export class CustomHtmlTableComponent implements OnInit {
             }
         });
 
-        this.tableDataUpdateFormControl.valueChanges.subscribe((value) => {
-            if (value) {
-                if (
-                    this.modifiedTableElementIdx.tableElement ===
-                        TableOperationConstants.cell &&
-                    Array.isArray(this.modifiedTableElementIdx.idx)
-                ) {
-                    this.tableData[
-                        this.modifiedTableElementIdx.idx[0] as number
-                    ].fieldValues[
-                        this.modifiedTableElementIdx.idx[1] as number
-                    ] = value;
+        this.tableDataUpdateFormControl.valueChanges
+            .pipe(debounceTime(800))
+            .subscribe((value) => {
+                if (value) {
+                    if (
+                        this.modifiedTableElementIdx.tableElement ===
+                            TableOperationConstants.cell &&
+                        Array.isArray(this.modifiedTableElementIdx.idx)
+                    ) {
+                        this.tableData[
+                            this.modifiedTableElementIdx.idx[0] as number
+                        ].fieldValues[
+                            this.modifiedTableElementIdx.idx[1] as number
+                        ] = value;
+                        if (this.tableDataUpdateFormControl.valid) {
+                            this.submitForm();
+                        } else {
+                            setTimeout(() => {
+                                this.tableDataUpdateInputComponent.focus();
+                            }, 0);
+                        }
+                    }
                 }
-            }
-        });
+            });
     }
 
     /*
