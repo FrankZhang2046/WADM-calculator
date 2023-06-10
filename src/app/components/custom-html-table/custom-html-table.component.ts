@@ -13,14 +13,8 @@ import {
   ColumnHeaderData,
   TableRowData,
 } from "../../models/table-row-data.model";
-import {
-  FormControl,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
+import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe";
-import { debounceTime } from "rxjs";
 
 @Component({
   selector: "app-custom-html-table",
@@ -53,13 +47,19 @@ export class CustomHtmlTableComponent implements OnInit {
       case this.tableOperationConstants.cell:
         this.resetAfterFormSubmission(this.tableOperationConstants.cell);
         break;
+      case this.tableOperationConstants.fieldWeight:
+        this.resetAfterFormSubmission(this.tableOperationConstants.fieldWeight);
+        break;
       default:
         break;
     }
   }
 
   public resetAfterFormSubmission(tableElement: TableOperationConstants): void {
-    if (tableElement === this.tableOperationConstants.cell) {
+    if (
+      tableElement === this.tableOperationConstants.cell ||
+      tableElement === this.tableOperationConstants.fieldWeight
+    ) {
       this.tableDataUpdateFormControl.reset();
     } else {
       this.headerRenamingFormControl.reset();
@@ -123,6 +123,13 @@ export class CustomHtmlTableComponent implements OnInit {
           this.tableData[
             this.modifiedTableElementIdx.idx[0] as number
           ].fieldValues[this.modifiedTableElementIdx.idx[1] as number] = value;
+        } else if (
+          this.modifiedTableElementIdx.tableElement ===
+          TableOperationConstants.fieldWeight
+        ) {
+          this.tableData[
+            this.modifiedTableElementIdx.idx as number
+          ].fieldWeight = value;
         }
       }
     });
@@ -209,6 +216,7 @@ export class CustomHtmlTableComponent implements OnInit {
     time each cell by its weight, calculate the sum, and attach to each column's result property
    */
   public calculateResult(): void {
+    // todo make this method more performant, loop through each cell instead of each column with a nested loop
     this.columnData.forEach((option, index) => {
       option.result = this.tableData.reduce((sum, row) => {
         if (row.fieldValues[index] !== null && row.fieldWeight) {

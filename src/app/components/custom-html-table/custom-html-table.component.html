@@ -74,7 +74,22 @@
         >
           {{ row.fieldName }}
         </th>
-        <td class="text-center text-blue-600">{{ row.fieldWeight }}</td>
+        <td
+          *ngIf="
+            !(
+              modifiedTableElementIdx.tableElement ===
+                tableOperationConstants.fieldWeight &&
+              modifiedTableElementIdx.idx === weightIndex
+            );
+            else tableDataUpdateInputTemplate
+          "
+          (dblclick)="
+            modifyTableElement(tableOperationConstants.fieldWeight, weightIndex)
+          "
+          class="text-center text-blue-600"
+        >
+          {{ row.fieldWeight }}
+        </td>
         <ng-container
           *ngFor="
             let item of row.fieldValues;
