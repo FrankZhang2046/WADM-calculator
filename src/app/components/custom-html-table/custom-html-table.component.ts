@@ -114,6 +114,22 @@ export class CustomHtmlTableComponent implements OnInit {
                 }
             }
         });
+
+        this.tableDataUpdateFormControl.valueChanges.subscribe((value) => {
+            if (value) {
+                if (
+                    this.modifiedTableElementIdx.tableElement ===
+                        TableOperationConstants.cell &&
+                    Array.isArray(this.modifiedTableElementIdx.idx)
+                ) {
+                    this.tableData[
+                        this.modifiedTableElementIdx.idx[0] as number
+                    ].fieldValues[
+                        this.modifiedTableElementIdx.idx[1] as number
+                    ] = value;
+                }
+            }
+        });
     }
 
     /*

@@ -101,6 +101,7 @@
     (focusout)="inputFocusOutHandler()" [formControl]="headerRenamingFormControl" label="header-rename" type="text" />
 </ng-template>
 <ng-template #tableDataUpdateInputTemplate>
-  <input #tableDataUpdateInputComponent matInput placeholder="option name..." (keydown.enter)="submitForm()"
-    (focusout)="inputFocusOutHandler()" [formControl]="tableDataUpdateFormControl" label="header-rename" type="text" />
+  <input #tableDataUpdateInputComponent matInput placeholder="update data..." (keydown.enter)="submitForm()"
+    (focusout)="inputFocusOutHandler()" [formControl]="tableDataUpdateFormControl" label="header-rename"
+    type="number" />
 </ng-template>
