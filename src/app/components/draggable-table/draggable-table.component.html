@@ -15,9 +15,7 @@
                 *matHeaderCellDef
                 cdkDrag
                 cdkDragLockAxis="x"
-                cdk
                 (cdkDragStarted)="dragStarted($event, i)"
-                [cdkDragData]="{ name: column.field, columIndex: i }"
             >
                 {{ column.field }}
             </mat-header-cell>

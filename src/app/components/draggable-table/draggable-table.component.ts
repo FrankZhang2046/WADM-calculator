@@ -51,8 +51,8 @@ export class DraggableTableComponent {
         }
     }
     public dragInProgress: boolean = false;
-    testMethod($event: Event, payload: any) {
-        console.log(`test method called`, payload);
+    testMethod($event: any) {
+        console.log(`test method called`, $event);
     }
     dragEnded($event: CdkDragEnd<any>) {
         console.log(`dragEnded event: `, $event);
@@ -89,7 +89,6 @@ export class DraggableTableComponent {
         this.previousColumnIndex = index;
     }
 
-    // dropListDropped(event: CdkDropList, index: number) {
     dropListDropped(event: any, index: number) {
         console.log(`event is:`, event);
         if (event && this.previousColumnIndex !== undefined) {
