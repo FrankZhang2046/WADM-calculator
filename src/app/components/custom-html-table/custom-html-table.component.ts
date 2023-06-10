@@ -140,7 +140,7 @@ export class CustomHtmlTableComponent implements OnInit {
       this.tableData.push({
         fieldName: "Criterion 1",
         fieldValues: [null, null],
-        fieldWeight: null,
+        fieldWeight: 10,
       });
     }
   }
@@ -202,5 +202,21 @@ export class CustomHtmlTableComponent implements OnInit {
   // row drop method shifts the order of the tableData array around
   public rowDropMethod($event: CdkDragDrop<TableRowData[]>) {
     moveItemInArray(this.tableData, $event.previousIndex, $event.currentIndex);
+  }
+
+  /*
+    method to calculate the weighted sum of the tableData array
+    time each cell by its weight, calculate the sum, and attach to each column's result property
+   */
+  public calculateResult(): void {
+    this.columnData.forEach((option, index) => {
+      option.result = this.tableData.reduce((sum, row) => {
+        if (row.fieldValues[index] !== null && row.fieldWeight) {
+          const val: number = row.fieldValues[index] ?? 0;
+          return sum + val * row.fieldWeight;
+        } else return sum;
+      }, 0);
+    });
+    this.displayResults = true;
   }
 }

@@ -107,8 +107,9 @@
 
       <tr *ngIf="displayResults">
         <th colspan="2">{{ "results" | titlecase }}</th>
-        <td>777</td>
-        <td>888</td>
+        <td class="text-center text-blue-600" *ngFor="let column of columnData">
+          {{ column.result }}
+        </td>
       </tr>
       <tr>
         <th class="add-criterion" [colSpan]="columnData.length + 2">
@@ -126,7 +127,7 @@
               class="ml-4 opacity-50 hover:opacity-100"
               mat-mini-fab
               color="primary"
-              (click)="displayResults = true"
+              (click)="calculateResult()"
             >
               <mat-icon>calculate</mat-icon>
             </button>
