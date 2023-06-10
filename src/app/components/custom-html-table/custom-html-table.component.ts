@@ -147,7 +147,7 @@ export class CustomHtmlTableComponent implements OnInit {
       this.tableData.push({
         fieldName: "Criterion 1",
         fieldValues: [null, null],
-        fieldWeight: 10,
+        fieldWeight: null,
       });
     }
   }
