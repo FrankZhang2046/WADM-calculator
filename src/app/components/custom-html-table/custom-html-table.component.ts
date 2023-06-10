@@ -85,18 +85,14 @@ export class CustomHtmlTableComponent implements OnInit {
   /*
     event handler when the user drag and drops to change the order of column headers
   */
-    public columnDropMethod($event: CdkDragDrop<string[]>) {
-        // shift order around with the moveItemsInArray method
-        moveItemInArray(
-            this.columnData,
-            $event.previousIndex,
-            $event.currentIndex
-        );
-        this.swapColumnsForTableData($event.previousIndex, $event.currentIndex);
-    }
+  public columnDropMethod($event: CdkDragDrop<string[]>) {
+    // shift order around with the moveItemsInArray method
+    moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
+    this.swapColumnsForTableData($event.previousIndex, $event.currentIndex);
+  }
 
-    public ngOnInit(): void {
-        this.seedTable();
+  public ngOnInit(): void {
+    this.seedTable();
 
     this.headerRenamingFormControl.valueChanges.subscribe((value) => {
       if (value) {
@@ -132,7 +128,7 @@ export class CustomHtmlTableComponent implements OnInit {
     });
   }
 
-    /*
+  /*
     when the table is empty, populate the table with some startup data
   */
   private seedTable() {
@@ -147,17 +143,18 @@ export class CustomHtmlTableComponent implements OnInit {
         fieldWeight: null,
       });
     }
+  }
 
-    public previousColIndex!: number | undefined;
+  public previousColIndex!: number | undefined;
 
-    /*
+  /*
     after column name swap, swap the indices for each table data's fieldValues array
    */
-    public swapColumnsForTableData(fromIndex: number, toIndex: number) {
-        this.tableData.forEach((tableData) => {
-            moveItemInArray(tableData.fieldValues, fromIndex, toIndex);
-        });
-    }
+  public swapColumnsForTableData(fromIndex: number, toIndex: number) {
+    this.tableData.forEach((tableData) => {
+      moveItemInArray(tableData.fieldValues, fromIndex, toIndex);
+    });
+  }
 
   public columnData: ColumnHeaderData[] = [];
   public tableData: TableRowData[] = [];
@@ -199,7 +196,11 @@ export class CustomHtmlTableComponent implements OnInit {
       this.headerRenamingInputComponent.focus();
     });
   }
-  public inputFocusOutHandler() {
+  public inputFocusOutHandler(): void {
     this.submitForm();
+  }
+  // row drop method shifts the order of the tableData array around
+  public rowDropMethod($event: CdkDragDrop<TableRowData[]>) {
+    moveItemInArray(this.tableData, $event.previousIndex, $event.currentIndex);
   }
 }
