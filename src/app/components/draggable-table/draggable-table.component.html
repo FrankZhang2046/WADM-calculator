@@ -3,6 +3,7 @@
     [dataSource]="dataSource"
     class="mat-elevation-z8"
     cdkDropListGroup
+    matSort
 >
     <ng-container
         *ngFor="let column of columns; let i = index"
@@ -14,7 +15,9 @@
                 *matHeaderCellDef
                 cdkDrag
                 cdkDragLockAxis="x"
+                cdk
                 (cdkDragStarted)="dragStarted($event, i)"
+                [cdkDragData]="{ name: column.field, columIndex: i }"
             >
                 {{ column.field }}
             </mat-header-cell>
