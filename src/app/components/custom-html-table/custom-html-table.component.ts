@@ -227,4 +227,8 @@ export class CustomHtmlTableComponent implements OnInit {
     });
     this.displayResults = true;
   }
+
+  highlightElement($event: MouseEvent) {
+    ( $event.target as HTMLElement ).classList.add("highlight");
+  }
 }

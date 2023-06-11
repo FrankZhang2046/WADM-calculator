@@ -32,6 +32,7 @@
             "
             class="draggable-cell"
             cdkDrag
+            (click)="highlightElement($event)"
             (mousedown)="$event.stopPropagation()"
             cdkDragLockAxis="x"
             (dblclick)="
