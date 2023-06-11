@@ -58,11 +58,19 @@ export class CustomHtmlTableComponent implements OnInit {
   @HostListener("window:keydown", ["$event"])
   public keyEvent(event: KeyboardEvent) {
     if (event.key === "Escape") {
-      if (this.cachedHighlightedElement) {
-        this.cachedHighlightedElement.classList.remove("highlight");
-      }
-      this.cachedHighlightedElement = null;
+      //todo extract this method
+      this.clearHighlightedTableElement();
     }
+  }
+
+  /*
+  method to clear the highlight class of a cached table HTMLElment, and assign null to the variable
+   */
+  private clearHighlightedTableElement() {
+    if (this.cachedHighlightedElement) {
+      this.cachedHighlightedElement.classList.remove("highlight");
+    }
+    this.cachedHighlightedElement = null;
   }
 
   public resetAfterFormSubmission(tableElement: TableOperationConstants): void {
@@ -97,6 +105,7 @@ export class CustomHtmlTableComponent implements OnInit {
     event handler when the user drag and drops to change the order of column headers
   */
   public columnDropMethod($event: CdkDragDrop<string[]>) {
+    this.clearHighlightedTableElement();
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
     this.swapColumnsForTableData($event.previousIndex, $event.currentIndex);
@@ -219,6 +228,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }
   // row drop method shifts the order of the tableData array around
   public rowDropMethod($event: CdkDragDrop<TableRowData[]>) {
+    this.clearHighlightedTableElement();
     moveItemInArray(this.tableData, $event.previousIndex, $event.currentIndex);
   }
 
@@ -240,9 +250,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   public highlightElement($event: MouseEvent) {
-    if (this.cachedHighlightedElement) {
-      this.cachedHighlightedElement.classList.remove("highlight");
-    }
+    this.clearHighlightedTableElement();
     ( $event.target as HTMLElement ).classList.add("highlight");
     this.cachedHighlightedElement = $event.target as HTMLElement;
   }
