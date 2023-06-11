@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import {Component, HostListener, OnInit, ViewChild} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { TableOperationConstants } from "src/app/models/enums";
 import { MatInput, MatInputModule } from "@angular/material/input";
@@ -55,6 +55,16 @@ export class CustomHtmlTableComponent implements OnInit {
     }
   }
 
+  @HostListener("window:keydown", ["$event"])
+  public keyEvent(event: KeyboardEvent) {
+    if (event.key === "Escape") {
+      if (this.cachedHighlightedElement) {
+        this.cachedHighlightedElement.classList.remove("highlight");
+      }
+      this.cachedHighlightedElement = null;
+    }
+  }
+
   public resetAfterFormSubmission(tableElement: TableOperationConstants): void {
     if (
       tableElement === this.tableOperationConstants.cell ||
@@ -71,6 +81,7 @@ export class CustomHtmlTableComponent implements OnInit {
   @ViewChild(MatInput) public headerRenamingInputComponent!: MatInput;
   @ViewChild(MatInput) public tableDataUpdateInputComponent!: MatInput;
   public displayResults: boolean = false;
+  public cachedHighlightedElement!: HTMLElement | null;
   // formControl for the column header renaming input component
   public headerRenamingFormControl = new FormControl<string>("");
   public tableDataUpdateFormControl = new FormControl<number | null>(null, [
@@ -228,7 +239,11 @@ export class CustomHtmlTableComponent implements OnInit {
     this.displayResults = true;
   }
 
-  highlightElement($event: MouseEvent) {
+  public highlightElement($event: MouseEvent) {
+    if (this.cachedHighlightedElement) {
+      this.cachedHighlightedElement.classList.remove("highlight");
+    }
     ( $event.target as HTMLElement ).classList.add("highlight");
+    this.cachedHighlightedElement = $event.target as HTMLElement;
   }
 }
