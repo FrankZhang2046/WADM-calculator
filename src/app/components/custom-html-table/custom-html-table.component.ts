@@ -58,8 +58,10 @@ export class CustomHtmlTableComponent implements OnInit {
   @HostListener("window:keydown", ["$event"])
   public keyEvent(event: KeyboardEvent) {
     if (event.key === "Escape") {
-      //todo extract this method
       this.clearHighlightedTableElement();
+      if (this.modifiedTableElementIdx.tableElement !== null) {
+        this.submitForm();
+      }
     }
   }
 
@@ -105,7 +107,6 @@ export class CustomHtmlTableComponent implements OnInit {
     event handler when the user drag and drops to change the order of column headers
   */
   public columnDropMethod($event: CdkDragDrop<string[]>) {
-    this.clearHighlightedTableElement();
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
     this.swapColumnsForTableData($event.previousIndex, $event.currentIndex);
@@ -172,8 +173,6 @@ export class CustomHtmlTableComponent implements OnInit {
     }
   }
 
-  public previousColIndex!: number | undefined;
-
   /*
     after column name swap, swap the indices for each table data's fieldValues array
    */
@@ -228,7 +227,6 @@ export class CustomHtmlTableComponent implements OnInit {
   }
   // row drop method shifts the order of the tableData array around
   public rowDropMethod($event: CdkDragDrop<TableRowData[]>) {
-    this.clearHighlightedTableElement();
     moveItemInArray(this.tableData, $event.previousIndex, $event.currentIndex);
   }
 
