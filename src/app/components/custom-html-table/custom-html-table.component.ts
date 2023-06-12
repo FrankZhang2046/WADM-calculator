@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit, ViewChild} from "@angular/core";
+import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { TableOperationConstants } from "src/app/models/enums";
 import { MatInput, MatInputModule } from "@angular/material/input";
@@ -57,11 +57,23 @@ export class CustomHtmlTableComponent implements OnInit {
 
   @HostListener("window:keydown", ["$event"])
   public keyEvent(event: KeyboardEvent) {
-    if (event.key === "Escape") {
-      this.clearHighlightedTableElement();
-      if (this.modifiedTableElementIdx.tableElement !== null) {
-        this.submitForm();
-      }
+    console.log(`key pressed is:`, event.key);
+    // switch statement to specify the procedure of different keystrokes:
+    switch (event.key) {
+      case "Escape":
+        this.clearHighlightedTableElement();
+        if (this.modifiedTableElementIdx.tableElement !== null) {
+          this.submitForm();
+        }
+        break;
+      case "Tab":
+        this.highlightTableElement(
+          this.tableOperationConstants.columnHeader,
+          0
+        );
+        break;
+      default:
+        break;
     }
   }
 
@@ -69,10 +81,10 @@ export class CustomHtmlTableComponent implements OnInit {
   method to clear the highlight class of a cached table HTMLElment, and assign null to the variable
    */
   private clearHighlightedTableElement() {
-    if (this.cachedHighlightedElement) {
-      this.cachedHighlightedElement.classList.remove("highlight");
-    }
-    this.cachedHighlightedElement = null;
+    this.highlightedTableElementIdx = {
+      tableElement: null,
+      idx: null,
+    };
   }
 
   public resetAfterFormSubmission(tableElement: TableOperationConstants): void {
@@ -98,7 +110,13 @@ export class CustomHtmlTableComponent implements OnInit {
     Validators.max(10),
     Validators.min(1),
   ]);
+  // * dictionary to indicate the table element that is currently being modified
   public modifiedTableElementIdx: {
+    tableElement: TableOperationConstants | null;
+    idx: number | null | number[];
+  } = { tableElement: null, idx: null };
+  // * dictionary to indicate the table element that is currently being highlighted
+  public highlightedTableElementIdx: {
     tableElement: TableOperationConstants | null;
     idx: number | null | number[];
   } = { tableElement: null, idx: null };
@@ -212,6 +230,10 @@ export class CustomHtmlTableComponent implements OnInit {
     );
   }
 
+  /*
+  method to update the value of the table element
+  procedure: hidden table element, show input component
+   */
   public modifyTableElement(
     tableElement: TableOperationConstants,
     idx: number | number[]
@@ -228,6 +250,14 @@ export class CustomHtmlTableComponent implements OnInit {
   // row drop method shifts the order of the tableData array around
   public rowDropMethod($event: CdkDragDrop<TableRowData[]>) {
     moveItemInArray(this.tableData, $event.previousIndex, $event.currentIndex);
+  }
+
+  public highlightTableElement(
+    tableElement: TableOperationConstants,
+    idx: number | number[]
+  ): void {
+    // this should be good enough to add the highlight class to the table element
+    this.highlightedTableElementIdx = { tableElement, idx };
   }
 
   /*
@@ -249,7 +279,7 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public highlightElement($event: MouseEvent) {
     this.clearHighlightedTableElement();
-    ( $event.target as HTMLElement ).classList.add("highlight");
+    ($event.target as HTMLElement).classList.add("highlight");
     this.cachedHighlightedElement = $event.target as HTMLElement;
   }
 }

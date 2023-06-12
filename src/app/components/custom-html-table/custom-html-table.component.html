@@ -22,6 +22,13 @@
           "
         >
           <th
+            [ngClass]="
+              highlightedTableElementIdx.tableElement ===
+                tableOperationConstants.columnHeader &&
+              highlightedTableElementIdx.idx === colIdx
+                ? 'highlight'
+                : null
+            "
             *ngIf="
               !(
                 modifiedTableElementIdx.tableElement ===
@@ -78,6 +85,13 @@
           {{ row.fieldName }}
         </th>
         <td
+          [ngClass]="
+            modifiedTableElementIdx.tableElement ===
+              tableOperationConstants.fieldWeight &&
+            modifiedTableElementIdx.idx === weightIndex
+              ? 'highlight'
+              : null
+          "
           *ngIf="
             !(
               modifiedTableElementIdx.tableElement ===
