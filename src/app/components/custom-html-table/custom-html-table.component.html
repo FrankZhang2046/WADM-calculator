@@ -86,9 +86,9 @@
         </th>
         <td
           [ngClass]="
-            modifiedTableElementIdx.tableElement ===
+            highlightedTableElementIdx.tableElement ===
               tableOperationConstants.fieldWeight &&
-            modifiedTableElementIdx.idx === weightIndex
+            highlightedTableElementIdx.idx === weightIndex
               ? 'highlight'
               : null
           "

@@ -60,6 +60,44 @@ export class CustomHtmlTableComponent implements OnInit {
     console.log(`key pressed is:`, event.key);
     // switch statement to specify the procedure of different keystrokes:
     switch (event.key) {
+      // if arrow right is pressed, console.log it
+      case "ArrowRight":
+        console.log(`arrow right is pressed`);
+        if (
+          (this.highlightedTableElementIdx.idx ||
+            this.highlightedTableElementIdx.idx === 0) &&
+          !Array.isArray(this.highlightedTableElementIdx.idx)
+        ) {
+          const newHighlightedTableElementDict = {
+            tableElement: this.highlightedTableElementIdx.tableElement,
+            idx: this.highlightedTableElementIdx.idx + 1,
+          };
+          console.log(`new dict: `, newHighlightedTableElementDict);
+          this.highlightedTableElementIdx = newHighlightedTableElementDict;
+        }
+        break;
+      case "ArrowLeft":
+        if (
+          (this.highlightedTableElementIdx.idx ||
+            this.highlightedTableElementIdx.idx === 0) &&
+          !Array.isArray(this.highlightedTableElementIdx.idx)
+        ) {
+          const newHighlightedTableElementDict = {
+            tableElement: this.highlightedTableElementIdx.tableElement,
+            idx: this.highlightedTableElementIdx.idx - 1,
+          };
+          console.log(`new dict: `, newHighlightedTableElementDict);
+          this.highlightedTableElementIdx = newHighlightedTableElementDict;
+        }
+        break;
+      case "Enter":
+        if (this.highlightedTableElementIdx.tableElement !== null) {
+          this.modifyTableElement(
+            this.highlightedTableElementIdx.tableElement,
+            this.highlightedTableElementIdx.idx
+          );
+        }
+        break;
       case "Escape":
         this.clearHighlightedTableElement();
         if (this.modifiedTableElementIdx.tableElement !== null) {
@@ -78,7 +116,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   /*
-  method to clear the highlight class of a cached table HTMLElment, and assign null to the variable
+  method to clear the highlight class of a cached table HTMLElement, and assign null to the variable
    */
   private clearHighlightedTableElement() {
     this.highlightedTableElementIdx = {
@@ -236,7 +274,7 @@ export class CustomHtmlTableComponent implements OnInit {
    */
   public modifyTableElement(
     tableElement: TableOperationConstants,
-    idx: number | number[]
+    idx: number | number[] | null
   ) {
     this.modifiedTableElementIdx = { tableElement, idx };
     // have to defer the action to the next loop otherwise the ViewChild will be undefined
