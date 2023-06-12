@@ -62,6 +62,7 @@ export class CustomHtmlTableComponent implements OnInit {
     switch (event.key) {
       // if arrow right is pressed, console.log it
       case "ArrowRight":
+        // TODO extract this procedure and the ArrowLeft procedures
         console.log(`arrow right is pressed`);
         if (
           (this.highlightedTableElementIdx.idx ||
@@ -91,11 +92,13 @@ export class CustomHtmlTableComponent implements OnInit {
         }
         break;
       case "Enter":
+        // todo extract this procedure into a method
         if (this.highlightedTableElementIdx.tableElement !== null) {
           this.modifyTableElement(
             this.highlightedTableElementIdx.tableElement,
             this.highlightedTableElementIdx.idx
           );
+          this.clearHighlightedTableElement();
         }
         break;
       case "Escape":
@@ -104,7 +107,7 @@ export class CustomHtmlTableComponent implements OnInit {
           this.submitForm();
         }
         break;
-      case "Tab":
+      case "/":
         this.highlightTableElement(
           this.tableOperationConstants.columnHeader,
           0
