@@ -1,3 +1,5 @@
+$complementary-color: #a30d64;
+
 input {
     border: solid 1px grey;
 }
@@ -5,17 +7,18 @@ input {
 #add-candidate-btn {
   color: black;
   &:hover {
-    background: lightseagreen;
+    background: $complementary-color;
     color: white;
   }
 }
 
 #calculate-btn {
-  background-color: lightseagreen;
+  background-color: $complementary-color;
+  color: white;
 }
 
 #add-criterion-btn {
-    background-color: lightseagreen;
+    background-color: $complementary-color;
 }
 
 .highlight {

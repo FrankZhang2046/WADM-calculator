@@ -3,7 +3,7 @@
     <thead>
       <tr>
         <th colspan="2"></th>
-        <th [colSpan]="columnData.length" class="bg-green-600">
+        <th [colSpan]="columnData.length" class="bg-green-600 text-white">
           {{ "options" | titlecase }}
         </th>
       </tr>
@@ -89,7 +89,7 @@
             modifyTableElement(tableOperationConstants.rowHeader, [rowIndex])
           "
         >
-          {{ row.fieldName }}
+          {{ row.fieldName | titlecase }}
         </th>
         <td
           [ngClass]="
