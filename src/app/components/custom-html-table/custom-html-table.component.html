@@ -66,6 +66,9 @@
       >
         <!-- implement table header modification for row headers -->
         <th
+          (click)="
+            highlightTableElement(tableOperationConstants.rowHeader, [rowIndex])
+          "
           [ngClass]="
             highlightedTableElementIdx.tableElement ===
               tableOperationConstants.rowHeader &&
@@ -103,6 +106,11 @@
               modifiedTableElementIdx.idx[0] === rowIndex
             );
             else tableDataUpdateInputTemplate
+          "
+          (click)="
+            highlightTableElement(tableOperationConstants.fieldWeight, [
+              rowIndex
+            ])
           "
           (dblclick)="
             modifyTableElement(tableOperationConstants.fieldWeight, [rowIndex])
