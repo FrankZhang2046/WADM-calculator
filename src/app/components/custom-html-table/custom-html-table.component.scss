@@ -2,6 +2,22 @@ input {
     border: solid 1px grey;
 }
 
+#add-candidate-btn {
+  color: black;
+  &:hover {
+    background: lightseagreen;
+    color: white;
+  }
+}
+
+#calculate-btn {
+  background-color: lightseagreen;
+}
+
+#add-criterion-btn {
+    background-color: lightseagreen;
+}
+
 .highlight {
   border: 2px solid red;
 }

@@ -1,4 +1,4 @@
-<div class="flex w-full justify-center">
+<div class="flex w-full justify-center mt-10">
   <table class="w-fit">
     <thead>
       <tr>
@@ -49,9 +49,9 @@
           </th>
         </ng-container>
         <button
-          class="opacity-40 hover:opacity-100"
+          id="add-candidate-btn"
+          class="opacity-40 hover:opacity-100 z-0"
           mat-icon-button
-          color="primary"
           (click)="addCandidate()"
         >
           <mat-icon>add</mat-icon>
@@ -169,10 +169,10 @@
         <th class="add-criterion" [colSpan]="columnData.length + 2">
           <div class="button-container">
             <button
+              id="add-criterion-btn"
               (click)="addRow()"
               mat-flat-button
-              color="primary"
-              class="opacity-40 hover:opacity-100"
+              class="opacity-40 hover:opacity-100 bg-green-600"
             >
               <mat-icon>add</mat-icon>
               {{ "add criterion" | titlecase }}
@@ -180,7 +180,7 @@
             <button
               class="ml-4 opacity-50 hover:opacity-100"
               mat-mini-fab
-              color="primary"
+              id="calculate-btn"
               (click)="calculateResult()"
             >
               <mat-icon>calculate</mat-icon>
