@@ -25,7 +25,7 @@
             [ngClass]="
               highlightedTableElementIdx.tableElement ===
                 tableOperationConstants.columnHeader &&
-              highlightedTableElementIdx.idx === colIdx
+              highlightedTableElementIdx.idx[0] === colIdx
                 ? 'highlight'
                 : null
             "
@@ -33,7 +33,7 @@
               !(
                 modifiedTableElementIdx.tableElement ===
                   tableOperationConstants.columnHeader &&
-                modifiedTableElementIdx.idx === colIdx
+                modifiedTableElementIdx.idx[0] === colIdx
               );
               else headerRenameInputTemplate
             "
@@ -44,7 +44,7 @@
             (mousedown)="$event.stopPropagation()"
             cdkDragLockAxis="x"
             (dblclick)="
-              modifyTableElement(tableOperationConstants.columnHeader, colIdx)
+              modifyTableElement(tableOperationConstants.columnHeader, [colIdx])
             "
           >
             {{ column.columnName | titlecase }}
@@ -74,12 +74,12 @@
             !(
               modifiedTableElementIdx.tableElement ===
                 tableOperationConstants.rowHeader &&
-              modifiedTableElementIdx.idx === weightIndex
+              modifiedTableElementIdx.idx[0] === weightIndex
             );
             else headerRenameInputTemplate
           "
           (dblclick)="
-            modifyTableElement(tableOperationConstants.rowHeader, weightIndex)
+            modifyTableElement(tableOperationConstants.rowHeader, [weightIndex])
           "
         >
           {{ row.fieldName }}
@@ -88,7 +88,7 @@
           [ngClass]="
             highlightedTableElementIdx.tableElement ===
               tableOperationConstants.fieldWeight &&
-            highlightedTableElementIdx.idx === weightIndex
+            highlightedTableElementIdx.idx[0] === weightIndex
               ? 'highlight'
               : null
           "
@@ -96,12 +96,14 @@
             !(
               modifiedTableElementIdx.tableElement ===
                 tableOperationConstants.fieldWeight &&
-              modifiedTableElementIdx.idx === weightIndex
+              modifiedTableElementIdx.idx[0] === weightIndex
             );
             else tableDataUpdateInputTemplate
           "
           (dblclick)="
-            modifyTableElement(tableOperationConstants.fieldWeight, weightIndex)
+            modifyTableElement(tableOperationConstants.fieldWeight, [
+              weightIndex
+            ])
           "
           class="text-center text-blue-600"
         >

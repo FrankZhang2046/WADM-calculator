@@ -64,32 +64,32 @@ export class CustomHtmlTableComponent implements OnInit {
       case "ArrowRight":
         // TODO extract this procedure and the ArrowLeft procedures
         console.log(`arrow right is pressed`);
-        if (
-          (this.highlightedTableElementIdx.idx ||
-            this.highlightedTableElementIdx.idx === 0) &&
-          !Array.isArray(this.highlightedTableElementIdx.idx)
-        ) {
-          const newHighlightedTableElementDict = {
-            tableElement: this.highlightedTableElementIdx.tableElement,
-            idx: this.highlightedTableElementIdx.idx + 1,
-          };
-          console.log(`new dict: `, newHighlightedTableElementDict);
-          this.highlightedTableElementIdx = newHighlightedTableElementDict;
-        }
+        // if (
+        //   (this.highlightedTableElementIdx.idx ||
+        //     this.highlightedTableElementIdx.idx === 0) &&
+        //   !Array.isArray(this.highlightedTableElementIdx.idx)
+        // ) {
+        //   const newHighlightedTableElementDict = {
+        //     tableElement: this.highlightedTableElementIdx.tableElement,
+        //     idx: this.highlightedTableElementIdx.idx + 1,
+        //   };
+        //   console.log(`new dict: `, newHighlightedTableElementDict);
+        //   this.highlightedTableElementIdx = newHighlightedTableElementDict;
+        // }
         break;
       case "ArrowLeft":
-        if (
-          (this.highlightedTableElementIdx.idx ||
-            this.highlightedTableElementIdx.idx === 0) &&
-          !Array.isArray(this.highlightedTableElementIdx.idx)
-        ) {
-          const newHighlightedTableElementDict = {
-            tableElement: this.highlightedTableElementIdx.tableElement,
-            idx: this.highlightedTableElementIdx.idx - 1,
-          };
-          console.log(`new dict: `, newHighlightedTableElementDict);
-          this.highlightedTableElementIdx = newHighlightedTableElementDict;
-        }
+        // if (
+        //   (this.highlightedTableElementIdx.idx ||
+        //     this.highlightedTableElementIdx.idx === 0) &&
+        //   !Array.isArray(this.highlightedTableElementIdx.idx)
+        // ) {
+        //   const newHighlightedTableElementDict = {
+        //     tableElement: this.highlightedTableElementIdx.tableElement,
+        //     idx: this.highlightedTableElementIdx.idx - 1,
+        //   };
+        //   console.log(`new dict: `, newHighlightedTableElementDict);
+        //   this.highlightedTableElementIdx = newHighlightedTableElementDict;
+        // }
         break;
       case "Enter":
         // todo extract this procedure into a method
@@ -108,10 +108,9 @@ export class CustomHtmlTableComponent implements OnInit {
         }
         break;
       case "/":
-        this.highlightTableElement(
-          this.tableOperationConstants.columnHeader,
-          0
-        );
+        this.highlightTableElement(this.tableOperationConstants.columnHeader, [
+          0,
+        ]);
         break;
       default:
         break;
@@ -119,12 +118,28 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   /*
+  method for traversing through table elements with the arrow keys
+   */
+  // public tableTraversal(keystroke: string): void {
+  //   if (
+  //     this.highlightedTableElementIdx.tableElement ===
+  //     this.tableOperationConstants.columnHeader
+  //   ) {
+  //     if (keystroke === "ArrowRight") {
+  //       if (this.highlightedTableElementIdx.idx < this.columnData.length - 1) {
+  //         this.highlightTableElement(this.tableOperationConstants.rowHeader, 0);
+  //       }
+  //     }
+  //   }
+  // }
+
+  /*
   method to clear the highlight class of a cached table HTMLElement, and assign null to the variable
    */
   private clearHighlightedTableElement() {
     this.highlightedTableElementIdx = {
       tableElement: null,
-      idx: null,
+      idx: [],
     };
   }
 
@@ -138,7 +153,7 @@ export class CustomHtmlTableComponent implements OnInit {
       this.headerRenamingFormControl.reset();
     }
     this.modifiedTableElementIdx.tableElement = null;
-    this.modifiedTableElementIdx.idx = null;
+    this.modifiedTableElementIdx.idx = [];
   }
 
   @ViewChild(MatInput) public headerRenamingInputComponent!: MatInput;
@@ -154,13 +169,13 @@ export class CustomHtmlTableComponent implements OnInit {
   // * dictionary to indicate the table element that is currently being modified
   public modifiedTableElementIdx: {
     tableElement: TableOperationConstants | null;
-    idx: number | null | number[];
-  } = { tableElement: null, idx: null };
+    idx: number[];
+  } = { tableElement: null, idx: [] };
   // * dictionary to indicate the table element that is currently being highlighted
   public highlightedTableElementIdx: {
     tableElement: TableOperationConstants | null;
-    idx: number | null | number[];
-  } = { tableElement: null, idx: null };
+    idx: number[];
+  } = { tableElement: null, idx: [] };
 
   /*
     event handler when the user drag and drops to change the order of column headers
@@ -180,15 +195,13 @@ export class CustomHtmlTableComponent implements OnInit {
           this.modifiedTableElementIdx.tableElement ===
           TableOperationConstants.columnHeader
         ) {
-          this.columnData[
-            this.modifiedTableElementIdx.idx as number
-          ].columnName = value;
+          this.columnData[this.modifiedTableElementIdx.idx[0]].columnName =
+            value;
         } else if (
           this.modifiedTableElementIdx.tableElement ===
           this.tableOperationConstants.rowHeader
         ) {
-          this.tableData[this.modifiedTableElementIdx.idx as number].fieldName =
-            value;
+          this.tableData[this.modifiedTableElementIdx.idx[0]].fieldName = value;
         }
       }
     });
@@ -200,16 +213,15 @@ export class CustomHtmlTableComponent implements OnInit {
             TableOperationConstants.cell &&
           Array.isArray(this.modifiedTableElementIdx.idx)
         ) {
-          this.tableData[
-            this.modifiedTableElementIdx.idx[0] as number
-          ].fieldValues[this.modifiedTableElementIdx.idx[1] as number] = value;
+          this.tableData[this.modifiedTableElementIdx.idx[0]].fieldValues[
+            this.modifiedTableElementIdx.idx[1]
+          ] = value;
         } else if (
           this.modifiedTableElementIdx.tableElement ===
           TableOperationConstants.fieldWeight
         ) {
-          this.tableData[
-            this.modifiedTableElementIdx.idx as number
-          ].fieldWeight = value;
+          this.tableData[this.modifiedTableElementIdx.idx[0]].fieldWeight =
+            value;
         }
       }
     });
@@ -253,10 +265,9 @@ export class CustomHtmlTableComponent implements OnInit {
       tableData.fieldValues.push(null);
     });
     // * prompt user to rename the new column header immediately after creation
-    this.modifyTableElement(
-      TableOperationConstants.columnHeader,
-      this.columnData.length - 1
-    );
+    this.modifyTableElement(TableOperationConstants.columnHeader, [
+      this.columnData.length - 1,
+    ]);
   }
   public addRow(): void {
     this.tableData.push({
@@ -265,10 +276,9 @@ export class CustomHtmlTableComponent implements OnInit {
       fieldWeight: null,
     });
     // * prompt user to rename the new option immediately after creation
-    this.modifyTableElement(
-      TableOperationConstants.rowHeader,
-      this.tableData.length - 1
-    );
+    this.modifyTableElement(TableOperationConstants.rowHeader, [
+      this.tableData.length - 1,
+    ]);
   }
 
   /*
@@ -277,7 +287,7 @@ export class CustomHtmlTableComponent implements OnInit {
    */
   public modifyTableElement(
     tableElement: TableOperationConstants,
-    idx: number | number[] | null
+    idx: number[]
   ) {
     this.modifiedTableElementIdx = { tableElement, idx };
     // have to defer the action to the next loop otherwise the ViewChild will be undefined
@@ -295,7 +305,7 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public highlightTableElement(
     tableElement: TableOperationConstants,
-    idx: number | number[]
+    idx: number[]
   ): void {
     // this should be good enough to add the highlight class to the table element
     this.highlightedTableElementIdx = { tableElement, idx };
