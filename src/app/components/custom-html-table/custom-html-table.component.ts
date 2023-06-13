@@ -310,10 +310,10 @@ export class CustomHtmlTableComponent implements OnInit {
     idx: number[];
   } = { tableElement: null, idx: [] };
   // * dictionary to indicate the table element that is currently being highlighted
-  public cachedHighlightedTableElementIdx!: {
+  public cachedHighlightedTableElementIdx: {
     tableElement: TableOperationConstants | null;
     idx: number[];
-  };
+  } = { tableElement: null, idx: [] };
 
   /*
     event handler when the user drag and drops to change the order of column headers
