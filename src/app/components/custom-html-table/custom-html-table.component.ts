@@ -109,6 +109,9 @@ export class CustomHtmlTableComponent implements OnInit {
   method for traversing through table elements with the arrow keys
    */
   public tableTraversal(keystroke: string): void {
+    if (this.highlightedTableElementIdx.tableElement === null) {
+      this.initiateTableTraversal();
+    }
     if (
       this.highlightedTableElementIdx.tableElement ===
       this.tableOperationConstants.columnHeader
@@ -399,6 +402,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   public addCandidate(): void {
+    this.clearHighlightedTableElement();
     this.columnData.push({ columnName: "new", result: null });
     this.tableData.forEach((tableData) => {
       tableData.fieldValues.push(null);
@@ -409,6 +413,7 @@ export class CustomHtmlTableComponent implements OnInit {
     ]);
   }
   public addRow(): void {
+    this.clearHighlightedTableElement();
     this.tableData.push({
       fieldName: "new",
       fieldValues: Array(this.columnData.length).fill(null),
