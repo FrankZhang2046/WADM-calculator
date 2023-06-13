@@ -118,15 +118,6 @@ export class CustomHtmlTableComponent implements OnInit {
               this.tableOperationConstants.columnHeader,
               [this.highlightedTableElementIdx.idx[0] + 1]
             );
-          } else if (
-            this.highlightedTableElementIdx.idx[0] ===
-            this.columnData.length - 1
-          ) {
-            // * wrapping back to the head of the list
-            this.highlightTableElement(
-              this.tableOperationConstants.columnHeader,
-              [0]
-            );
           }
           break;
         case "ArrowLeft":
@@ -134,12 +125,6 @@ export class CustomHtmlTableComponent implements OnInit {
             this.highlightTableElement(
               this.tableOperationConstants.columnHeader,
               [this.highlightedTableElementIdx.idx[0] - 1]
-            );
-          } else if (this.highlightedTableElementIdx.idx[0] === 0) {
-            // * wrapping back to the head of the list
-            this.highlightTableElement(
-              this.tableOperationConstants.columnHeader,
-              [this.columnData.length - 1]
             );
           }
           break;
@@ -166,15 +151,6 @@ export class CustomHtmlTableComponent implements OnInit {
               this.highlightedTableElementIdx.idx[0],
               this.highlightedTableElementIdx.idx[1] + 1,
             ]);
-          } else if (
-            this.highlightedTableElementIdx.idx[1] ===
-            this.columnData.length - 1
-          ) {
-            // * wrapping back to the head of the list
-            this.highlightTableElement(this.tableOperationConstants.cell, [
-              this.highlightedTableElementIdx.idx[0],
-              0,
-            ]);
           }
           break;
         case "ArrowLeft":
@@ -183,8 +159,8 @@ export class CustomHtmlTableComponent implements OnInit {
               this.highlightedTableElementIdx.idx[0],
               this.highlightedTableElementIdx.idx[1] - 1,
             ]);
-          } else if (this.highlightedTableElementIdx.idx[1] === 0) {
-            // * wrapping back to the head of the list
+          } else {
+            // * transition to the fieldWeight block of the corresponding row
             this.highlightTableElement(
               this.tableOperationConstants.fieldWeight,
               [this.highlightedTableElementIdx.idx[0]]
@@ -222,24 +198,11 @@ export class CustomHtmlTableComponent implements OnInit {
     ) {
       switch (keystroke) {
         case "ArrowRight":
-          if (
-            this.highlightedTableElementIdx.idx[0] <
-            this.columnData.length - 1
-          ) {
-            this.highlightTableElement(
-              this.tableOperationConstants.fieldWeight,
-              [this.highlightedTableElementIdx.idx[0] + 1]
-            );
-          } else if (
-            this.highlightedTableElementIdx.idx[0] ===
-            this.columnData.length - 1
-          ) {
-            // * wrapping back to the head of the list
-            this.highlightTableElement(
-              this.tableOperationConstants.fieldWeight,
-              [0]
-            );
-          }
+          // * transition to the cells block for the corresponding row
+          this.highlightTableElement(this.tableOperationConstants.cell, [
+            this.highlightedTableElementIdx.idx[0],
+            0,
+          ]);
           break;
         case "ArrowLeft":
           // when the fieldWeight cell is highlighted, when you go left, highlight the corresponding row header
@@ -256,6 +219,13 @@ export class CustomHtmlTableComponent implements OnInit {
       this.tableOperationConstants.rowHeader
     ) {
       switch (keystroke) {
+        case "ArrowRight":
+          // * transition to the fieldWeight block for the corresponding row
+          this.highlightTableElement(
+            this.tableOperationConstants.fieldWeight,
+            this.highlightedTableElementIdx.idx
+          );
+          break;
         case "ArrowDown":
           if (
             this.highlightedTableElementIdx.idx[0] <
