@@ -159,7 +159,6 @@ export class CustomHtmlTableComponent implements OnInit {
   @ViewChild(MatInput) public headerRenamingInputComponent!: MatInput;
   @ViewChild(MatInput) public tableDataUpdateInputComponent!: MatInput;
   public displayResults: boolean = false;
-  public cachedHighlightedElement!: HTMLElement | null;
   // formControl for the column header renaming input component
   public headerRenamingFormControl = new FormControl<string>("");
   public tableDataUpdateFormControl = new FormControl<number | null>(null, [
@@ -326,11 +325,5 @@ export class CustomHtmlTableComponent implements OnInit {
       }, 0);
     });
     this.displayResults = true;
-  }
-
-  public highlightElement($event: MouseEvent) {
-    this.clearHighlightedTableElement();
-    ($event.target as HTMLElement).classList.add("highlight");
-    this.cachedHighlightedElement = $event.target as HTMLElement;
   }
 }

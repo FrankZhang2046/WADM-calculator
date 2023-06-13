@@ -39,8 +39,6 @@
             "
             class="draggable-cell"
             cdkDrag
-            [cdkDragDisabled]="cachedHighlightedElement !== null"
-            (click)="highlightElement($event)"
             (mousedown)="$event.stopPropagation()"
             cdkDragLockAxis="x"
             (dblclick)="
@@ -62,7 +60,6 @@
     </thead>
     <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">
       <tr
-        [cdkDragDisabled]="cachedHighlightedElement !== null"
         cdkDrag
         *ngFor="let row of tableData; let weightIndex = index"
         class="table-row"
