@@ -91,9 +91,14 @@ export class CustomHtmlTableComponent implements OnInit {
         break;
       case "/":
         // * initiate table traversal
-        this.highlightTableElement(this.tableOperationConstants.columnHeader, [
-          0,
-        ]);
+        if (this.cachedHighlightedTableElementIdx.tableElement === null) {
+          this.highlightTableElement(
+            this.tableOperationConstants.columnHeader,
+            [0]
+          );
+        } else {
+          this.initiateTableTraversal();
+        }
         break;
       default:
         break;
@@ -291,6 +296,11 @@ export class CustomHtmlTableComponent implements OnInit {
     tableElement: TableOperationConstants | null;
     idx: number[];
   } = { tableElement: null, idx: [] };
+  // * dictionary to indicate the table element that is currently being highlighted
+  public cachedHighlightedTableElementIdx!: {
+    tableElement: TableOperationConstants | null;
+    idx: number[];
+  };
 
   /*
     event handler when the user drag and drops to change the order of column headers
@@ -424,6 +434,8 @@ export class CustomHtmlTableComponent implements OnInit {
   ): void {
     // this should be good enough to add the highlight class to the table element
     this.highlightedTableElementIdx = { tableElement, idx };
+    // * cache the highlighted table element so that it can be reactivated
+    this.cachedHighlightedTableElementIdx = this.highlightedTableElementIdx;
   }
 
   /*
@@ -441,5 +453,14 @@ export class CustomHtmlTableComponent implements OnInit {
       }, 0);
     });
     this.displayResults = true;
+  }
+
+  private initiateTableTraversal() {
+    if (this.cachedHighlightedTableElementIdx.tableElement !== null) {
+      this.highlightTableElement(
+        this.cachedHighlightedTableElementIdx.tableElement,
+        this.cachedHighlightedTableElementIdx.idx
+      );
+    }
   }
 }
