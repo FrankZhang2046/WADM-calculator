@@ -70,6 +70,9 @@ export class CustomHtmlTableComponent implements OnInit {
       case "ArrowDown":
         this.tableTraversal(event.key);
         break;
+      case "ArrowUp":
+        this.tableTraversal(event.key);
+        break;
       case "Enter":
         // todo extract this procedure into a method
         if (this.highlightedTableElementIdx.tableElement !== null) {
@@ -190,9 +193,25 @@ export class CustomHtmlTableComponent implements OnInit {
           break;
         case "ArrowDown":
           this.highlightTableElement(this.tableOperationConstants.cell, [
-            0,
-            this.highlightedTableElementIdx.idx[0],
+            Math.min(
+              this.highlightedTableElementIdx.idx[0] + 1,
+              this.tableData.length - 1
+            ),
+            this.highlightedTableElementIdx.idx[1],
           ]);
+          break;
+        case "ArrowUp":
+          if (this.highlightedTableElementIdx.idx[0] > 0) {
+            this.highlightTableElement(this.tableOperationConstants.cell, [
+              this.highlightedTableElementIdx.idx[0] - 1,
+              this.highlightedTableElementIdx.idx[1],
+            ]);
+          } else {
+            this.highlightTableElement(
+              this.tableOperationConstants.columnHeader,
+              [this.highlightedTableElementIdx.idx[1]]
+            );
+          }
           break;
         default:
           break;
@@ -223,11 +242,35 @@ export class CustomHtmlTableComponent implements OnInit {
           }
           break;
         case "ArrowLeft":
+          // when the fieldWeight cell is highlighted, when you go left, highlight the corresponding row header
+          this.highlightTableElement(
+            this.tableOperationConstants.rowHeader,
+            this.highlightedTableElementIdx.idx
+          );
+          break;
+        default:
+          break;
+      }
+    } else if (
+      this.highlightedTableElementIdx.tableElement ===
+      this.tableOperationConstants.rowHeader
+    ) {
+      switch (keystroke) {
+        case "ArrowDown":
+          if (
+            this.highlightedTableElementIdx.idx[0] <
+            this.tableData.length - 1
+          ) {
+            this.highlightTableElement(this.tableOperationConstants.rowHeader, [
+              this.highlightedTableElementIdx.idx[0] + 1,
+            ]);
+          }
+          break;
+        case "ArrowUp":
           if (this.highlightedTableElementIdx.idx[0] > 0) {
-            this.highlightTableElement(
-              this.tableOperationConstants.fieldWeight,
-              [this.highlightedTableElementIdx.idx[0] - 1]
-            );
+            this.highlightTableElement(this.tableOperationConstants.rowHeader, [
+              this.highlightedTableElementIdx.idx[0] - 1,
+            ]);
           }
           break;
         default:

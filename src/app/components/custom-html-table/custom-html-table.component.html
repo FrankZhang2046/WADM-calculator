@@ -61,22 +61,29 @@
     <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">
       <tr
         cdkDrag
-        *ngFor="let row of tableData; let weightIndex = index"
+        *ngFor="let row of tableData; let rowIndex = index"
         class="table-row"
       >
         <!-- implement table header modification for row headers -->
         <th
+          [ngClass]="
+            highlightedTableElementIdx.tableElement ===
+              tableOperationConstants.rowHeader &&
+            highlightedTableElementIdx.idx[0] === rowIndex
+              ? 'highlight'
+              : null
+          "
           class="text-left"
           *ngIf="
             !(
               modifiedTableElementIdx.tableElement ===
                 tableOperationConstants.rowHeader &&
-              modifiedTableElementIdx.idx[0] === weightIndex
+              modifiedTableElementIdx.idx[0] === rowIndex
             );
             else headerRenameInputTemplate
           "
           (dblclick)="
-            modifyTableElement(tableOperationConstants.rowHeader, [weightIndex])
+            modifyTableElement(tableOperationConstants.rowHeader, [rowIndex])
           "
         >
           {{ row.fieldName }}
@@ -85,7 +92,7 @@
           [ngClass]="
             highlightedTableElementIdx.tableElement ===
               tableOperationConstants.fieldWeight &&
-            highlightedTableElementIdx.idx[0] === weightIndex
+            highlightedTableElementIdx.idx[0] === rowIndex
               ? 'highlight'
               : null
           "
@@ -93,14 +100,12 @@
             !(
               modifiedTableElementIdx.tableElement ===
                 tableOperationConstants.fieldWeight &&
-              modifiedTableElementIdx.idx[0] === weightIndex
+              modifiedTableElementIdx.idx[0] === rowIndex
             );
             else tableDataUpdateInputTemplate
           "
           (dblclick)="
-            modifyTableElement(tableOperationConstants.fieldWeight, [
-              weightIndex
-            ])
+            modifyTableElement(tableOperationConstants.fieldWeight, [rowIndex])
           "
           class="text-center text-blue-600"
         >
@@ -115,7 +120,7 @@
         >
           <td
             [class.highlight]="
-              highlightedTableElementIdx.idx[0] === weightIndex &&
+              highlightedTableElementIdx.idx[0] === rowIndex &&
               highlightedTableElementIdx.idx[1] === cellIdx
             "
             *ngIf="
@@ -123,20 +128,20 @@
                 modifiedTableElementIdx.tableElement ===
                   tableOperationConstants.cell &&
                 (modifiedTableElementIdx.idx
-                  | assertArrayEquality : [weightIndex, cellIdx])
+                  | assertArrayEquality : [rowIndex, cellIdx])
               );
               else tableDataUpdateInputTemplate
             "
             class="text-blue-600 text-center w-20"
             (click)="
               highlightTableElement(tableOperationConstants.cell, [
-                weightIndex,
+                rowIndex,
                 cellIdx
               ])
             "
             (dblclick)="
               modifyTableElement(tableOperationConstants.cell, [
-                weightIndex,
+                rowIndex,
                 cellIdx
               ])
             "
