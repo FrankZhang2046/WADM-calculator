@@ -114,6 +114,10 @@
           "
         >
           <td
+            [class.highlight]="
+              highlightedTableElementIdx.idx[0] === weightIndex &&
+              highlightedTableElementIdx.idx[1] === cellIdx
+            "
             *ngIf="
               !(
                 modifiedTableElementIdx.tableElement ===
@@ -124,6 +128,12 @@
               else tableDataUpdateInputTemplate
             "
             class="text-blue-600 text-center w-20"
+            (click)="
+              highlightTableElement(tableOperationConstants.cell, [
+                weightIndex,
+                cellIdx
+              ])
+            "
             (dblclick)="
               modifyTableElement(tableOperationConstants.cell, [
                 weightIndex,
@@ -148,7 +158,7 @@
             <button
               (click)="addRow()"
               mat-flat-button
-              color="white"
+              color="primary"
               class="opacity-40 hover:opacity-100"
             >
               <mat-icon>add</mat-icon>
@@ -197,7 +207,7 @@
       type="number"
     />
     <div class="text-red-500" *ngIf="tableDataUpdateFormControl.invalid">
-      something's wrong
+      please enter a value between 1 to 10
     </div>
   </th>
 </ng-template>

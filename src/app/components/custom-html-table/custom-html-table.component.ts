@@ -62,34 +62,13 @@ export class CustomHtmlTableComponent implements OnInit {
     switch (event.key) {
       // if arrow right is pressed, console.log it
       case "ArrowRight":
-        // TODO extract this procedure and the ArrowLeft procedures
-        console.log(`arrow right is pressed`);
-        // if (
-        //   (this.highlightedTableElementIdx.idx ||
-        //     this.highlightedTableElementIdx.idx === 0) &&
-        //   !Array.isArray(this.highlightedTableElementIdx.idx)
-        // ) {
-        //   const newHighlightedTableElementDict = {
-        //     tableElement: this.highlightedTableElementIdx.tableElement,
-        //     idx: this.highlightedTableElementIdx.idx + 1,
-        //   };
-        //   console.log(`new dict: `, newHighlightedTableElementDict);
-        //   this.highlightedTableElementIdx = newHighlightedTableElementDict;
-        // }
+        this.tableTraversal(event.key);
         break;
       case "ArrowLeft":
-        // if (
-        //   (this.highlightedTableElementIdx.idx ||
-        //     this.highlightedTableElementIdx.idx === 0) &&
-        //   !Array.isArray(this.highlightedTableElementIdx.idx)
-        // ) {
-        //   const newHighlightedTableElementDict = {
-        //     tableElement: this.highlightedTableElementIdx.tableElement,
-        //     idx: this.highlightedTableElementIdx.idx - 1,
-        //   };
-        //   console.log(`new dict: `, newHighlightedTableElementDict);
-        //   this.highlightedTableElementIdx = newHighlightedTableElementDict;
-        // }
+        this.tableTraversal(event.key);
+        break;
+      case "ArrowDown":
+        this.tableTraversal(event.key);
         break;
       case "Enter":
         // todo extract this procedure into a method
@@ -108,6 +87,7 @@ export class CustomHtmlTableComponent implements OnInit {
         }
         break;
       case "/":
+        // * initiate table traversal
         this.highlightTableElement(this.tableOperationConstants.columnHeader, [
           0,
         ]);
@@ -120,18 +100,141 @@ export class CustomHtmlTableComponent implements OnInit {
   /*
   method for traversing through table elements with the arrow keys
    */
-  // public tableTraversal(keystroke: string): void {
-  //   if (
-  //     this.highlightedTableElementIdx.tableElement ===
-  //     this.tableOperationConstants.columnHeader
-  //   ) {
-  //     if (keystroke === "ArrowRight") {
-  //       if (this.highlightedTableElementIdx.idx < this.columnData.length - 1) {
-  //         this.highlightTableElement(this.tableOperationConstants.rowHeader, 0);
-  //       }
-  //     }
-  //   }
-  // }
+  public tableTraversal(keystroke: string): void {
+    if (
+      this.highlightedTableElementIdx.tableElement ===
+      this.tableOperationConstants.columnHeader
+    ) {
+      switch (keystroke) {
+        case "ArrowRight":
+          if (
+            this.highlightedTableElementIdx.idx[0] <
+            this.columnData.length - 1
+          ) {
+            this.highlightTableElement(
+              this.tableOperationConstants.columnHeader,
+              [this.highlightedTableElementIdx.idx[0] + 1]
+            );
+          } else if (
+            this.highlightedTableElementIdx.idx[0] ===
+            this.columnData.length - 1
+          ) {
+            // * wrapping back to the head of the list
+            this.highlightTableElement(
+              this.tableOperationConstants.columnHeader,
+              [0]
+            );
+          }
+          break;
+        case "ArrowLeft":
+          if (this.highlightedTableElementIdx.idx[0] > 0) {
+            this.highlightTableElement(
+              this.tableOperationConstants.columnHeader,
+              [this.highlightedTableElementIdx.idx[0] - 1]
+            );
+          } else if (this.highlightedTableElementIdx.idx[0] === 0) {
+            // * wrapping back to the head of the list
+            this.highlightTableElement(
+              this.tableOperationConstants.columnHeader,
+              [this.columnData.length - 1]
+            );
+          }
+          break;
+        case "ArrowDown":
+          this.highlightTableElement(this.tableOperationConstants.cell, [
+            0,
+            this.highlightedTableElementIdx.idx[0],
+          ]);
+          break;
+        default:
+          break;
+      }
+    } else if (
+      this.highlightedTableElementIdx.tableElement ===
+      this.tableOperationConstants.cell
+    ) {
+      switch (keystroke) {
+        case "ArrowRight":
+          if (
+            this.highlightedTableElementIdx.idx[1] <
+            this.columnData.length - 1
+          ) {
+            this.highlightTableElement(this.tableOperationConstants.cell, [
+              this.highlightedTableElementIdx.idx[0],
+              this.highlightedTableElementIdx.idx[1] + 1,
+            ]);
+          } else if (
+            this.highlightedTableElementIdx.idx[1] ===
+            this.columnData.length - 1
+          ) {
+            // * wrapping back to the head of the list
+            this.highlightTableElement(this.tableOperationConstants.cell, [
+              this.highlightedTableElementIdx.idx[0],
+              0,
+            ]);
+          }
+          break;
+        case "ArrowLeft":
+          if (this.highlightedTableElementIdx.idx[1] > 0) {
+            this.highlightTableElement(this.tableOperationConstants.cell, [
+              this.highlightedTableElementIdx.idx[0],
+              this.highlightedTableElementIdx.idx[1] - 1,
+            ]);
+          } else if (this.highlightedTableElementIdx.idx[1] === 0) {
+            // * wrapping back to the head of the list
+            this.highlightTableElement(
+              this.tableOperationConstants.fieldWeight,
+              [this.highlightedTableElementIdx.idx[0]]
+            );
+          }
+          break;
+        case "ArrowDown":
+          this.highlightTableElement(this.tableOperationConstants.cell, [
+            0,
+            this.highlightedTableElementIdx.idx[0],
+          ]);
+          break;
+        default:
+          break;
+      }
+    } else if (
+      this.highlightedTableElementIdx.tableElement ===
+      this.tableOperationConstants.fieldWeight
+    ) {
+      switch (keystroke) {
+        case "ArrowRight":
+          if (
+            this.highlightedTableElementIdx.idx[0] <
+            this.columnData.length - 1
+          ) {
+            this.highlightTableElement(
+              this.tableOperationConstants.fieldWeight,
+              [this.highlightedTableElementIdx.idx[0] + 1]
+            );
+          } else if (
+            this.highlightedTableElementIdx.idx[0] ===
+            this.columnData.length - 1
+          ) {
+            // * wrapping back to the head of the list
+            this.highlightTableElement(
+              this.tableOperationConstants.fieldWeight,
+              [0]
+            );
+          }
+          break;
+        case "ArrowLeft":
+          if (this.highlightedTableElementIdx.idx[0] > 0) {
+            this.highlightTableElement(
+              this.tableOperationConstants.fieldWeight,
+              [this.highlightedTableElementIdx.idx[0] - 1]
+            );
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }
 
   /*
   method to clear the highlight class of a cached table HTMLElement, and assign null to the variable
