@@ -91,9 +91,14 @@ export class CustomHtmlTableComponent implements OnInit {
         break;
       case "/":
         // * initiate table traversal
-        this.highlightTableElement(this.tableOperationConstants.columnHeader, [
-          0,
-        ]);
+        if (this.cachedHighlightedTableElementIdx.tableElement === null) {
+          this.highlightTableElement(
+            this.tableOperationConstants.columnHeader,
+            [0]
+          );
+        } else {
+          this.initiateTableTraversal();
+        }
         break;
       default:
         break;
@@ -104,6 +109,9 @@ export class CustomHtmlTableComponent implements OnInit {
   method for traversing through table elements with the arrow keys
    */
   public tableTraversal(keystroke: string): void {
+    if (this.highlightedTableElementIdx.tableElement === null) {
+      this.initiateTableTraversal();
+    }
     if (
       this.highlightedTableElementIdx.tableElement ===
       this.tableOperationConstants.columnHeader
@@ -211,6 +219,19 @@ export class CustomHtmlTableComponent implements OnInit {
             this.highlightedTableElementIdx.idx
           );
           break;
+        case "ArrowUp":
+          this.highlightTableElement(this.tableOperationConstants.fieldWeight, [
+            Math.max(this.highlightedTableElementIdx.idx[0] - 1, 0),
+          ]);
+          break;
+        case "ArrowDown":
+          this.highlightTableElement(this.tableOperationConstants.fieldWeight, [
+            Math.min(
+              this.highlightedTableElementIdx.idx[0] + 1,
+              this.tableData.length - 1
+            ),
+          ]);
+          break;
         default:
           break;
       }
@@ -291,11 +312,17 @@ export class CustomHtmlTableComponent implements OnInit {
     tableElement: TableOperationConstants | null;
     idx: number[];
   } = { tableElement: null, idx: [] };
+  // * dictionary to indicate the table element that is currently being highlighted
+  public cachedHighlightedTableElementIdx: {
+    tableElement: TableOperationConstants | null;
+    idx: number[];
+  } = { tableElement: null, idx: [] };
 
   /*
     event handler when the user drag and drops to change the order of column headers
   */
   public columnDropMethod($event: CdkDragDrop<string[]>) {
+    this.clearHighlightedTableElement();
     // shift order around with the moveItemsInArray method
     moveItemInArray(this.columnData, $event.previousIndex, $event.currentIndex);
     this.swapColumnsForTableData($event.previousIndex, $event.currentIndex);
@@ -375,6 +402,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   public addCandidate(): void {
+    this.clearHighlightedTableElement();
     this.columnData.push({ columnName: "new", result: null });
     this.tableData.forEach((tableData) => {
       tableData.fieldValues.push(null);
@@ -385,6 +413,7 @@ export class CustomHtmlTableComponent implements OnInit {
     ]);
   }
   public addRow(): void {
+    this.clearHighlightedTableElement();
     this.tableData.push({
       fieldName: "new",
       fieldValues: Array(this.columnData.length).fill(null),
@@ -404,6 +433,7 @@ export class CustomHtmlTableComponent implements OnInit {
     tableElement: TableOperationConstants,
     idx: number[]
   ) {
+    this.clearHighlightedTableElement();
     this.modifiedTableElementIdx = { tableElement, idx };
     // have to defer the action to the next loop otherwise the ViewChild will be undefined
     setTimeout(() => {
@@ -415,6 +445,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }
   // row drop method shifts the order of the tableData array around
   public rowDropMethod($event: CdkDragDrop<TableRowData[]>) {
+    this.clearHighlightedTableElement();
     moveItemInArray(this.tableData, $event.previousIndex, $event.currentIndex);
   }
 
@@ -424,6 +455,8 @@ export class CustomHtmlTableComponent implements OnInit {
   ): void {
     // this should be good enough to add the highlight class to the table element
     this.highlightedTableElementIdx = { tableElement, idx };
+    // * cache the highlighted table element so that it can be reactivated
+    this.cachedHighlightedTableElementIdx = this.highlightedTableElementIdx;
   }
 
   /*
@@ -431,6 +464,7 @@ export class CustomHtmlTableComponent implements OnInit {
     time each cell by its weight, calculate the sum, and attach to each column's result property
    */
   public calculateResult(): void {
+    this.clearHighlightedTableElement();
     // todo make this method more performant, loop through each cell instead of each column with a nested loop
     this.columnData.forEach((option, index) => {
       option.result = this.tableData.reduce((sum, row) => {
@@ -441,5 +475,14 @@ export class CustomHtmlTableComponent implements OnInit {
       }, 0);
     });
     this.displayResults = true;
+  }
+
+  private initiateTableTraversal() {
+    if (this.cachedHighlightedTableElementIdx.tableElement !== null) {
+      this.highlightTableElement(
+        this.cachedHighlightedTableElementIdx.tableElement,
+        this.cachedHighlightedTableElementIdx.idx
+      );
+    }
   }
 }
