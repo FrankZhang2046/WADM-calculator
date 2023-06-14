@@ -161,3 +161,10 @@
     </div>
   </th>
 </ng-template>
+
+<div class="flex w-full justify-center mt-10">
+  <canvas baseChart class="chart w-max p-10" [data]="barChartData" [options]="barChartOptions"
+    [plugins]="barChartPlugins" [type]="barChartType" (chartHover)="chartHovered($event)"
+    (chartClick)="chartClicked($event)">
+  </canvas>
+</div>
