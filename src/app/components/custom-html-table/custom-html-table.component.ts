@@ -1,7 +1,9 @@
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { TableOperationConstants } from "src/app/models/enums";
 import { MatInput, MatInputModule } from "@angular/material/input";
+import { ConfirmDeletionComponent } from "../confirm-deletion/confirm-deletion.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import {
@@ -21,6 +23,7 @@ import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe"
   standalone: true,
   imports: [
     AssertArrayEqualityPipe,
+    MatDialogModule,
     CommonModule,
     MatInputModule,
     MatButtonModule,
@@ -35,6 +38,9 @@ export class CustomHtmlTableComponent implements OnInit {
   public tableOperationConstants = TableOperationConstants;
   public columnToDelete!: number | null;
   public rowToDelete!: number | null;
+  public confirmDeletionModalOpened!: boolean;
+
+  constructor(public matDialog: MatDialog) {}
 
   public submitForm() {
     switch (this.modifiedTableElementIdx.tableElement) {
@@ -59,6 +65,9 @@ export class CustomHtmlTableComponent implements OnInit {
 
   @HostListener("window:keydown", ["$event"])
   public keyEvent(event: KeyboardEvent) {
+    if (this.confirmDeletionModalOpened) {
+      return;
+    }
     console.log(`key pressed is:`, event.key);
     // switch statement to specify the procedure of different keystrokes:
     switch (event.key) {
@@ -114,6 +123,14 @@ export class CustomHtmlTableComponent implements OnInit {
           );
         } else {
           this.initiateTableTraversal();
+        }
+        break;
+      case "Backspace":
+        if (!this.confirmDeletionModalOpened) {
+          this.matDialog
+            .open(ConfirmDeletionComponent)
+            .afterOpened()
+            .subscribe((res) => (this.confirmDeletionModalOpened = true));
         }
         break;
       default:
@@ -505,6 +522,7 @@ export class CustomHtmlTableComponent implements OnInit {
     console.log(`signal col for deletion called`);
     if (this.columnToDelete === null || this.columnToDelete === undefined) {
       this.columnToDelete = columnToDelete;
+      this.rowToDelete = null;
     } else {
       this.columnToDelete = null;
     }
@@ -513,6 +531,7 @@ export class CustomHtmlTableComponent implements OnInit {
   private signalRowForDeletion(rowToDelete: number): void {
     if (this.rowToDelete === null || this.rowToDelete === undefined) {
       this.rowToDelete = rowToDelete;
+      this.columnToDelete = null;
     } else {
       this.rowToDelete = null;
     }
