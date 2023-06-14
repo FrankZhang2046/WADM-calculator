@@ -1,5 +1,24 @@
+$complementary-color: #a30d64;
+
 input {
     border: solid 1px grey;
+}
+
+#add-candidate-btn {
+  color: black;
+  &:hover {
+    background: $complementary-color;
+    color: white;
+  }
+}
+
+#calculate-btn {
+  background-color: $complementary-color;
+  color: white;
+}
+
+#add-criterion-btn {
+    background-color: $complementary-color;
 }
 
 .highlight {
