@@ -503,7 +503,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }
   public signalColumnForDeletion(columnToDelete: number): void {
     console.log(`signal col for deletion called`);
-    if (!this.columnToDelete) {
+    if (this.columnToDelete === null || this.columnToDelete === undefined) {
       this.columnToDelete = columnToDelete;
     } else {
       this.columnToDelete = null;
@@ -511,7 +511,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   private signalRowForDeletion(rowToDelete: number): void {
-    if (!this.rowToDelete) {
+    if (this.rowToDelete === null || this.rowToDelete === undefined) {
       this.rowToDelete = rowToDelete;
     } else {
       this.rowToDelete = null;
