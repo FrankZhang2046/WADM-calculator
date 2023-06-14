@@ -33,6 +33,8 @@ import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe"
 })
 export class CustomHtmlTableComponent implements OnInit {
   public tableOperationConstants = TableOperationConstants;
+  public columnToDelete!: number | null;
+  public rowToDelete!: number | null;
 
   public submitForm() {
     switch (this.modifiedTableElementIdx.tableElement) {
@@ -65,13 +67,27 @@ export class CustomHtmlTableComponent implements OnInit {
         this.tableTraversal(event.key);
         break;
       case "ArrowLeft":
-        this.tableTraversal(event.key);
+        if (
+          this.highlightedTableElementIdx.tableElement ===
+          this.tableOperationConstants.rowHeader
+        ) {
+          this.signalRowForDeletion(this.highlightedTableElementIdx.idx[0]);
+        } else {
+          this.tableTraversal(event.key);
+        }
         break;
       case "ArrowDown":
         this.tableTraversal(event.key);
         break;
       case "ArrowUp":
-        this.tableTraversal(event.key);
+        if (
+          this.highlightedTableElementIdx.tableElement ===
+          this.tableOperationConstants.columnHeader
+        ) {
+          this.signalColumnForDeletion(this.highlightedTableElementIdx.idx[0]);
+        } else {
+          this.tableTraversal(event.key);
+        }
         break;
       case "Enter":
         // todo extract this procedure into a method
@@ -483,6 +499,22 @@ export class CustomHtmlTableComponent implements OnInit {
         this.cachedHighlightedTableElementIdx.tableElement,
         this.cachedHighlightedTableElementIdx.idx
       );
+    }
+  }
+  public signalColumnForDeletion(columnToDelete: number): void {
+    console.log(`signal col for deletion called`);
+    if (!this.columnToDelete) {
+      this.columnToDelete = columnToDelete;
+    } else {
+      this.columnToDelete = null;
+    }
+  }
+
+  private signalRowForDeletion(rowToDelete: number): void {
+    if (!this.rowToDelete) {
+      this.rowToDelete = rowToDelete;
+    } else {
+      this.rowToDelete = null;
     }
   }
 }

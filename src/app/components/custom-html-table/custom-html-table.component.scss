@@ -4,6 +4,10 @@ input {
     border: solid 1px grey;
 }
 
+.to-delete {
+  background-color: rgba(255, 0, 0, 0.5) !important;
+}
+
 #add-candidate-btn {
   color: black;
   &:hover {
