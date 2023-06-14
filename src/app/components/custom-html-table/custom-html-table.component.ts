@@ -39,6 +39,12 @@ export class CustomHtmlTableComponent implements OnInit {
   public columnToDelete!: number | null;
   public rowToDelete!: number | null;
   public confirmDeletionModalOpened!: boolean;
+  public get hasEitherColumnOrRowToDelete(): boolean {
+    return (
+      (this.columnToDelete !== null && this.columnToDelete !== undefined) ||
+      (this.rowToDelete !== null && this.rowToDelete !== undefined)
+    );
+  }
 
   constructor(public matDialog: MatDialog) {}
 
@@ -126,16 +132,51 @@ export class CustomHtmlTableComponent implements OnInit {
         }
         break;
       case "Backspace":
-        if (!this.confirmDeletionModalOpened) {
-          this.matDialog
-            .open(ConfirmDeletionComponent)
+        if (
+          !this.confirmDeletionModalOpened &&
+          this.hasEitherColumnOrRowToDelete
+        ) {
+          const confirmDeletionDialogRef = this.matDialog.open(
+            ConfirmDeletionComponent
+          );
+
+          confirmDeletionDialogRef
             .afterOpened()
             .subscribe((res) => (this.confirmDeletionModalOpened = true));
+
+          confirmDeletionDialogRef.afterClosed().subscribe((res) => {
+            if (res === true) {
+              if (
+                this.columnToDelete !== null &&
+                this.columnToDelete !== undefined
+              ) {
+                this.deleteColumn(this.columnToDelete);
+                this.columnToDelete = null;
+              }
+              if (this.rowToDelete !== null && this.rowToDelete !== undefined) {
+                this.deleteRow(this.rowToDelete);
+                this.rowToDelete = null;
+              }
+            }
+            this.confirmDeletionModalOpened = false;
+          });
         }
         break;
       default:
         break;
     }
+  }
+  public deleteColumn(columnToDelete: number) {
+    // delete item at index columnToDelete from columnData
+    this.columnData.splice(columnToDelete, 1);
+    // delete item at index columnToDelete from each row of tableData
+    this.tableData.forEach((row) => {
+      row.fieldValues.splice(columnToDelete, 1);
+    });
+  }
+  public deleteRow(rowToDelete: number) {
+    // delete item at index rowToDelete from tableData
+    this.tableData.splice(rowToDelete, 1);
   }
 
   /*

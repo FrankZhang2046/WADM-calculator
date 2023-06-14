@@ -1,11 +1,12 @@
 import { Component, HostListener } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatDialogRef } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: "app-confirm-deletion",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatButtonModule],
   templateUrl: "./confirm-deletion.component.html",
   styleUrls: ["./confirm-deletion.component.scss"],
 })

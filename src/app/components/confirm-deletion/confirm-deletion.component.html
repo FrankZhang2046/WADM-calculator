@@ -1,7 +1,9 @@
-<div class="bg-white">
-    Are you sure you would like to delete this column?
-    <div>
-        <button (click)="closeDialog(true)">Yes</button>
-        <button (click)="closeDialog(false)">No</button>
+<div class="bg-white h-max">
+    <h3 class="p-2">
+        Are you sure you would like to delete this column?
+    </h3>
+    <div class="bg-white flex w-full">
+        <button id="confirm-deletion" mat-flat-button (click)="closeDialog(true)">Yes</button>
+        <button class="ml-4" id="cancel-deletion" mat-flat-button (click)="closeDialog(false)">No</button>
     </div>
 </div>
