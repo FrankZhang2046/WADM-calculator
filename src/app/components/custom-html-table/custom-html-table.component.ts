@@ -1,7 +1,9 @@
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { TableOperationConstants } from "src/app/models/enums";
 import { MatInput, MatInputModule } from "@angular/material/input";
+import { ConfirmDeletionComponent } from "../confirm-deletion/confirm-deletion.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import {
@@ -21,6 +23,7 @@ import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe"
   standalone: true,
   imports: [
     AssertArrayEqualityPipe,
+    MatDialogModule,
     CommonModule,
     MatInputModule,
     MatButtonModule,
@@ -33,6 +36,17 @@ import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe"
 })
 export class CustomHtmlTableComponent implements OnInit {
   public tableOperationConstants = TableOperationConstants;
+  public columnToDelete!: number | null;
+  public rowToDelete!: number | null;
+  public confirmDeletionModalOpened!: boolean;
+  public get hasEitherColumnOrRowToDelete(): boolean {
+    return (
+      (this.columnToDelete !== null && this.columnToDelete !== undefined) ||
+      (this.rowToDelete !== null && this.rowToDelete !== undefined)
+    );
+  }
+
+  constructor(public matDialog: MatDialog) {}
 
   public submitForm() {
     switch (this.modifiedTableElementIdx.tableElement) {
@@ -57,6 +71,9 @@ export class CustomHtmlTableComponent implements OnInit {
 
   @HostListener("window:keydown", ["$event"])
   public keyEvent(event: KeyboardEvent) {
+    if (this.confirmDeletionModalOpened) {
+      return;
+    }
     console.log(`key pressed is:`, event.key);
     // switch statement to specify the procedure of different keystrokes:
     switch (event.key) {
@@ -65,13 +82,27 @@ export class CustomHtmlTableComponent implements OnInit {
         this.tableTraversal(event.key);
         break;
       case "ArrowLeft":
-        this.tableTraversal(event.key);
+        if (
+          this.highlightedTableElementIdx.tableElement ===
+          this.tableOperationConstants.rowHeader
+        ) {
+          this.signalRowForDeletion(this.highlightedTableElementIdx.idx[0]);
+        } else {
+          this.tableTraversal(event.key);
+        }
         break;
       case "ArrowDown":
         this.tableTraversal(event.key);
         break;
       case "ArrowUp":
-        this.tableTraversal(event.key);
+        if (
+          this.highlightedTableElementIdx.tableElement ===
+          this.tableOperationConstants.columnHeader
+        ) {
+          this.signalColumnForDeletion(this.highlightedTableElementIdx.idx[0]);
+        } else {
+          this.tableTraversal(event.key);
+        }
         break;
       case "Enter":
         // todo extract this procedure into a method
@@ -100,9 +131,52 @@ export class CustomHtmlTableComponent implements OnInit {
           this.initiateTableTraversal();
         }
         break;
+      case "Backspace":
+        if (
+          !this.confirmDeletionModalOpened &&
+          this.hasEitherColumnOrRowToDelete
+        ) {
+          const confirmDeletionDialogRef = this.matDialog.open(
+            ConfirmDeletionComponent
+          );
+
+          confirmDeletionDialogRef
+            .afterOpened()
+            .subscribe((res) => (this.confirmDeletionModalOpened = true));
+
+          confirmDeletionDialogRef.afterClosed().subscribe((res) => {
+            if (res === true) {
+              if (
+                this.columnToDelete !== null &&
+                this.columnToDelete !== undefined
+              ) {
+                this.deleteColumn(this.columnToDelete);
+                this.columnToDelete = null;
+              }
+              if (this.rowToDelete !== null && this.rowToDelete !== undefined) {
+                this.deleteRow(this.rowToDelete);
+                this.rowToDelete = null;
+              }
+            }
+            this.confirmDeletionModalOpened = false;
+          });
+        }
+        break;
       default:
         break;
     }
+  }
+  public deleteColumn(columnToDelete: number) {
+    // delete item at index columnToDelete from columnData
+    this.columnData.splice(columnToDelete, 1);
+    // delete item at index columnToDelete from each row of tableData
+    this.tableData.forEach((row) => {
+      row.fieldValues.splice(columnToDelete, 1);
+    });
+  }
+  public deleteRow(rowToDelete: number) {
+    // delete item at index rowToDelete from tableData
+    this.tableData.splice(rowToDelete, 1);
   }
 
   /*
@@ -483,6 +557,24 @@ export class CustomHtmlTableComponent implements OnInit {
         this.cachedHighlightedTableElementIdx.tableElement,
         this.cachedHighlightedTableElementIdx.idx
       );
+    }
+  }
+  public signalColumnForDeletion(columnToDelete: number): void {
+    console.log(`signal col for deletion called`);
+    if (this.columnToDelete === null || this.columnToDelete === undefined) {
+      this.columnToDelete = columnToDelete;
+      this.rowToDelete = null;
+    } else {
+      this.columnToDelete = null;
+    }
+  }
+
+  private signalRowForDeletion(rowToDelete: number): void {
+    if (this.rowToDelete === null || this.rowToDelete === undefined) {
+      this.rowToDelete = rowToDelete;
+      this.columnToDelete = null;
+    } else {
+      this.rowToDelete = null;
     }
   }
 }

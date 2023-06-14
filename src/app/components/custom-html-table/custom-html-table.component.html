@@ -29,6 +29,7 @@
                 ? 'highlight'
                 : null
             "
+            [class.to-delete]="columnToDelete === colIdx"
             *ngIf="
               !(
                 modifiedTableElementIdx.tableElement ===
@@ -76,6 +77,7 @@
               ? 'highlight'
               : null
           "
+          [class.to-delete]="rowIndex === rowToDelete"
           class="text-left"
           *ngIf="
             !(
@@ -92,6 +94,7 @@
           {{ row.fieldName | titlecase }}
         </th>
         <td
+          [class.to-delete]="rowIndex === rowToDelete"
           [ngClass]="
             highlightedTableElementIdx.tableElement ===
               tableOperationConstants.fieldWeight &&
@@ -127,6 +130,9 @@
           "
         >
           <td
+            [class.to-delete]="
+              columnToDelete === cellIdx || rowIndex === rowToDelete
+            "
             [class.highlight]="
               highlightedTableElementIdx.idx[0] === rowIndex &&
               highlightedTableElementIdx.idx[1] === cellIdx
