@@ -240,6 +240,10 @@ export class CustomHtmlTableComponent implements OnInit {
   method for traversing through table elements with the arrow keys
    */
   public tableTraversal(keystroke: string): void {
+    // * abort table traversal if user is editing a field
+    if (this.modifiedTableElementIdx.tableElement !== null) {
+      return;
+    }
     if (this.highlightedTableElementIdx.tableElement === null) {
       this.initiateTableTraversal();
     }
