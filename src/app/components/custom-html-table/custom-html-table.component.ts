@@ -420,8 +420,10 @@ export class CustomHtmlTableComponent implements OnInit {
       tableElement === this.tableOperationConstants.cell ||
       tableElement === this.tableOperationConstants.fieldWeight
     ) {
+      this.updateTableData(this.tableDataUpdateFormControl.value);
       this.tableDataUpdateFormControl.reset();
     } else {
+      this.updateTableHeader(this.headerRenamingFormControl.value);
       this.headerRenamingFormControl.reset();
     }
     this.modifiedTableElementIdx.tableElement = null;
@@ -465,43 +467,45 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public ngOnInit(): void {
     this.seedTable();
-
+    // * valueChanges listener header renaming formControl
     this.headerRenamingFormControl.valueChanges.subscribe((value) => {
-      if (value) {
-        if (
-          this.modifiedTableElementIdx.tableElement ===
-          TableOperationConstants.columnHeader
-        ) {
-          this.columnData[this.modifiedTableElementIdx.idx[0]].columnName =
-            value;
-        } else if (
-          this.modifiedTableElementIdx.tableElement ===
-          this.tableOperationConstants.rowHeader
-        ) {
-          this.tableData[this.modifiedTableElementIdx.idx[0]].fieldName = value;
-        }
-      }
+      this.updateTableHeader(value);
     });
+  }
 
-    this.tableDataUpdateFormControl.valueChanges.subscribe((value) => {
-      if (value) {
-        if (
-          this.modifiedTableElementIdx.tableElement ===
-            TableOperationConstants.cell &&
-          Array.isArray(this.modifiedTableElementIdx.idx)
-        ) {
-          this.tableData[this.modifiedTableElementIdx.idx[0]].fieldValues[
-            this.modifiedTableElementIdx.idx[1]
-          ] = value;
-        } else if (
-          this.modifiedTableElementIdx.tableElement ===
-          TableOperationConstants.fieldWeight
-        ) {
-          this.tableData[this.modifiedTableElementIdx.idx[0]].fieldWeight =
-            value;
-        }
+  private updateTableHeader(value: string | null) {
+    if (value) {
+      if (
+        this.modifiedTableElementIdx.tableElement ===
+        TableOperationConstants.columnHeader
+      ) {
+        this.columnData[this.modifiedTableElementIdx.idx[0]].columnName = value;
+      } else if (
+        this.modifiedTableElementIdx.tableElement ===
+        this.tableOperationConstants.rowHeader
+      ) {
+        this.tableData[this.modifiedTableElementIdx.idx[0]].fieldName = value;
       }
-    });
+    }
+  }
+
+  private updateTableData(value: number | null) {
+    if (value && this.tableDataUpdateFormControl.valid) {
+      if (
+        this.modifiedTableElementIdx.tableElement ===
+          TableOperationConstants.cell &&
+        Array.isArray(this.modifiedTableElementIdx.idx)
+      ) {
+        this.tableData[this.modifiedTableElementIdx.idx[0]].fieldValues[
+          this.modifiedTableElementIdx.idx[1]
+        ] = value;
+      } else if (
+        this.modifiedTableElementIdx.tableElement ===
+        TableOperationConstants.fieldWeight
+      ) {
+        this.tableData[this.modifiedTableElementIdx.idx[0]].fieldWeight = value;
+      }
+    }
   }
 
   /*
