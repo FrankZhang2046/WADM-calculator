@@ -21,6 +21,7 @@ import {
 } from "../../models/table-row-data.model";
 import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe";
+import { timer } from "rxjs";
 
 @Component({
   selector: "app-custom-html-table",
@@ -65,6 +66,11 @@ export class CustomHtmlTableComponent implements OnInit {
   public barChartPlugins = [DataLabelsPlugin];
   public barChartData!: ChartData<"bar">;
   public chartWidth!: string;
+  public displayMessage: { status: string; message: string } = {
+    status: "",
+    message: "",
+  };
+  public highestResultColumnIdx: number[] = [];
   // events
   public chartClicked({
     event,
@@ -122,7 +128,7 @@ export class CustomHtmlTableComponent implements OnInit {
 
   @HostListener("window:keydown", ["$event"])
   public keyEvent(event: KeyboardEvent) {
-    if (this.confirmDeletionModalOpened) {
+    if (this.confirmDeletionModalOpened || this.displayResults) {
       return;
     }
     console.log(`key pressed is:`, event.key);
@@ -513,8 +519,8 @@ export class CustomHtmlTableComponent implements OnInit {
   */
   private seedTable() {
     if (this.columnData.length === 0) {
-      this.columnData.push({ columnName: "Option 1", result: null });
-      this.columnData.push({ columnName: "Option 2", result: null });
+      this.columnData.push({ columnName: "Option 1", result: 0 });
+      this.columnData.push({ columnName: "Option 2", result: 0 });
     }
     if (this.tableData.length === 0) {
       this.tableData.push({
@@ -542,7 +548,7 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public addCandidate(): void {
     this.clearHighlightedTableElement();
-    this.columnData.push({ columnName: "new", result: null });
+    this.columnData.push({ columnName: "new", result: 0 });
     this.tableData.forEach((tableData) => {
       tableData.fieldValues.push(null);
     });
@@ -609,6 +615,11 @@ export class CustomHtmlTableComponent implements OnInit {
     time each cell by its weight, calculate the sum, and attach to each column's result property
    */
   public calculateResult(): void {
+    const formTableValidation = this.validateTableData();
+    if (!formTableValidation) {
+      this.dismissDisplayMessage(5000);
+      return;
+    }
     this.clearHighlightedTableElement();
     // todo make this method more performant, loop through each cell instead of each column with a nested loop
     this.columnData.forEach((option, index) => {
@@ -623,8 +634,60 @@ export class CustomHtmlTableComponent implements OnInit {
     const tableEle = document.querySelector("table");
     const tableWidth = tableEle?.offsetWidth ? tableEle.offsetWidth : 0;
     this.chartWidth = (tableWidth - 48).toString() + "px";
+    this.findBestOption();
 
     this.compileChartData();
+  }
+
+  public dismissDisplayMessage(time: number) {
+    timer(time).subscribe(() => {
+      this.displayMessage = { status: "", message: "" };
+    });
+  }
+
+  /*
+  method to check if all the tableData's fieldValues and fieldWeights are valid
+  */
+  private validateTableData(): boolean {
+    for (const row of this.tableData) {
+      if (
+        row.fieldValues.some((val) => val === null) ||
+        row.fieldWeight === null
+      ) {
+        this.displayMessage = {
+          status: "error",
+          message: "Please fill in all the blank cells in the table.",
+        };
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private findBestOption() {
+    // loop through the columnData array, find the column that has the highest result and cache it in an number[], if multiple values are tied, cache them all
+    this.highestResultColumnIdx = [];
+    let highestResult: number = 0;
+    this.columnData.forEach((option, index) => {
+      if (option.result > highestResult) {
+        this.highestResultColumnIdx = [];
+        this.highestResultColumnIdx.push(index);
+        highestResult = option.result;
+      } else if (option.result === highestResult) {
+        this.highestResultColumnIdx.push(index);
+      }
+    });
+    this.displayMessage = {
+      status: "success",
+      message:
+        this.highestResultColumnIdx.length > 1
+          ? `According to the data you entered, the best options are ${this.highestResultColumnIdx
+              .map((idx) => this.columnData[idx].columnName)
+              .join(", ")}`
+          : `According to the data you entered, the best option is ${
+              this.columnData[this.highestResultColumnIdx[0]].columnName
+            }`,
+    };
   }
 
   private initiateTableTraversal() {
@@ -655,13 +718,6 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   private compileChartData(): void {
-    // const sampleData = {
-    //   labels: ["2006", "2007", "2008", "2009", "2010", "2011", "2012"],
-    //   datasets: [
-    //     { data: [65, 59, 80, 81, 56, 55, 40], label: "Series A", stack: "a" },
-    //     { data: [28, 48, 40, 19, 86, 27, 90], label: "Series B", stack: "a" },
-    //   ],
-    // };
     const chartData: ChartData<"bar"> = {
       labels: [],
       datasets: [],
