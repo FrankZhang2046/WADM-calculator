@@ -42,6 +42,7 @@ import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe"
 export class CustomHtmlTableComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   public barChartOptions: ChartConfiguration["options"] = {
+    indexAxis: "x",
     responsive: true,
     // We use these empty structures as placeholders for dynamic theming.
     scales: {
@@ -608,6 +609,8 @@ export class CustomHtmlTableComponent implements OnInit {
     const tableEle = document.querySelector("table");
     const tableWidth = tableEle?.offsetWidth ? tableEle.offsetWidth : 0;
     this.chartWidth = (tableWidth - 48).toString() + "px";
+
+    this.compileChartData();
   }
 
   private initiateTableTraversal() {
@@ -635,5 +638,31 @@ export class CustomHtmlTableComponent implements OnInit {
     } else {
       this.rowToDelete = null;
     }
+  }
+
+  private compileChartData(): void {
+    // const sampleData = {
+    //   labels: ["2006", "2007", "2008", "2009", "2010", "2011", "2012"],
+    //   datasets: [
+    //     { data: [65, 59, 80, 81, 56, 55, 40], label: "Series A", stack: "a" },
+    //     { data: [28, 48, 40, 19, 86, 27, 90], label: "Series B", stack: "a" },
+    //   ],
+    // };
+    const chartData: ChartData<"bar"> = {
+      labels: [],
+      datasets: [],
+    };
+    chartData.labels = this.columnData.map((col) => col.columnName);
+    this.tableData.forEach((row) =>
+      chartData.datasets.push({
+        data: row.fieldValues.map(
+          (val) => (val ?? 0) * (row.fieldWeight ? row.fieldWeight : 0)
+        ),
+        label: row.fieldName,
+        stack: "a",
+      })
+    );
+
+    this.barChartData = chartData;
   }
 }

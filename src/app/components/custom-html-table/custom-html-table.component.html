@@ -162,8 +162,8 @@
   </th>
 </ng-template>
 
-<div class="flex w-full justify-center mt-10">
-  <div *ngIf="displayResults" [ngStyle]="{width: chartWidth}" class="flex justify-center mt-10">
+<div class="flex w-full justify-center mt-5">
+  <div *ngIf="displayResults" [ngStyle]="{width: chartWidth}" class="flex justify-center">
     <canvas baseChart class="chart w-max p-10" [data]="barChartData" [options]="barChartOptions"
       [plugins]="barChartPlugins" [type]="barChartType" (chartHover)="chartHovered($event)"
       (chartClick)="chartClicked($event)">
