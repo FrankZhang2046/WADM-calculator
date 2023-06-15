@@ -154,10 +154,10 @@
   </th>
 </ng-template>
 <ng-template #tableDataUpdateInputTemplate>
-  <th>
-    <input #tableDataUpdateInputComponent matInput placeholder="update data..." (keydown.enter)="submitForm()"
-      (focusout)="inputFocusOutHandler()" [formControl]="tableDataUpdateFormControl" label="header-rename"
-      type="number" />
+  <th class="w-fit">
+    <input class="w-22 pl-2" #tableDataUpdateInputComponent matInput placeholder="new value"
+      (keydown.enter)="submitForm()" (focusout)="inputFocusOutHandler()" [formControl]="tableDataUpdateFormControl"
+      label="header-rename" type="number" />
     <div class="text-red-500" *ngIf="tableDataUpdateFormControl.invalid">
       please enter a value between 1 to 10
     </div>
@@ -169,5 +169,16 @@
     <canvas baseChart class="chart w-max p-10" [data]="barChartData" [options]="barChartOptions"
       [plugins]="barChartPlugins" [type]="barChartType">
     </canvas>
+  </div>
+</div>
+
+<div *ngIf="displayMessage.status !== ''" class="flex w-full justify-center mt-5">
+  <div [class.bg-red-200]="displayMessage.status==='error'" [class.bg-green-200]="displayMessage.status==='success'"
+    class="rounded-sm flex-col items-center justify-center" [ngStyle]="{width: chartWidth}">
+    <div [class.text-red-800]="displayMessage.status === 'error'"
+      [class.text-green-800]="displayMessage.status === 'success'" class="p-2 ">{{displayMessage.message}}</div>
+    <div class="flex w-full justify-end p-1">
+      <button class="self-end" (click)="dismissDisplayMessage(0)">DISMISS</button>
+    </div>
   </div>
 </div>
