@@ -28,7 +28,8 @@
                 modifiedTableElementIdx.idx[0] === colIdx
               );
               else headerRenameInputTemplate
-            " class="draggable-cell" cdkDrag (mousedown)="$event.stopPropagation()" cdkDragLockAxis="x" (dblclick)="
+            " class="draggable-cell" [cdkDragDisabled]="displayResults" cdkDrag (mousedown)="$event.stopPropagation()"
+            cdkDragLockAxis="x" (dblclick)="
               modifyTableElement(tableOperationConstants.columnHeader, [colIdx])
             ">
             {{ column.columnName | titlecase }}
@@ -41,7 +42,8 @@
       </tr>
     </thead>
     <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">
-      <tr cdkDrag *ngFor="let row of tableData; let rowIndex = index" class="table-row">
+      <tr cdkDrag [cdkDragDisabled]="displayResults" *ngFor="let row of tableData; let rowIndex = index"
+        class="table-row">
         <!-- implement table header modification for row headers -->
         <th (click)="
             highlightTableElement(tableOperationConstants.rowHeader, [rowIndex])
@@ -165,8 +167,7 @@
 <div class="flex w-full justify-center mt-5">
   <div *ngIf="displayResults" [ngStyle]="{width: chartWidth}" class="flex justify-center">
     <canvas baseChart class="chart w-max p-10" [data]="barChartData" [options]="barChartOptions"
-      [plugins]="barChartPlugins" [type]="barChartType" (chartHover)="chartHovered($event)"
-      (chartClick)="chartClicked($event)">
+      [plugins]="barChartPlugins" [type]="barChartType">
     </canvas>
   </div>
 </div>

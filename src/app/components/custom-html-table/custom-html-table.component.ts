@@ -63,13 +63,7 @@ export class CustomHtmlTableComponent implements OnInit {
   };
   public barChartType: ChartType = "bar";
   public barChartPlugins = [DataLabelsPlugin];
-  public barChartData: ChartData<"bar"> = {
-    labels: ["2006", "2007", "2008", "2009", "2010", "2011", "2012"],
-    datasets: [
-      { data: [65, 59, 80, 81, 56, 55, 40], label: "Series A", stack: "a" },
-      { data: [28, 48, 40, 19, 86, 27, 90], label: "Series B", stack: "a" },
-    ],
-  };
+  public barChartData!: ChartData<"bar">;
   public chartWidth!: string;
   // events
   public chartClicked({
@@ -178,6 +172,9 @@ export class CustomHtmlTableComponent implements OnInit {
         }
         break;
       case "/":
+        if (this.displayResults) {
+          return;
+        }
         // * initiate table traversal
         if (this.cachedHighlightedTableElementIdx.tableElement === null) {
           this.highlightTableElement(
@@ -240,6 +237,13 @@ export class CustomHtmlTableComponent implements OnInit {
   method for traversing through table elements with the arrow keys
    */
   public tableTraversal(keystroke: string): void {
+    // * abort table traversal if user is editing a field
+    if (
+      this.modifiedTableElementIdx.tableElement !== null ||
+      this.displayResults
+    ) {
+      return;
+    }
     if (this.highlightedTableElementIdx.tableElement === null) {
       this.initiateTableTraversal();
     }
@@ -416,8 +420,10 @@ export class CustomHtmlTableComponent implements OnInit {
       tableElement === this.tableOperationConstants.cell ||
       tableElement === this.tableOperationConstants.fieldWeight
     ) {
+      this.updateTableData(this.tableDataUpdateFormControl.value);
       this.tableDataUpdateFormControl.reset();
     } else {
+      this.updateTableHeader(this.headerRenamingFormControl.value);
       this.headerRenamingFormControl.reset();
     }
     this.modifiedTableElementIdx.tableElement = null;
@@ -461,43 +467,45 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public ngOnInit(): void {
     this.seedTable();
-
+    // * valueChanges listener header renaming formControl
     this.headerRenamingFormControl.valueChanges.subscribe((value) => {
-      if (value) {
-        if (
-          this.modifiedTableElementIdx.tableElement ===
-          TableOperationConstants.columnHeader
-        ) {
-          this.columnData[this.modifiedTableElementIdx.idx[0]].columnName =
-            value;
-        } else if (
-          this.modifiedTableElementIdx.tableElement ===
-          this.tableOperationConstants.rowHeader
-        ) {
-          this.tableData[this.modifiedTableElementIdx.idx[0]].fieldName = value;
-        }
-      }
+      this.updateTableHeader(value);
     });
+  }
 
-    this.tableDataUpdateFormControl.valueChanges.subscribe((value) => {
-      if (value) {
-        if (
-          this.modifiedTableElementIdx.tableElement ===
-            TableOperationConstants.cell &&
-          Array.isArray(this.modifiedTableElementIdx.idx)
-        ) {
-          this.tableData[this.modifiedTableElementIdx.idx[0]].fieldValues[
-            this.modifiedTableElementIdx.idx[1]
-          ] = value;
-        } else if (
-          this.modifiedTableElementIdx.tableElement ===
-          TableOperationConstants.fieldWeight
-        ) {
-          this.tableData[this.modifiedTableElementIdx.idx[0]].fieldWeight =
-            value;
-        }
+  private updateTableHeader(value: string | null) {
+    if (value) {
+      if (
+        this.modifiedTableElementIdx.tableElement ===
+        TableOperationConstants.columnHeader
+      ) {
+        this.columnData[this.modifiedTableElementIdx.idx[0]].columnName = value;
+      } else if (
+        this.modifiedTableElementIdx.tableElement ===
+        this.tableOperationConstants.rowHeader
+      ) {
+        this.tableData[this.modifiedTableElementIdx.idx[0]].fieldName = value;
       }
-    });
+    }
+  }
+
+  private updateTableData(value: number | null) {
+    if (value && this.tableDataUpdateFormControl.valid) {
+      if (
+        this.modifiedTableElementIdx.tableElement ===
+          TableOperationConstants.cell &&
+        Array.isArray(this.modifiedTableElementIdx.idx)
+      ) {
+        this.tableData[this.modifiedTableElementIdx.idx[0]].fieldValues[
+          this.modifiedTableElementIdx.idx[1]
+        ] = value;
+      } else if (
+        this.modifiedTableElementIdx.tableElement ===
+        TableOperationConstants.fieldWeight
+      ) {
+        this.tableData[this.modifiedTableElementIdx.idx[0]].fieldWeight = value;
+      }
+    }
   }
 
   /*
@@ -564,6 +572,9 @@ export class CustomHtmlTableComponent implements OnInit {
     tableElement: TableOperationConstants,
     idx: number[]
   ) {
+    if (this.displayResults) {
+      return;
+    }
     this.clearHighlightedTableElement();
     this.modifiedTableElementIdx = { tableElement, idx };
     // have to defer the action to the next loop otherwise the ViewChild will be undefined
@@ -584,6 +595,9 @@ export class CustomHtmlTableComponent implements OnInit {
     tableElement: TableOperationConstants,
     idx: number[]
   ): void {
+    if (this.displayResults) {
+      return;
+    }
     // this should be good enough to add the highlight class to the table element
     this.highlightedTableElementIdx = { tableElement, idx };
     // * cache the highlighted table element so that it can be reactivated
