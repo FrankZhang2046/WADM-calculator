@@ -24,6 +24,12 @@ import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe"
 import { timer } from "rxjs";
 import { Store } from "@ngxs/store";
 import { PersistTableInDB } from "src/app/stores/actions/table.action";
+import {
+  Firestore,
+  addDoc,
+  collection,
+  onSnapshot,
+} from "@angular/fire/firestore";
 
 @Component({
   selector: "app-custom-html-table",
@@ -105,7 +111,11 @@ export class CustomHtmlTableComponent implements OnInit {
     );
   }
 
-  constructor(public matDialog: MatDialog, private store: Store) {}
+  constructor(
+    public matDialog: MatDialog,
+    private store: Store,
+    private firestore: Firestore
+  ) {}
 
   public submitForm() {
     switch (this.modifiedTableElementIdx.tableElement) {
@@ -476,6 +486,10 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    const testCollection = collection(this.firestore, "test");
+    onSnapshot(testCollection, (snapshot) => {
+      snapshot.docs.forEach((doc) => console.log(doc.data()));
+    });
     this.seedTable();
     // * valueChanges listener header renaming formControl
     this.headerRenamingFormControl.valueChanges.subscribe((value) => {
@@ -750,5 +764,13 @@ export class CustomHtmlTableComponent implements OnInit {
         },
       })
     );
+  }
+
+  public addDocToCollection() {
+    const testCollection = collection(this.firestore, "test");
+    addDoc(testCollection, {
+      name: "Greg Hirsch",
+    });
+    throw new Error("Method not implemented.");
   }
 }
