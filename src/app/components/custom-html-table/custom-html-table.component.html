@@ -159,7 +159,7 @@
       (keydown.enter)="submitForm()" (focusout)="inputFocusOutHandler()" [formControl]="tableDataUpdateFormControl"
       label="header-rename" type="number" />
     <div class="text-red-500" *ngIf="tableDataUpdateFormControl.invalid">
-      please enter a value between 1 to 10
+      please enter an integer between 1 and 10
     </div>
   </th>
 </ng-template>

@@ -446,6 +446,8 @@ export class CustomHtmlTableComponent implements OnInit {
   public tableDataUpdateFormControl = new FormControl<number | null>(null, [
     Validators.max(10),
     Validators.min(1),
+    // validate that the value is a whole number
+    Validators.pattern("^[1-9][0-9]?$|^10$"),
   ]);
   // * dictionary to indicate the table element that is currently being modified
   public modifiedTableElementIdx: {
