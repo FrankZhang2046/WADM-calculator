@@ -9,3 +9,12 @@ export interface ColumnHeaderData {
   columnName: string;
   result: number;
 }
+
+export interface PersistedTableDocument {
+  name: string;
+  notes: string;
+  tableData: {
+    columnData: ColumnHeaderData[];
+    tableRowData: TableRowData[];
+  };
+}
