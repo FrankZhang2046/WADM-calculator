@@ -770,7 +770,8 @@ export class CustomHtmlTableComponent implements OnInit {
     const testCollection = collection(this.firestore, "test");
     addDoc(testCollection, {
       name: "Greg Hirsch",
+    }).then((docRef) => {
+      console.log("Document written with ID: ", docRef.id);
     });
-    throw new Error("Method not implemented.");
   }
 }

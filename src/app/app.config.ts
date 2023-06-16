@@ -1,9 +1,13 @@
 import { ApplicationConfig, importProvidersFrom } from "@angular/core";
 import { provideRouter } from "@angular/router";
 import { provideFirebaseApp, getApp, initializeApp } from "@angular/fire/app";
-import { getFirestore, provideFirestore } from "@angular/fire/firestore";
+import {
+  connectFirestoreEmulator,
+  getFirestore,
+  provideFirestore,
+} from "@angular/fire/firestore";
 import { firebaseConfig } from "./firebase.config";
-
+import { getAuth, connectAuthEmulator, provideAuth } from "@angular/fire/auth";
 import { routes } from "./app.routes";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { NgxsModule } from "@ngxs/store";
@@ -19,6 +23,19 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       provideFirebaseApp(() => initializeApp(firebaseConfig))
     ),
-    importProvidersFrom(provideFirestore(() => getFirestore(getApp()))),
+    importProvidersFrom(
+      provideFirestore(() => {
+        const firestore = getFirestore();
+        connectFirestoreEmulator(firestore, "localhost", 8080);
+        return firestore;
+      })
+    ),
+    importProvidersFrom(
+      provideAuth(() => {
+        const auth = getAuth();
+        connectAuthEmulator(auth, "http://localhost:9099");
+        return auth;
+      })
+    ),
   ],
 };
