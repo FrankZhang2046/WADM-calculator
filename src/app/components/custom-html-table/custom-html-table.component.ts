@@ -769,7 +769,7 @@ export class CustomHtmlTableComponent implements OnInit {
   public addDocToCollection() {
     const testCollection = collection(this.firestore, "test");
     addDoc(testCollection, {
-      name: "Greg Hirsch",
+      name: "I'm the eldest boi!",
     }).then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
     });
