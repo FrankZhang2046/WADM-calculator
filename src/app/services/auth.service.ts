@@ -6,7 +6,13 @@ import { Auth, createUserWithEmailAndPassword } from "@angular/fire/auth";
 })
 export class AuthService {
   constructor(private auth: Auth) {}
-  public signUpWithEmailAndPassword(email: string, password: string) {
+  public signUpWithEmailAndPassword(
+    email: string | null,
+    password: string | null
+  ) {
+    if (!email || !password) {
+      return;
+    }
     createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         console.log(`credential: `, userCredential);

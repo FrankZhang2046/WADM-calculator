@@ -10,8 +10,8 @@
         <div>
             <label for="email">Email</label>
             <input class="ml-2" type="email" id="email" formControlName="email">
-            <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="error-message">
-                <div *ngIf="f['email'].errors">Email is required.</div>
+            <div *ngIf="f.email.invalid && (f['email'].dirty || f['email'].touched)" class="error-message">
+                <div *ngIf="f.email.errors">Email is required.</div>
                 <div *ngIf="f['email'].errors">Invalid email format.</div>
             </div>
         </div>

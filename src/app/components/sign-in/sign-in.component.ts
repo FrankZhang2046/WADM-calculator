@@ -9,7 +9,9 @@ import {
 } from "@angular/fire/auth";
 import { Router } from "@angular/router";
 import {
+  AbstractControl,
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -29,7 +31,11 @@ interface SignUpFormData {
   styleUrls: ["./sign-in.component.scss"],
 })
 export class SignInComponent implements OnInit {
-  public signUpForm!: FormGroup;
+  public signUpForm!: FormGroup<{
+    email: FormControl<string | null>;
+    password: FormControl<string | null>;
+    confirmPassword: FormControl<string | null>;
+  }>;
   constructor(
     private auth: Auth,
     private router: Router,
