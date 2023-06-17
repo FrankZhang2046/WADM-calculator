@@ -21,8 +21,8 @@ import {
 } from "../../models/table-row-data.model";
 import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe";
-import { timer } from "rxjs";
-import { Store } from "@ngxs/store";
+import { Observable, timer } from "rxjs";
+import { Select, Store } from "@ngxs/store";
 import { TableActions } from "src/app/stores/actions/table.action";
 import {
   Firestore,
@@ -30,11 +30,17 @@ import {
   collection,
   onSnapshot,
 } from "@angular/fire/firestore";
+import { TableStateModel } from "src/app/stores/states/table.state";
+import { AuthStateModel } from "src/app/stores/states/auth.state";
+import { User } from "@angular/fire/auth";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-custom-html-table",
   standalone: true,
   imports: [
+    MatTooltipModule,
     NgChartsModule,
     AssertArrayEqualityPipe,
     MatDialogModule,
@@ -79,6 +85,7 @@ export class CustomHtmlTableComponent implements OnInit {
     message: "",
   };
   public highestResultColumnIdx: number[] = [];
+  public currentUserVal!: User | null;
   // events
   public chartClicked({
     event,
@@ -111,10 +118,18 @@ export class CustomHtmlTableComponent implements OnInit {
     );
   }
 
+  // * select the table state
+  @Select(
+    (state: { table: TableStateModel; user: AuthStateModel }) =>
+      state.user.currentUser
+  )
+  currentUser$!: Observable<User | null>;
+
   constructor(
     public matDialog: MatDialog,
     private store: Store,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private router: Router
   ) {}
 
   public submitForm() {
@@ -486,6 +501,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.currentUser$.subscribe((user) => (this.currentUserVal = user));
     const testCollection = collection(this.firestore, "test");
     onSnapshot(testCollection, (snapshot) => {
       snapshot.docs.forEach((doc) => console.log(doc.data()));
@@ -805,5 +821,13 @@ export class CustomHtmlTableComponent implements OnInit {
     this.displayResults = false;
     this.seedTable();
     this.resetTableElementDeletionVariables();
+  }
+  /*
+    method to either redirect user to log-in page if they are not logged in, or persist the table state to db
+  */
+  public saveTable(): void {
+    if (!this.currentUserVal) {
+      this.router.navigate(["/log-in"]);
+    }
   }
 }
