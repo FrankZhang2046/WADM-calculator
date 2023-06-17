@@ -1,6 +1,41 @@
 <div class="p-4 w-full">
-    <div class="flex flex-col items-center">
+    <div *ngIf="displaySignInForm else emailSignInForm" class="flex flex-col items-center">
         <button mat-flat-button (click)="signIn('google')">sign in with google</button>
         <button class="mt-2 justify-center " mat-flat-button (click)="signIn('email')">sign in with email</button>
     </div>
 </div>
+
+<ng-template #emailSignInForm>
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+        <div>
+            <label for="email">Email</label>
+            <input class="ml-2" type="email" id="email" formControlName="email">
+            <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="error-message">
+                <div *ngIf="f['email'].errors">Email is required.</div>
+                <div *ngIf="f['email'].errors">Invalid email format.</div>
+            </div>
+        </div>
+
+        <div class="mt-2">
+            <label for="password">Password</label>
+            <input class="ml-2" type="password" id="password" formControlName="password">
+            <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="error-message">
+                <div *ngIf="f['password'].errors">Password is required.</div>
+                <div *ngIf="f['password'].errors">Password must be at least 6 characters.</div>
+            </div>
+        </div>
+        <div class="mt-2">
+            <label for="confirmPassword">Confirm Password</label>
+            <input class="ml-2" type="password" id="confirmPassword" formControlName="confirmPassword">
+            <div *ngIf="f['confirmPassword'].invalid && (f['confirmPassword'].dirty || f['confirmPassword'].touched)"
+                class="error-message">
+                <div *ngIf="f['confirmPassword'].errors">Password is required.</div>
+                <div *ngIf="f['confirmPassword']?.errors?.['passwordMismatch']">Password mismatched.</div>
+            </div>
+        </div>
+
+        <button mat-flat-button type="submit" [disabled]="signUpForm.invalid">Sign Up</button>
+    </form>
+
+
+</ng-template>
