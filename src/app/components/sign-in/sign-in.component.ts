@@ -14,6 +14,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
+import { AuthService } from "src/app/services/auth.service";
 
 interface SignUpFormData {
   email: string;
@@ -32,7 +33,8 @@ export class SignInComponent implements OnInit {
   constructor(
     private auth: Auth,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private authService: AuthService
   ) {}
   public get f() {
     return this.signUpForm.controls;
@@ -87,6 +89,6 @@ export class SignInComponent implements OnInit {
     const password = this.f["password"].value;
 
     // TODO: Implement the sign-up logic using Firebase or your preferred authentication service
-    // Example: authService.signUp(email, password)
+    this.authService.signUpWithEmailAndPassword(email, password);
   }
 }
