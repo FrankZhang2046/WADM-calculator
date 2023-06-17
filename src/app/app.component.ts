@@ -1,16 +1,21 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { RouterOutlet } from "@angular/router";
+import { Router, RouterOutlet } from "@angular/router";
 import { DraggableTableComponent } from "./components/draggable-table/draggable-table.component";
 import { CustomHtmlTableComponent } from "./components/custom-html-table/custom-html-table.component";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { Auth, onAuthStateChanged } from "@angular/fire/auth";
+import { Store } from "@ngxs/store";
+import { AuthActions } from "./stores/actions/user.action";
 
 @Component({
   selector: "app-root",
   standalone: true,
   imports: [
+    MatTooltipModule,
     CommonModule,
     RouterOutlet,
     DraggableTableComponent,
@@ -22,4 +27,18 @@ import { MatIconModule } from "@angular/material/icon";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
-export class AppComponent {}
+export class AppComponent implements OnInit {
+  constructor(
+    private router: Router,
+    private auth: Auth,
+    private store: Store
+  ) {}
+  public redirectMethod(targetUrl: string) {
+    this.router.navigateByUrl(targetUrl);
+  }
+  public ngOnInit(): void {
+    onAuthStateChanged(this.auth, (user) => {
+      this.store.dispatch(new AuthActions.RegisterCurrentUser(user));
+    });
+  }
+}
