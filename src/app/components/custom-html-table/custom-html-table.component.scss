@@ -8,6 +8,10 @@ input {
   background-color: rgba(255, 0, 0, 0.5) !important;
 }
 
+#refresh-btn {
+  background-color: #17ba45;
+}
+
 #add-candidate-btn {
   color: black;
   &:hover {

@@ -4,6 +4,7 @@ import { Router, RouterOutlet } from "@angular/router";
 import { DraggableTableComponent } from "./components/draggable-table/draggable-table.component";
 import { CustomHtmlTableComponent } from "./components/custom-html-table/custom-html-table.component";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { Auth, onAuthStateChanged } from "@angular/fire/auth";
@@ -14,6 +15,7 @@ import { AuthActions } from "./stores/actions/user.action";
   selector: "app-root",
   standalone: true,
   imports: [
+    MatTooltipModule,
     CommonModule,
     RouterOutlet,
     DraggableTableComponent,

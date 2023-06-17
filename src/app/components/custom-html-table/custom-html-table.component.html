@@ -186,11 +186,13 @@
 <div *ngIf="displayResults" class="flex w-full justify-center mt-5">
   <div class="rounded-sm flex-col items-center justify-center" [ngStyle]="{width: chartWidth}">
     <div class="flex w-full justify-end p-1" [ngStyle]="{width: chartWidth}">
-      <button mat-flat-button class="" color="primary" (click)="restartTableState()">
+      <button matTooltip="Refresh table state to start a new matrix." id="refresh-btn" mat-flat-button class=""
+        (click)="restartTableState()">
         <mat-icon>refresh</mat-icon>
         RESTART
       </button>
-      <button mat-flat-button class="self-end ml-2" color="primary" (click)="dismissDisplayMessage(0)">
+      <button [matTooltip]="( currentUser$ | async ) ? 'Click to save your work' : 'You have not logged in yet'"
+        mat-flat-button class="self-end ml-2" color="primary" (click)="saveTable()">
         <mat-icon>save</mat-icon>
         SAVE</button>
     </div>
