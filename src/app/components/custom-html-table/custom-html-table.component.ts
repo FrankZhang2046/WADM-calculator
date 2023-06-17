@@ -23,10 +23,7 @@ import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe";
 import { timer } from "rxjs";
 import { Store } from "@ngxs/store";
-import {
-  CacheLatestTableData,
-  PersistTableInDB,
-} from "src/app/stores/actions/table.action";
+import { TableActions } from "src/app/stores/actions/table.action";
 import {
   Firestore,
   addDoc,
@@ -762,7 +759,7 @@ export class CustomHtmlTableComponent implements OnInit {
   */
   public cacheLatestCalculatedTableData() {
     this.store.dispatch(
-      new CacheLatestTableData({
+      new TableActions.CacheLatestTableData({
         tableData: {
           columnData: this.columnData,
           tableRowData: this.tableData,

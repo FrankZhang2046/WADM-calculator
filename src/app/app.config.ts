@@ -13,12 +13,13 @@ import { provideAnimations } from "@angular/platform-browser/animations";
 import { NgxsModule } from "@ngxs/store";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 import { TableState } from "./stores/states/table.state";
+import { AuthState } from "./stores/states/auth.state";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
-    importProvidersFrom(NgxsModule.forRoot([TableState])),
+    importProvidersFrom(NgxsModule.forRoot([TableState, AuthState])),
     importProvidersFrom(NgxsReduxDevtoolsPluginModule.forRoot()),
     importProvidersFrom(
       provideFirebaseApp(() => initializeApp(firebaseConfig))

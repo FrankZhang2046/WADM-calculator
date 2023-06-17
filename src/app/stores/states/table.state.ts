@@ -1,8 +1,5 @@
 import { Action, State, StateContext } from "@ngxs/store";
-import {
-  CacheLatestTableData,
-  PersistTableInDB,
-} from "../actions/table.action";
+import { TableActions } from "../actions/table.action";
 import { Injectable } from "@angular/core";
 import {
   LatestTableData,
@@ -21,10 +18,10 @@ export interface TableStateModel {
 })
 @Injectable()
 export class TableState {
-  @Action(CacheLatestTableData)
+  @Action(TableActions.CacheLatestTableData)
   cacheLatestTableData(
     ctx: StateContext<TableStateModel>,
-    action: CacheLatestTableData
+    action: TableActions.CacheLatestTableData
   ) {
     ctx.patchState({
       lastCalculatedTableData: action.payload,
