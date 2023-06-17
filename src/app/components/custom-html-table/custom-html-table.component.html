@@ -183,7 +183,8 @@
   </div>
 </div>
 
-<div *ngIf="displayResults" class="hover:cursor-pointer" (click)="persistTableData()">persist table data in database
+<div *ngIf="displayResults" class="hover:cursor-pointer" (click)="cacheLatestCalculatedTableData()">persist table data
+  in database
 </div>
 
 <button (click)="addDocToCollection()">write new doc to collection</button>
