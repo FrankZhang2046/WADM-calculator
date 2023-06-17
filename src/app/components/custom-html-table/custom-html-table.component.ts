@@ -779,4 +779,34 @@ export class CustomHtmlTableComponent implements OnInit {
       console.log("Document written with ID: ", docRef.id);
     });
   }
+
+  public resetHighlightedTableElement(): void {
+    this.highlightedTableElementIdx = { tableElement: null, idx: [] };
+  }
+  public resetModifiedTableElement(): void {
+    this.modifiedTableElementIdx = { tableElement: null, idx: [] };
+  }
+  public resetColumnData(): void {
+    this.columnData = [];
+  }
+  public resetTableData(): void {
+    this.tableData = [];
+  }
+  public resetTableElementDeletionVariables(): void {
+    this.columnToDelete = null;
+    this.rowToDelete = null;
+  }
+  /* 
+  reset all the variables in table so the user can build a new form
+  */
+  public restartTableState(): void {
+    this.resetHighlightedTableElement();
+    this.resetModifiedTableElement();
+    this.resetColumnData();
+    this.resetTableData();
+    this.dismissDisplayMessage(0);
+    this.displayResults = false;
+    this.seedTable();
+    this.resetTableElementDeletionVariables();
+  }
 }
