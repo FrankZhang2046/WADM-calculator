@@ -18,3 +18,10 @@ export interface PersistedTableDocument {
     tableRowData: TableRowData[];
   };
 }
+
+export interface LatestTableData {
+  tableData: {
+    columnData: ColumnHeaderData[];
+    tableRowData: TableRowData[];
+  };
+}

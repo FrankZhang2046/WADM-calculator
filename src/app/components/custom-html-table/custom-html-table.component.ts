@@ -23,7 +23,10 @@ import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe";
 import { timer } from "rxjs";
 import { Store } from "@ngxs/store";
-import { PersistTableInDB } from "src/app/stores/actions/table.action";
+import {
+  CacheLatestTableData,
+  PersistTableInDB,
+} from "src/app/stores/actions/table.action";
 import {
   Firestore,
   addDoc,
@@ -655,6 +658,7 @@ export class CustomHtmlTableComponent implements OnInit {
     this.findBestOption();
 
     this.compileChartData();
+    this.cacheLatestCalculatedTableData();
   }
 
   public dismissDisplayMessage(time: number) {
@@ -753,11 +757,12 @@ export class CustomHtmlTableComponent implements OnInit {
 
     this.barChartData = chartData;
   }
-  public persistTableData() {
+  /*
+  persist latest calculated table data to the store
+  */
+  public cacheLatestCalculatedTableData() {
     this.store.dispatch(
-      new PersistTableInDB({
-        name: "table name",
-        notes: "table notes",
+      new CacheLatestTableData({
         tableData: {
           columnData: this.columnData,
           tableRowData: this.tableData,
@@ -769,9 +774,39 @@ export class CustomHtmlTableComponent implements OnInit {
   public addDocToCollection() {
     const testCollection = collection(this.firestore, "test");
     addDoc(testCollection, {
-      name: "Greg Hirsch",
+      name: "I'm the eldest boi!",
     }).then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
     });
+  }
+
+  public resetHighlightedTableElement(): void {
+    this.highlightedTableElementIdx = { tableElement: null, idx: [] };
+  }
+  public resetModifiedTableElement(): void {
+    this.modifiedTableElementIdx = { tableElement: null, idx: [] };
+  }
+  public resetColumnData(): void {
+    this.columnData = [];
+  }
+  public resetTableData(): void {
+    this.tableData = [];
+  }
+  public resetTableElementDeletionVariables(): void {
+    this.columnToDelete = null;
+    this.rowToDelete = null;
+  }
+  /* 
+  reset all the variables in table so the user can build a new form
+  */
+  public restartTableState(): void {
+    this.resetHighlightedTableElement();
+    this.resetModifiedTableElement();
+    this.resetColumnData();
+    this.resetTableData();
+    this.dismissDisplayMessage(0);
+    this.displayResults = false;
+    this.seedTable();
+    this.resetTableElementDeletionVariables();
   }
 }

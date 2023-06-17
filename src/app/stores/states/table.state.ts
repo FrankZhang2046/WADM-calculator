@@ -1,27 +1,33 @@
 import { Action, State, StateContext } from "@ngxs/store";
-import { PersistTableInDB } from "../actions/table.action";
+import {
+  CacheLatestTableData,
+  PersistTableInDB,
+} from "../actions/table.action";
 import { Injectable } from "@angular/core";
-import { PersistedTableDocument } from "src/app/models/table-row-data.model";
+import {
+  LatestTableData,
+  PersistedTableDocument,
+} from "src/app/models/table-row-data.model";
 
 export interface TableStateModel {
-  lastSubmittedTableState: PersistedTableDocument;
+  lastCalculatedTableData: LatestTableData;
 }
 
 @State<TableStateModel>({
   name: "table",
   defaults: {
-    lastSubmittedTableState: {} as PersistedTableDocument,
+    lastCalculatedTableData: {} as LatestTableData,
   },
 })
 @Injectable()
 export class TableState {
-  @Action(PersistTableInDB)
-  persistTableDataInDB(
+  @Action(CacheLatestTableData)
+  cacheLatestTableData(
     ctx: StateContext<TableStateModel>,
-    action: PersistTableInDB
+    action: CacheLatestTableData
   ) {
-    ctx.setState({
-      lastSubmittedTableState: action.payload,
+    ctx.patchState({
+      lastCalculatedTableData: action.payload,
     });
   }
 }
