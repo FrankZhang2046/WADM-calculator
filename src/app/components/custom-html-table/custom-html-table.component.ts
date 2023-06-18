@@ -7,7 +7,7 @@ import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { TableOperationConstants } from "src/app/models/enums";
 import { MatInput, MatInputModule } from "@angular/material/input";
-import { ConfirmDeletionComponent } from "../confirm-deletion/confirm-deletion.component";
+import { ConfirmDeletionComponent } from "../modals/confirm-deletion/confirm-deletion.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import {
@@ -829,8 +829,10 @@ export class CustomHtmlTableComponent implements OnInit {
   */
   public saveTable(): void {
     if (!this.currentUserVal) {
+      // todo need to display a message assuring the user their work has been saved
       this.router.navigate(["/log-in"]);
     } else {
+      // todo open up a new modal asking user to enter table name and notes (optional)
       const tableCollection = collection(
         this.firestore,
         `appData/tables/${this.currentUserVal.uid}`

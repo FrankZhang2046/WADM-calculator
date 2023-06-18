@@ -8,4 +8,5 @@ export class TableTraversalService {
   public tableOperationConstants = TableOperationConstants;
 
   constructor() {}
+  // TODO extract the table traversal logic to this file
 }
