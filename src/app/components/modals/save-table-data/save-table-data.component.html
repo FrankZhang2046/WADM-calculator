@@ -1,1 +1,18 @@
-<p>save-table-data works!</p>
+<div>
+    <div>To save your work, please enter a name and notes (optional) for the table</div>
+    <form (ngSubmit)="onSubmit()">
+        <div>
+            <label for="tableName">Name: </label>
+            <input type="text" id="tableName" formControlName="tableName">
+            <div *ngIf="form.tableName.errors">
+                <div>Table name is required</div>
+            </div>
+        </div>
+        <div>
+            <label for="tableName">Notes: (Optional)</label>
+            <textarea type="text" id="tableNotes" formControlName="tableNotes">
+                </textarea>
+        </div>
+        <button [disabled]="tableInfoForm.invalid" mat-flat-button type="submit">Save Table</button>
+    </form>
+</div>

@@ -37,6 +37,7 @@ import { AuthStateModel } from "src/app/stores/states/auth.state";
 import { User } from "@angular/fire/auth";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { Router } from "@angular/router";
+import { SaveTableDataComponent } from "../modals/save-table-data/save-table-data.component";
 
 @Component({
   selector: "app-custom-html-table",
@@ -833,11 +834,13 @@ export class CustomHtmlTableComponent implements OnInit {
       this.router.navigate(["/log-in"]);
     } else {
       // todo open up a new modal asking user to enter table name and notes (optional)
-      const tableCollection = collection(
-        this.firestore,
-        `appData/tables/${this.currentUserVal.uid}`
-      );
-      addDoc(tableCollection, { text: "fuck you amy" });
+      this.matDialog.open(SaveTableDataComponent);
+      return;
+      // const tableCollection = collection(
+      //   this.firestore,
+      //   `appData/tables/${this.currentUserVal.uid}`
+      // );
+      // addDoc(tableCollection, { text: "fuck you amy" });
     }
   }
 }
