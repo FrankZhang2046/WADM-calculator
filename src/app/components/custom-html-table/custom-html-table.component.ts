@@ -28,7 +28,9 @@ import {
   Firestore,
   addDoc,
   collection,
+  doc,
   onSnapshot,
+  setDoc,
 } from "@angular/fire/firestore";
 import { TableStateModel } from "src/app/stores/states/table.state";
 import { AuthStateModel } from "src/app/stores/states/auth.state";
@@ -828,6 +830,12 @@ export class CustomHtmlTableComponent implements OnInit {
   public saveTable(): void {
     if (!this.currentUserVal) {
       this.router.navigate(["/log-in"]);
+    } else {
+      const tableCollection = collection(
+        this.firestore,
+        `appData/tables/${this.currentUserVal.uid}`
+      );
+      addDoc(tableCollection, { text: "fuck you amy" });
     }
   }
 }
