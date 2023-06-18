@@ -5,6 +5,7 @@ import {
   LatestTableData,
   PersistedTableDocument,
 } from "src/app/models/table-row-data.model";
+import { TableDataService } from "src/app/services/table-data.service";
 
 export interface TableStateModel {
   lastCalculatedTableData: LatestTableData;
@@ -18,6 +19,15 @@ export interface TableStateModel {
 })
 @Injectable()
 export class TableState {
+  constructor(private tableDataService: TableDataService) {}
+
+  @Action(TableActions.WriteTableDataToDB)
+  writeTableDataToDB(
+    ctx: StateContext<TableStateModel>,
+    action: TableActions.WriteTableDataToDB
+  ) {
+    return this.tableDataService.writeTableData(action.payload);
+  }
   @Action(TableActions.CacheLatestTableData)
   cacheLatestTableData(
     ctx: StateContext<TableStateModel>,
