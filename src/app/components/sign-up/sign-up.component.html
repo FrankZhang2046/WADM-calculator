@@ -1,11 +1,11 @@
 <div class="p-4 w-full">
-    <div *ngIf="!displaySignInForm else emailSignInForm" class="flex flex-col items-center">
+    <div *ngIf="!displaySignInForm else emailSignUpForm" class="flex flex-col items-center">
         <button mat-flat-button (click)="signIn('google')">sign in with google</button>
         <button class="mt-2 justify-center " mat-flat-button (click)="signIn('email')">sign in with email</button>
     </div>
 </div>
 
-<ng-template #emailSignInForm>
+<ng-template #emailSignUpForm>
     <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
         <div>
             <label for="email">Email</label>
