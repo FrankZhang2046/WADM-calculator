@@ -10,6 +10,11 @@ export interface ColumnHeaderData {
   result: number;
 }
 
+export interface TableNameAndNotes {
+  tableName: string | null;
+  tableNotes?: string | null;
+}
+
 export interface PersistedTableDocument {
   name: string;
   notes: string;

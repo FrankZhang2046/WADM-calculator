@@ -1,3 +1,5 @@
+import { TableActions } from "./../../../stores/actions/table.action";
+import { TableDataService } from "./../../../services/table-data.service";
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
@@ -8,6 +10,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
+import { Store } from "@ngxs/store";
 
 @Component({
   selector: "app-save-table-data",
@@ -17,11 +20,14 @@ import { MatButtonModule } from "@angular/material/button";
   styleUrls: ["./save-table-data.component.scss"],
 })
 export class SaveTableDataComponent implements OnInit {
-  public tableInfoForm!: FormGroup<{
+  public tableInfoForm: FormGroup<{
     tableName: FormControl<string | null>;
     tableNotes: FormControl<string | null>;
-  }>;
-  constructor(private formBuilder: FormBuilder) {}
+  }> = this.formBuilder.group({
+    tableName: ["", Validators.required],
+    tableNotes: [""],
+  });
+  constructor(private formBuilder: FormBuilder, private store: Store) {}
   // * getter method that returns the formGroup's control
   public get form() {
     return this.tableInfoForm.controls;
@@ -32,12 +38,17 @@ export class SaveTableDataComponent implements OnInit {
       tableName: string;
       tableNotes: string;
     */
-    this.formBuilder.group({
-      tableName: ["", Validators.required],
-      tableNotes: [""],
-    });
   }
   public onSubmit() {
-    throw new Error("Method not implemented.");
+    // make sure tableName is not null
+    this.store
+      .dispatch(
+        new TableActions.WriteTableDataToDB({
+          tableName: this.tableInfoForm.controls.tableName.value,
+          tableNotes: this.tableInfoForm.controls.tableNotes.value,
+        })
+      )
+      .subscribe((res) => console.log(`saved to db: `, res));
+    // dispatch a write table data to db action
   }
 }

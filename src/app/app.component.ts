@@ -47,6 +47,10 @@ export class AppComponent implements OnInit {
     this.router.navigateByUrl(targetUrl);
   }
   public ngOnInit(): void {
+    this.currentUser$.subscribe((user) => {
+      console.log(`in app component: `, user);
+    });
+
     onAuthStateChanged(this.auth, (user) => {
       this.store.dispatch(new AuthActions.RegisterCurrentUser(user));
       if (user) {
