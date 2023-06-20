@@ -779,6 +779,8 @@ export class CustomHtmlTableComponent implements OnInit {
   public cacheLatestCalculatedTableData() {
     this.store.dispatch(
       new TableActions.CacheLatestTableData({
+        tableName: null,
+        tableNotes: null,
         tableData: {
           columnData: this.columnData,
           tableRowData: this.tableData,
