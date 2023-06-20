@@ -1,3 +1,4 @@
+<div *ngIf="dialogClose">Your work has been saved. Dialog with be closed in {{dialogClose}} seconds.</div>
 <div>To save your work, please enter a name and notes (optional) for the table</div>
 <form [formGroup]="tableInfoForm" *ngIf="tableInfoForm" (ngSubmit)="onSubmit()">
     <div>
@@ -13,4 +14,5 @@
                 </textarea>
     </div>
     <button [disabled]="tableInfoForm.invalid" mat-flat-button type="submit">Save Table</button>
+    <button [disabled]="tableInfoForm.invalid" mat-flat-button type="submit">Close</button>
 </form>
