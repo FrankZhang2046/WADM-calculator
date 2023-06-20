@@ -5,32 +5,25 @@
   <div class="font-light" (click)="redirectMethod('/')">
     {{ "WADM Calculator" }}
   </div>
-  <div
-    *ngIf="(currentUser$ | async) === null"
+  <div *ngIf="(currentUser$ | async) === null"
     matTooltip="You'll be able to save your table data after you have logged in."
-    class="hover:cursor-pointer font-light text-base"
-    (click)="redirectMethod('log-in')"
-  >
+    class="hover:cursor-pointer font-light text-base" (click)="redirectMethod('log-in')">
     {{ "log in" | titlecase }}
   </div>
-  <div
-    [mat-menu-trigger-for]="userProfileMenu"
-    *ngIf="(currentUser$ | async) !== null"
-    class="h-10 mr-1 hover:cursor-pointer"
-  >
-    <img
-      class="object-cover h-full rounded-full"
-      src="assets/images/anon-profile-pic.jpeg"
-      alt=""
-    />
+  <div [mat-menu-trigger-for]="userProfileMenu" *ngIf="(currentUser$ | async) !== null"
+    class="h-10 mr-1 hover:cursor-pointer">
+    <img class="object-cover h-full rounded-full" src="assets/images/anon-profile-pic.jpeg" alt="" />
   </div>
 </mat-toolbar>
 
-<mat-drawer-container class="h-full bg-white">
+<mat-drawer-container autosize class="h-full bg-white">
   <router-outlet></router-outlet>
 
-  <mat-drawer #drawer mode="side">
-    <p>auto-resizing sidenav</p>
+  <mat-drawer #drawer mode="side" class="drawer">
+    <div (click)="redirectMethod('/works')" class="flex items-center p-4 hover:cursor-pointer">
+      <mat-icon>stacked_bar_chart</mat-icon>
+      <span class="ml-2">View Past Works</span>
+    </div>
   </mat-drawer>
 </mat-drawer-container>
 

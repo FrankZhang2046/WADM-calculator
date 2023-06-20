@@ -1,4 +1,4 @@
-$complementary-color: #a30d64;
+@import "../../../styles/variables";
 
 input {
     border: solid 1px grey;
@@ -51,6 +51,7 @@ td,
 th {
     border: 1px solid #ddd;
     padding: 8px;
+    color: black;
 }
 .draggable-cell {
     background-color: white;
