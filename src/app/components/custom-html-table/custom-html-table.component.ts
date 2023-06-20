@@ -511,9 +511,11 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public ngOnInit(): void {
     this.currentUser$.subscribe((user) => (this.currentUserVal = user));
-    this.retrievedTableData$.subscribe((tableData: any) =>
-      console.log(`retrieved table data is: `, tableData)
-    );
+    this.retrievedTableData$.subscribe((tableData: TableData | null) => {
+      if (tableData && Object.keys(tableData).length > 0) {
+        this.hydrateUIFromCachedTableData(tableData);
+      }
+    });
     const testCollection = collection(this.firestore, "test");
     onSnapshot(testCollection, (snapshot) => {
       snapshot.docs.forEach((doc) => console.log(doc.data()));
@@ -558,6 +560,16 @@ export class CustomHtmlTableComponent implements OnInit {
         this.tableData[this.modifiedTableElementIdx.idx[0]].fieldWeight = value;
       }
     }
+  }
+
+  /*
+    method to hydrate UI from the cached retrieved table data
+  */
+  private hydrateUIFromCachedTableData(tableData: TableData): void {
+    this.columnData = tableData.columnData;
+    this.tableData = tableData.tableRowData;
+    this.displayResults = true;
+    this.compileChartData();
   }
 
   /*
