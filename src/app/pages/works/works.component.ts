@@ -6,11 +6,12 @@ import { TableStateModel } from "src/app/stores/states/table.state";
 import { Observable } from "rxjs";
 import { User } from "@angular/fire/auth";
 import { Select } from "@ngxs/store";
+import { MatTableModule } from "@angular/material/table";
 
 @Component({
   selector: "app-works",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatTableModule],
   templateUrl: "./works.component.html",
   styleUrls: ["./works.component.scss"],
 })
@@ -31,7 +32,15 @@ export class WorksComponent implements OnInit {
           `appData/tables/${this.currentUserValue.uid}`
         );
         onSnapshot(userTableCollection, (snapshot) => {
-          console.log(`my tables are: `, snapshot.docs);
+          console.log(
+            snapshot.docs.map((doc) => {
+              const document = doc.data();
+              console.log(
+                new Date(document["createdAt"].seconds).toISOString()
+              );
+              return document;
+            })
+          );
         });
       }
     });
