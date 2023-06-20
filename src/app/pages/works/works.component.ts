@@ -7,6 +7,7 @@ import { Observable } from "rxjs";
 import { User } from "@angular/fire/auth";
 import { Select } from "@ngxs/store";
 import { MatTableModule } from "@angular/material/table";
+import { PersistedTableDocument } from "src/app/models/table-row-data.model";
 
 @Component({
   selector: "app-works",
@@ -21,6 +22,7 @@ export class WorksComponent implements OnInit {
       state.user.currentUser
   )
   public currentUser$!: Observable<User | null>;
+  public dataSource!: PersistedTableDocument[];
   public currentUserValue!: User | null;
   constructor(private firestore: Firestore) {}
   public ngOnInit(): void {
@@ -32,14 +34,8 @@ export class WorksComponent implements OnInit {
           `appData/tables/${this.currentUserValue.uid}`
         );
         onSnapshot(userTableCollection, (snapshot) => {
-          console.log(
-            snapshot.docs.map((doc) => {
-              const document = doc.data();
-              console.log(
-                new Date(document["createdAt"].seconds).toISOString()
-              );
-              return document;
-            })
+          this.dataSource = snapshot.docs.map(
+            (doc) => doc.data() as PersistedTableDocument
           );
         });
       }

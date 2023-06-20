@@ -16,8 +16,9 @@ export interface TableNameAndNotes {
 }
 
 export interface PersistedTableDocument {
-  name: string;
-  notes: string;
+  createdAt: object;
+  tableName: string;
+  tableNotes: string;
   tableData: {
     columnData: ColumnHeaderData[];
     tableRowData: TableRowData[];
