@@ -27,6 +27,7 @@ export class SaveTableDataComponent implements OnInit {
     tableName: ["", Validators.required],
     tableNotes: [""],
   });
+  public dialogClose!: number;
   constructor(private formBuilder: FormBuilder, private store: Store) {}
   // * getter method that returns the formGroup's control
   public get form() {
