@@ -1,17 +1,33 @@
+import { TableRowData } from "./../../models/table-row-data.model";
 import {
+  ColumnHeaderData,
   LatestTableData,
   PersistedTableDocument,
   TableNameAndNotes,
 } from "src/app/models/table-row-data.model";
 
 export namespace TableActions {
-  export class CacheLatestTableData {
-    static readonly type = `[Table] Cache latest table data`;
+  export class CacheCalculatedTableData {
+    static readonly type = `[Table] Cache latest calculated table data`;
     constructor(public payload: LatestTableData) {}
   }
 
   export class WriteTableDataToDB {
     static readonly type = `[Table] Write table data to DB`;
     constructor(public payload: TableNameAndNotes) {}
+  }
+
+  export class ResetRetrievedTableData {
+    static readonly type = `[Table] Reset retrieved table data`;
+    constructor() {}
+  }
+  export class RegisterRetrievedTableData {
+    static readonly type = `[Table] Register retrieved table data`;
+    constructor(
+      public payload: {
+        columnData: ColumnHeaderData[];
+        tableRowData: TableRowData[];
+      }
+    ) {}
   }
 }
