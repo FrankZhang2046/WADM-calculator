@@ -24,6 +24,7 @@ export class WorksComponent implements OnInit {
   public currentUser$!: Observable<User | null>;
   public dataSource!: PersistedTableDocument[];
   public currentUserValue!: User | null;
+  public displayedColumns: string[] = ["tableName", "tableNotes"];
   constructor(private firestore: Firestore) {}
   public ngOnInit(): void {
     this.currentUser$.subscribe((user) => {

@@ -1,3 +1,13 @@
-<mat-table>
+<mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="tableName">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">{{element.tableName}}</td>
+    </ng-container>
+    <ng-container matColumnDef="tableNotes">
+        <th mat-header-cell *matHeaderCellDef>Notes</th>
+        <td mat-cell *matCellDef="let element">{{element.tableNotes}}</td>
+    </ng-container>
 
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </mat-table>
