@@ -9,5 +9,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr (click)="loadTableData(row)" class="hover:cursor-pointer" mat-row
+        *matRowDef="let row; columns: displayedColumns">
+    </tr>
 </mat-table>

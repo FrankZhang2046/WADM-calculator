@@ -17,6 +17,7 @@ import {
 } from "@angular/cdk/drag-drop";
 import {
   ColumnHeaderData,
+  TableData,
   TableRowData,
 } from "../../models/table-row-data.model";
 import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -127,6 +128,11 @@ export class CustomHtmlTableComponent implements OnInit {
       state.user.currentUser
   )
   currentUser$!: Observable<User | null>;
+  @Select(
+    (state: { table: TableStateModel; user: AuthStateModel }) =>
+      state.table.retrievedTableData
+  )
+  retrievedTableData$!: Observable<TableData | null>;
 
   constructor(
     public matDialog: MatDialog,
@@ -505,6 +511,9 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public ngOnInit(): void {
     this.currentUser$.subscribe((user) => (this.currentUserVal = user));
+    this.retrievedTableData$.subscribe((tableData: any) =>
+      console.log(`retrieved table data is: `, tableData)
+    );
     const testCollection = collection(this.firestore, "test");
     onSnapshot(testCollection, (snapshot) => {
       snapshot.docs.forEach((doc) => console.log(doc.data()));
@@ -778,7 +787,7 @@ export class CustomHtmlTableComponent implements OnInit {
   */
   public cacheLatestCalculatedTableData() {
     this.store.dispatch(
-      new TableActions.CacheLatestTableData({
+      new TableActions.CacheCalculatedTableData({
         tableName: null,
         tableNotes: null,
         tableData: {
@@ -838,11 +847,6 @@ export class CustomHtmlTableComponent implements OnInit {
       // todo open up a new modal asking user to enter table name and notes (optional)
       this.matDialog.open(SaveTableDataComponent);
       return;
-      // const tableCollection = collection(
-      //   this.firestore,
-      //   `appData/tables/${this.currentUserVal.uid}`
-      // );
-      // addDoc(tableCollection, { text: "fuck you amy" });
     }
   }
 }

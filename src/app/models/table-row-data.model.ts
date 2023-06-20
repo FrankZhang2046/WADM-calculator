@@ -26,10 +26,12 @@ export interface PersistedTableDocument {
 }
 
 export interface LatestTableData {
-  tableData: {
-    columnData: ColumnHeaderData[];
-    tableRowData: TableRowData[];
-  };
+  tableData: TableData;
   tableName: string | null;
   tableNotes?: string | null;
+}
+
+export interface TableData {
+  columnData: ColumnHeaderData[];
+  tableRowData: TableRowData[];
 }

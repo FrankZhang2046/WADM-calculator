@@ -5,9 +5,11 @@ import { AuthStateModel } from "src/app/stores/states/auth.state";
 import { TableStateModel } from "src/app/stores/states/table.state";
 import { Observable } from "rxjs";
 import { User } from "@angular/fire/auth";
-import { Select } from "@ngxs/store";
+import { Select, Store } from "@ngxs/store";
 import { MatTableModule } from "@angular/material/table";
 import { PersistedTableDocument } from "src/app/models/table-row-data.model";
+import { ActivatedRoute, Router } from "@angular/router";
+import { TableActions } from "src/app/stores/actions/table.action";
 
 @Component({
   selector: "app-works",
@@ -25,8 +27,16 @@ export class WorksComponent implements OnInit {
   public dataSource!: PersistedTableDocument[];
   public currentUserValue!: User | null;
   public displayedColumns: string[] = ["tableName", "tableNotes"];
-  constructor(private firestore: Firestore) {}
+  constructor(
+    private store: Store,
+    private firestore: Firestore,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
   public ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      console.log(`params are: `, params);
+    });
     this.currentUser$.subscribe((user) => {
       this.currentUserValue = user;
       if (this.currentUserValue) {
@@ -41,5 +51,12 @@ export class WorksComponent implements OnInit {
         });
       }
     });
+  }
+  public loadTableData(tableRow: PersistedTableDocument) {
+    console.log(`table row data is: `, tableRow);
+    this.store.dispatch(
+      new TableActions.RegisterRetrievedTableData(tableRow.tableData)
+    );
+    this.router.navigate(["/"]);
   }
 }
