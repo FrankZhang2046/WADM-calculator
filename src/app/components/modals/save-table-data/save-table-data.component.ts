@@ -88,7 +88,7 @@ export class SaveTableDataComponent implements OnInit {
           );
 
           snackBarRef.onAction().subscribe(() => {
-            this.router.navigate(["/log-in"]);
+            this.router.navigate(["/works"]);
             snackBarRef.dismiss();
           });
         }

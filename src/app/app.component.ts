@@ -1,7 +1,7 @@
 import { MatMenuModule } from "@angular/material/menu";
 import { TableStateModel } from "./stores/states/table.state";
 import { AuthStateModel } from "./stores/states/auth.state";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router, RouterOutlet } from "@angular/router";
 import { DraggableTableComponent } from "./components/draggable-table/draggable-table.component";
@@ -54,7 +54,9 @@ export class AppComponent implements OnInit {
     onAuthStateChanged(this.auth, (user) => {
       this.store.dispatch(new AuthActions.RegisterCurrentUser(user));
       if (user) {
-        this.redirectMethod("/");
+        if (!this.router.url.includes("works")) {
+          this.redirectMethod("/");
+        }
       }
     });
   }
