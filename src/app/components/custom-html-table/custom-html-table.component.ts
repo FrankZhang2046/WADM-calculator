@@ -39,6 +39,7 @@ import { User } from "@angular/fire/auth";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { Router } from "@angular/router";
 import { SaveTableDataComponent } from "../modals/save-table-data/save-table-data.component";
+import { DetermineRetrievedTableDataUIControlPipe } from "../../pipes/determine-retrieved-table-data-ui-control.pipe";
 
 @Component({
   selector: "app-custom-html-table",
@@ -54,6 +55,7 @@ import { SaveTableDataComponent } from "../modals/save-table-data/save-table-dat
     DragDropModule,
     ReactiveFormsModule,
     MatIconModule,
+    DetermineRetrievedTableDataUIControlPipe,
   ],
   templateUrl: "./custom-html-table.component.html",
   styleUrls: ["./custom-html-table.component.scss"],
@@ -132,7 +134,7 @@ export class CustomHtmlTableComponent implements OnInit {
     (state: { table: TableStateModel; user: AuthStateModel }) =>
       state.table.retrievedTableData
   )
-  retrievedTableData$!: Observable<TableData | null>;
+  public retrievedTableData$!: Observable<TableData | null>;
 
   constructor(
     public matDialog: MatDialog,
@@ -835,7 +837,7 @@ export class CustomHtmlTableComponent implements OnInit {
     this.columnToDelete = null;
     this.rowToDelete = null;
   }
-  /* 
+  /*
   reset all the variables in table so the user can build a new form
   */
   public restartTableState(): void {
@@ -860,5 +862,13 @@ export class CustomHtmlTableComponent implements OnInit {
       this.matDialog.open(SaveTableDataComponent);
       return;
     }
+  }
+
+  public redirectToWorksPage(): void {
+    this.router
+      .navigate(["/works"])
+      .then(() =>
+        this.store.dispatch(new TableActions.ResetRetrievedTableData())
+      );
   }
 }
