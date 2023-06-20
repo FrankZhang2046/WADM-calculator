@@ -1,3 +1,4 @@
+import { connectAuthEmulator } from "@angular/fire/auth";
 import { TableActions } from "./../../../stores/actions/table.action";
 import { TableDataService } from "./../../../services/table-data.service";
 import { Component, OnInit } from "@angular/core";
@@ -11,6 +12,8 @@ import {
 } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { Store } from "@ngxs/store";
+import { count, take, timer } from "rxjs";
+import { MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: "app-save-table-data",
@@ -28,7 +31,11 @@ export class SaveTableDataComponent implements OnInit {
     tableNotes: [""],
   });
   public dialogClose!: number;
-  constructor(private formBuilder: FormBuilder, private store: Store) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private store: Store,
+    private matDialogRef: MatDialogRef<SaveTableDataComponent>
+  ) {}
   // * getter method that returns the formGroup's control
   public get form() {
     return this.tableInfoForm.controls;
@@ -49,7 +56,21 @@ export class SaveTableDataComponent implements OnInit {
           tableNotes: this.tableInfoForm.controls.tableNotes.value,
         })
       )
-      .subscribe((res) => console.log(`saved to db: `, res));
-    // dispatch a write table data to db action
+      .subscribe((res) => {
+        console.log(`saved to db: `, res);
+        this.closeDialogTimer();
+      });
+  }
+
+  public closeDialogTimer(): void {
+    const countdown = 5;
+    timer(0, 1000)
+      .pipe(take(countdown + 1))
+      .subscribe((val) => {
+        this.dialogClose = countdown - val;
+        if (this.dialogClose === 0) {
+          this.matDialogRef.close();
+        }
+      });
   }
 }
