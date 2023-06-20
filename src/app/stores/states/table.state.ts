@@ -4,8 +4,10 @@ import { Injectable } from "@angular/core";
 import {
   LatestTableData,
   PersistedTableDocument,
+  TableNameAndNotes,
 } from "src/app/models/table-row-data.model";
 import { TableDataService } from "src/app/services/table-data.service";
+import { Firestore } from "@angular/fire/firestore";
 
 export interface TableStateModel {
   lastCalculatedTableData: LatestTableData;
@@ -26,7 +28,11 @@ export class TableState {
     ctx: StateContext<TableStateModel>,
     action: TableActions.WriteTableDataToDB
   ) {
-    return this.tableDataService.writeTableData(action.payload);
+    const tableData = ctx.getState().lastCalculatedTableData;
+    tableData.tableName = action.payload.tableName;
+    tableData.tableNotes = action.payload.tableNotes;
+
+    return this.tableDataService.writeTableData(tableData);
   }
   @Action(TableActions.CacheLatestTableData)
   cacheLatestTableData(

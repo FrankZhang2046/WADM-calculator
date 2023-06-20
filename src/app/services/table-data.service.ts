@@ -1,6 +1,12 @@
 import { Injectable } from "@angular/core";
 import { PersistedTableDocument } from "../models/table-row-data.model";
-import { Firestore, addDoc, collection, doc } from "@angular/fire/firestore";
+import {
+  Firestore,
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+} from "@angular/fire/firestore";
 import { Select, Store } from "@ngxs/store";
 import { TableStateModel } from "../stores/states/table.state";
 import { AuthStateModel } from "../stores/states/auth.state";
@@ -17,6 +23,7 @@ export class TableDataService {
   */
   writeTableData(tableData: any): Promise<any> {
     const currentUser = this.store.select((state) => state.user.currentUser);
+    tableData.createdAt = serverTimestamp();
     return new Promise((resolve, reject) => {
       currentUser.pipe(take(1)).subscribe((user) => {
         const tableCollection = collection(

@@ -29,4 +29,6 @@ export interface LatestTableData {
     columnData: ColumnHeaderData[];
     tableRowData: TableRowData[];
   };
+  tableName: string | null;
+  tableNotes?: string | null;
 }
