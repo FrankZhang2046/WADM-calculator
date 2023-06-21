@@ -1,7 +1,7 @@
 import { MatMenuModule } from "@angular/material/menu";
 import { TableStateModel } from "./stores/states/table.state";
 import { AuthStateModel } from "./stores/states/auth.state";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router, RouterOutlet } from "@angular/router";
 import { DraggableTableComponent } from "./components/draggable-table/draggable-table.component";
@@ -14,6 +14,7 @@ import { Auth, User, onAuthStateChanged, signOut } from "@angular/fire/auth";
 import { Select, Store } from "@ngxs/store";
 import { AuthActions } from "./stores/actions/user.action";
 import { Observable } from "rxjs";
+import { MatDrawer, MatSidenavModule } from "@angular/material/sidenav";
 
 @Component({
   selector: "app-root",
@@ -28,6 +29,7 @@ import { Observable } from "rxjs";
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
+    MatSidenavModule,
   ],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
