@@ -14,6 +14,7 @@ import { NgxsModule } from "@ngxs/store";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 import { TableState } from "./stores/states/table.state";
 import { AuthState } from "./stores/states/auth.state";
+import { environment } from "../environments/environment";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,14 +28,20 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       provideFirestore(() => {
         const firestore = getFirestore();
-        connectFirestoreEmulator(firestore, "localhost", 8080);
+        if (!environment.production) {
+          console.log(`using firestore emulator:`, environment.production);
+          connectFirestoreEmulator(firestore, "localhost", 8080);
+        }
         return firestore;
       })
     ),
     importProvidersFrom(
       provideAuth(() => {
         const auth = getAuth();
-        connectAuthEmulator(auth, "http://localhost:9099");
+        if (!environment.production) {
+          console.log(`using auth emulator:`, environment.production);
+          connectAuthEmulator(auth, "http://localhost:9099");
+        }
         return auth;
       })
     ),

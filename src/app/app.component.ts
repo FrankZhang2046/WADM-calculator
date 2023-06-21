@@ -15,6 +15,7 @@ import { Select, Store } from "@ngxs/store";
 import { AuthActions } from "./stores/actions/user.action";
 import { Observable } from "rxjs";
 import { MatDrawer, MatSidenavModule } from "@angular/material/sidenav";
+import { environment } from "../environments/environment";
 
 @Component({
   selector: "app-root",
@@ -49,10 +50,6 @@ export class AppComponent implements OnInit {
     this.router.navigateByUrl(targetUrl);
   }
   public ngOnInit(): void {
-    this.currentUser$.subscribe((user) => {
-      console.log(`in app component: `, user);
-    });
-
     onAuthStateChanged(this.auth, (user) => {
       this.store.dispatch(new AuthActions.RegisterCurrentUser(user));
       if (user) {
