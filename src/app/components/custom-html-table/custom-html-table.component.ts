@@ -100,7 +100,7 @@ export class CustomHtmlTableComponent implements OnInit {
     event?: ChartEvent;
     active?: {}[];
   }): void {
-    console.log(event, active);
+    // console.log(event, active);
   }
 
   public chartHovered({
@@ -110,7 +110,7 @@ export class CustomHtmlTableComponent implements OnInit {
     event?: ChartEvent;
     active?: {}[];
   }): void {
-    console.log(event, active);
+    // console.log(event, active);
   }
 
   public tableOperationConstants = TableOperationConstants;
@@ -169,7 +169,6 @@ export class CustomHtmlTableComponent implements OnInit {
     if (this.confirmDeletionModalOpened || this.displayResults) {
       return;
     }
-    console.log(`key pressed is:`, event.key);
     // switch statement to specify the procedure of different keystrokes:
     switch (event.key) {
       // if arrow right is pressed, console.log it
@@ -518,10 +517,6 @@ export class CustomHtmlTableComponent implements OnInit {
         this.hydrateUIFromCachedTableData(tableData);
       }
     });
-    const testCollection = collection(this.firestore, "test");
-    onSnapshot(testCollection, (snapshot) => {
-      snapshot.docs.forEach((doc) => console.log(doc.data()));
-    });
     this.seedTable();
     // * valueChanges listener header renaming formControl
     this.headerRenamingFormControl.valueChanges.subscribe((value) => {
@@ -760,7 +755,6 @@ export class CustomHtmlTableComponent implements OnInit {
     }
   }
   public signalColumnForDeletion(columnToDelete: number): void {
-    console.log(`signal col for deletion called`);
     if (this.columnToDelete === null || this.columnToDelete === undefined) {
       this.columnToDelete = columnToDelete;
       this.rowToDelete = null;
@@ -810,15 +804,6 @@ export class CustomHtmlTableComponent implements OnInit {
         },
       })
     );
-  }
-
-  public addDocToCollection() {
-    const testCollection = collection(this.firestore, "test");
-    addDoc(testCollection, {
-      name: "I'm the eldest boi!",
-    }).then((docRef) => {
-      console.log("Document written with ID: ", docRef.id);
-    });
   }
 
   public resetHighlightedTableElement(): void {

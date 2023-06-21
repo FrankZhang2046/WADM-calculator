@@ -65,7 +65,6 @@ export class SaveTableDataComponent implements OnInit {
         })
       )
       .subscribe((res) => {
-        console.log(`saved to db: `, res);
         this.closeDialogTimer();
       });
   }
