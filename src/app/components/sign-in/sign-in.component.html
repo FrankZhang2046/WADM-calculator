@@ -1,29 +1,56 @@
 <div class="p-4">
-    <div *ngIf="!displaySignInForm else emailSignInForm">
-        <button (click)="signIn('google')" mat-flat-button>sing in with google</button>
-        <button (click)="signIn('email')" class="mt-2" mat-flat-button>sign in with email</button>
-    </div>
+  <div *ngIf="!displaySignInForm; else emailSignInForm">
+    <button (click)="signIn('google')" mat-flat-button>
+      sign in with google
+    </button>
+    <button (click)="signIn('email')" class="mt-2" mat-flat-button>
+      sign in with email
+    </button>
+  </div>
 </div>
 
 <ng-template #emailSignInForm>
-    <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
-        <div>
-            <label for="email">Email</label>
-            <input type="email" id="email" formControlName="email">
-            <div *ngIf="form.email.invalid && (form.email.dirty || form.email.touched)" class="error-message">
-                <div *ngIf="form.email.errors">Email is required.</div>
-                <div *ngIf="form.email.errors">Invalid email format.</div>
-            </div>
-        </div>
+  <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="email">Email</label>
+      <input type="email" id="email" formControlName="email" />
+      <div
+        *ngIf="form.email.invalid && (form.email.dirty || form.email.touched)"
+        class="error-message"
+      >
+        <div *ngIf="form.email.errors">Email is required.</div>
+        <div *ngIf="form.email.errors">Invalid email format.</div>
+      </div>
+    </div>
 
-        <div class="mt-2">
-            <label for="password">Password</label>
-            <input class="ml-2" type="password" id="password" formControlName="password">
-            <div *ngIf="form.password.invalid && (form.password.dirty || form.password.touched)" class="error-message">
-                <div *ngIf="form.password.errors">Password is required.</div>
-                <div *ngIf="form.password.errors">Password must be at least 6 characters.</div>
-            </div>
+    <div class="mt-2">
+      <label for="password">Password</label>
+      <input
+        class="ml-2"
+        type="password"
+        id="password"
+        formControlName="password"
+      />
+      <div
+        *ngIf="
+          form.password.invalid &&
+          (form.password.dirty || form.password.touched)
+        "
+        class="error-message"
+      >
+        <div *ngIf="form.password.errors">Password is required.</div>
+        <div *ngIf="form.password.errors">
+          Password must be at least 6 characters.
         </div>
-        <button mat-flat-button type="submit" [disabled]="signInForm.invalid">Sign In</button>
-    </form>
+      </div>
+    </div>
+    <div class="w-full flex justify-between mt-2">
+      <button mat-flat-button (click)="displaySignInForm = false">
+        Cancel
+      </button>
+      <button mat-flat-button type="submit" [disabled]="signInForm.invalid">
+        Sign In
+      </button>
+    </div>
+  </form>
 </ng-template>
