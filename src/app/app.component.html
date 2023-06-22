@@ -2,7 +2,7 @@
   <button (click)="drawer.toggle()" mat-icon-button>
     <mat-icon>menu</mat-icon>
   </button>
-  <div class="font-light" (click)="redirectMethod('/')">
+  <div class="font-light hover:cursor-pointer" (click)="redirectMethod('/')">
     {{ "WADM Calculator" }}
   </div>
   <div *ngIf="(currentUser$ | async) === null"

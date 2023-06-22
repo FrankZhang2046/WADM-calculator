@@ -10,11 +10,13 @@ import { MatTableModule } from "@angular/material/table";
 import { PersistedTableDocument } from "src/app/models/table-row-data.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableActions } from "src/app/stores/actions/table.action";
+import {MatButtonModule} from "@angular/material/button";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @Component({
   selector: "app-works",
   standalone: true,
-  imports: [CommonModule, MatTableModule],
+  imports: [CommonModule, MatTableModule, MatButtonModule, MatTooltipModule],
   templateUrl: "./works.component.html",
   styleUrls: ["./works.component.scss"],
 })
@@ -26,7 +28,7 @@ export class WorksComponent implements OnInit {
   public currentUser$!: Observable<User | null>;
   public dataSource!: PersistedTableDocument[];
   public currentUserValue!: User | null;
-  public displayedColumns: string[] = ["tableName", "tableNotes"];
+  public displayedColumns: string[] = ["tableName", "tableNotes", "loadTable"];
   constructor(
     private store: Store,
     private firestore: Firestore,
@@ -58,5 +60,12 @@ export class WorksComponent implements OnInit {
       new TableActions.RegisterRetrievedTableData(tableRow.tableData)
     );
     this.router.navigate(["/"]);
+  }
+
+  rowHoveredMethod($event: any) {
+    console.log(`hovered row is: `, $event.hovered = true);
+  }
+  rowMouseLeaveMethod($event: any) {
+    console.log(`hovered row is: `, $event.hovered = false);
   }
 }
