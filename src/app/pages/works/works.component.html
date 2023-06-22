@@ -1,28 +1,54 @@
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
   <!-- Name Column -->
   <ng-container matColumnDef="tableName">
-    <th mat-header-cell *matHeaderCellDef> Name </th>
-    <td mat-cell *matCellDef="let element"> {{element.tableName}} </td>
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.tableName }}
+    </td>
   </ng-container>
 
   <!-- Notes Column -->
   <ng-container matColumnDef="tableNotes">
-    <th mat-header-cell *matHeaderCellDef> Notes </th>
-    <td mat-cell *matCellDef="let element"> {{element.tableNotes}} </td>
-  </ng-container>
-
-  <!-- Load Table Btn Column -->
-  <ng-container matColumnDef="loadTable">
-    <th mat-header-cell *matHeaderCellDef></th>
+    <th mat-header-cell *matHeaderCellDef>Notes</th>
     <td mat-cell *matCellDef="let element">
-      <button matTooltip="click to load your table data" *ngIf="element.hovered" (click)="loadTableData(element)" mat-flat-button color="primary">Load Data</button>
+      {{ element.tableNotes }}
     </td>
   </ng-container>
 
+  <!-- Action Control Column -->
+  <ng-container matColumnDef="actionControl">
+    <th mat-header-cell *matHeaderCellDef>Action Control</th>
+    <td
+      [matMenuTriggerFor]="rowDataControl"
+      [matMenuTriggerData]="{ data: element }"
+      mat-cell
+      *matCellDef="let element"
+    >
+      <button mat-flat-button color="primary">Modify</button>
+    </td>
+  </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row class="hover:cursor-pointer"
-      (mouseover)="rowHoveredMethod(row)"
-      (mouseleave)="rowMouseLeaveMethod(row)"
-      *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr
+    [class.border-red-600]="true"
+    mat-row
+    class="hover:cursor-pointer border-green-600"
+    (click)="rowHoveredMethod(row)"
+    *matRowDef="let row; columns: displayedColumns"
+  ></tr>
 </table>
+<mat-menu
+  class="bg-green-600"
+  #rowDataControl="matMenu"
+  #rowDataControlMenu
+  xPosition="after"
+  yPosition="below"
+>
+  <ng-template let-myData="data" matMenuContent>
+    <button mat-menu-item>Edit Table Data</button>
+    <button (click)="loadTableData(myData)" mat-menu-item>
+      Load Table Data
+    </button>
+    <button mat-menu-item>Delete Table</button>
+  </ng-template>
+</mat-menu>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Firestore, collection, onSnapshot } from "@angular/fire/firestore";
 import { AuthStateModel } from "src/app/stores/states/auth.state";
@@ -10,17 +10,25 @@ import { MatTableModule } from "@angular/material/table";
 import { PersistedTableDocument } from "src/app/models/table-row-data.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableActions } from "src/app/stores/actions/table.action";
-import {MatButtonModule} from "@angular/material/button";
-import {MatTooltipModule} from "@angular/material/tooltip";
+import { MatButtonModule } from "@angular/material/button";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatMenu, MatMenuModule } from "@angular/material/menu";
 
 @Component({
   selector: "app-works",
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatButtonModule, MatTooltipModule],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatMenuModule,
+  ],
   templateUrl: "./works.component.html",
   styleUrls: ["./works.component.scss"],
 })
 export class WorksComponent implements OnInit {
+  @ViewChild(MatMenu) rowDataControlMenu!: MatMenu;
   @Select(
     (state: { user: AuthStateModel; table: TableStateModel }) =>
       state.user.currentUser
@@ -28,7 +36,11 @@ export class WorksComponent implements OnInit {
   public currentUser$!: Observable<User | null>;
   public dataSource!: PersistedTableDocument[];
   public currentUserValue!: User | null;
-  public displayedColumns: string[] = ["tableName", "tableNotes", "loadTable"];
+  public displayedColumns: string[] = [
+    "tableName",
+    "tableNotes",
+    "actionControl",
+  ];
   constructor(
     private store: Store,
     private firestore: Firestore,
@@ -54,7 +66,7 @@ export class WorksComponent implements OnInit {
       }
     });
   }
-  public loadTableData(tableRow: PersistedTableDocument) {
+  public loadTableData(tableRow: any) {
     console.log(`table row data is: `, tableRow);
     this.store.dispatch(
       new TableActions.RegisterRetrievedTableData(tableRow.tableData)
@@ -63,9 +75,6 @@ export class WorksComponent implements OnInit {
   }
 
   rowHoveredMethod($event: any) {
-    console.log(`hovered row is: `, $event.hovered = true);
-  }
-  rowMouseLeaveMethod($event: any) {
-    console.log(`hovered row is: `, $event.hovered = false);
+    console.log(`hovered row is: `, ($event.activated = true));
   }
 }
