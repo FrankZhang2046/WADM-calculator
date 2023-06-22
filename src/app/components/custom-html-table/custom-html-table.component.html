@@ -43,7 +43,7 @@
             cdkDrag
             (mousedown)="$event.stopPropagation()"
             cdkDragLockAxis="x"
-            (dblclick)="
+            (click)="
               modifyTableElement(tableOperationConstants.columnHeader, [colIdx])
             "
           >
@@ -70,9 +70,6 @@
       >
         <!-- implement table header modification for row headers -->
         <th
-          (click)="
-            highlightTableElement(tableOperationConstants.rowHeader, [rowIndex])
-          "
           [ngClass]="
             highlightedTableElementIdx.tableElement ===
               tableOperationConstants.rowHeader &&
@@ -90,7 +87,7 @@
             );
             else headerRenameInputTemplate
           "
-          (dblclick)="
+          (click)="
             modifyTableElement(tableOperationConstants.rowHeader, [rowIndex])
           "
         >
@@ -114,11 +111,6 @@
             else tableDataUpdateInputTemplate
           "
           (click)="
-            highlightTableElement(tableOperationConstants.fieldWeight, [
-              rowIndex
-            ])
-          "
-          (dblclick)="
             modifyTableElement(tableOperationConstants.fieldWeight, [rowIndex])
           "
           class="text-center text-blue-600"
@@ -151,12 +143,6 @@
             "
             class="text-blue-600 text-center w-20"
             (click)="
-              highlightTableElement(tableOperationConstants.cell, [
-                rowIndex,
-                cellIdx
-              ])
-            "
-            (dblclick)="
               modifyTableElement(tableOperationConstants.cell, [
                 rowIndex,
                 cellIdx
