@@ -46,7 +46,8 @@ export class AppComponent implements OnInit {
     (state: { user: AuthStateModel; table: TableStateModel }) =>
       state.user.currentUser
   )
-  currentUser$!: Observable<User | null>;
+  public currentUser$!: Observable<User | null>;
+  public currentUserVal!: User | null;
   constructor(
     private router: Router,
     private auth: Auth,
@@ -57,6 +58,7 @@ export class AppComponent implements OnInit {
   }
   public ngOnInit(): void {
     onAuthStateChanged(this.auth, (user) => {
+      this.currentUserVal = user;
       this.store.dispatch(new AuthActions.RegisterCurrentUser(user));
       if (user) {
         if (!this.router.url.includes("works")) {

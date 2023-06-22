@@ -1,5 +1,11 @@
 <mat-toolbar class="bg-green-600 flex justify-between">
-  <button (click)="drawer.toggle()" mat-icon-button>
+  <button
+    (click)="currentUserVal ? drawer.toggle() : drawer.close()"
+    [matTooltip]="
+      currentUserVal ? '' : 'Please log in to access additional features'
+    "
+    mat-icon-button
+  >
     <mat-icon>menu</mat-icon>
   </button>
   <div class="font-light hover:cursor-pointer" (click)="redirectMethod('/')">
@@ -56,7 +62,7 @@
       <span class="ml-2">Profile Settings</span>
     </div>
     <div
-      (click)="logOut()"
+      (click)="logOut(); profileDrawer.close(); drawer.close()"
       class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
     >
       <mat-icon>logout</mat-icon>
