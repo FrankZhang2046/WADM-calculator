@@ -1,13 +1,22 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { Firestore, collection, onSnapshot } from "@angular/fire/firestore";
+import {
+  Firestore,
+  collection,
+  onSnapshot,
+  deleteDoc,
+  doc,
+} from "@angular/fire/firestore";
 import { AuthStateModel } from "src/app/stores/states/auth.state";
 import { TableStateModel } from "src/app/stores/states/table.state";
 import { Observable } from "rxjs";
 import { User } from "@angular/fire/auth";
 import { Select, Store } from "@ngxs/store";
 import { MatTableModule } from "@angular/material/table";
-import { PersistedTableDocument } from "src/app/models/table-row-data.model";
+import {
+  CachedPersistedTableDocument,
+  PersistedTableDocument,
+} from "src/app/models/table-row-data.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TableActions } from "src/app/stores/actions/table.action";
 import { MatButtonModule } from "@angular/material/button";
@@ -33,7 +42,7 @@ export class WorksComponent implements OnInit {
       state.user.currentUser
   )
   public currentUser$!: Observable<User | null>;
-  public dataSource!: PersistedTableDocument[];
+  public dataSource!: CachedPersistedTableDocument[];
   public currentUserValue!: User | null;
   public displayedColumns: string[] = [
     "tableName",
@@ -58,9 +67,11 @@ export class WorksComponent implements OnInit {
           `appData/tables/${this.currentUserValue.uid}`
         );
         onSnapshot(userTableCollection, (snapshot) => {
-          this.dataSource = snapshot.docs.map(
-            (doc) => doc.data() as PersistedTableDocument
-          );
+          this.dataSource = snapshot.docs.map((doc) => {
+            const returnDoc = doc.data();
+            returnDoc["id"] = doc.id;
+            return returnDoc as CachedPersistedTableDocument;
+          });
         });
       }
     });
@@ -75,5 +86,14 @@ export class WorksComponent implements OnInit {
 
   rowHoveredMethod($event: any) {
     console.log(`hovered row is: `, ($event.activated = true));
+  }
+
+  public deleteTable(myData: any) {
+    const userTableCollection = collection(
+      this.firestore,
+      `appData/tables/${this.currentUserValue?.uid}`
+    );
+    const docRef = doc(userTableCollection, myData.id);
+    deleteDoc(docRef).then((res) => console.log(`res is: `, res));
   }
 }

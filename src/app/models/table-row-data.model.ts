@@ -25,6 +25,16 @@ export interface PersistedTableDocument {
   };
 }
 
+export interface CachedPersistedTableDocument {
+  createdAt: object;
+  tableName: string;
+  tableNotes: string;
+  tableData: {
+    columnData: ColumnHeaderData[];
+    tableRowData: TableRowData[];
+  };
+}
+
 export interface LatestTableData {
   tableData: TableData;
   tableName: string | null;

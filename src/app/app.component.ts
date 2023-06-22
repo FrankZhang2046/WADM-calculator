@@ -10,7 +10,13 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { Auth, User, onAuthStateChanged, signOut } from "@angular/fire/auth";
+import {
+  Auth,
+  User,
+  onAuthStateChanged,
+  signOut,
+  user,
+} from "@angular/fire/auth";
 import { Select, Store } from "@ngxs/store";
 import { AuthActions } from "./stores/actions/user.action";
 import { Observable } from "rxjs";
@@ -62,4 +68,6 @@ export class AppComponent implements OnInit {
   public logOut() {
     signOut(this.auth);
   }
+
+  protected readonly user = user;
 }

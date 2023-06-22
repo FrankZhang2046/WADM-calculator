@@ -1,4 +1,9 @@
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table
+  *ngIf="dataSource.length > 0; else emptyCollectionDisplayMessage"
+  mat-table
+  [dataSource]="dataSource"
+  class="mat-elevation-z8"
+>
   <!-- Name Column -->
   <ng-container matColumnDef="tableName">
     <th mat-header-cell *matHeaderCellDef>Name</th>
@@ -48,6 +53,15 @@
     <button (click)="loadTableData(myData)" mat-menu-item>
       Load Table Data
     </button>
-    <button mat-menu-item>Delete Table</button>
+    <button (click)="deleteTable(myData)" mat-menu-item>Delete Table</button>
   </ng-template>
 </mat-menu>
+<ng-template #emptyCollectionDisplayMessage>
+  <div class="w-full flex justify-center mt-4">
+    <div class="rounded-lg p-4 w-fit bg-red-200">
+      <div class="p-2 text-red-800">
+        You haven't created any table, create one now.
+      </div>
+    </div>
+  </div>
+</ng-template>
