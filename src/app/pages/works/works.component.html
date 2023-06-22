@@ -17,7 +17,7 @@
 
   <!-- Action Control Column -->
   <ng-container matColumnDef="actionControl">
-    <th mat-header-cell *matHeaderCellDef>Action Control</th>
+    <th mat-header-cell *matHeaderCellDef></th>
     <td
       [matMenuTriggerFor]="rowDataControl"
       [matMenuTriggerData]="{ data: element }"
@@ -40,7 +40,6 @@
 <mat-menu
   class="bg-green-600"
   #rowDataControl="matMenu"
-  #rowDataControlMenu
   xPosition="after"
   yPosition="below"
 >

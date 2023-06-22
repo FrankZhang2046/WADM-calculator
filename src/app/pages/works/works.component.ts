@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Firestore, collection, onSnapshot } from "@angular/fire/firestore";
 import { AuthStateModel } from "src/app/stores/states/auth.state";
@@ -28,7 +28,6 @@ import { MatMenu, MatMenuModule } from "@angular/material/menu";
   styleUrls: ["./works.component.scss"],
 })
 export class WorksComponent implements OnInit {
-  @ViewChild(MatMenu) rowDataControlMenu!: MatMenu;
   @Select(
     (state: { user: AuthStateModel; table: TableStateModel }) =>
       state.user.currentUser
