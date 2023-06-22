@@ -1,18 +1,67 @@
-<div *ngIf="dialogClose">Your work has been saved. Dialog with be closed in {{dialogClose}} seconds.</div>
-<div>To save your work, please enter a name and notes (optional) for the table</div>
-<form [formGroup]="tableInfoForm" *ngIf="tableInfoForm" (ngSubmit)="onSubmit()">
+<div class="p-4">
+  <div *ngIf="dialogClose">
+    Your work has been saved. Dialog with be closed in
+    {{ dialogClose }} seconds.
+  </div>
+  <div class="font-black text-base text-gray-300 mb-4">
+    To save your work, please enter a name and notes (optional) for the table
+  </div>
+  <form
+    [formGroup]="tableInfoForm"
+    *ngIf="tableInfoForm"
+    (ngSubmit)="onSubmit()"
+  >
     <div>
-        <label for="tableName">Name: </label>
-        <input type="text" id="tableName" formControlName="tableName">
-        <div *ngIf="form.tableName.errors">
-            <div>Table name is required</div>
-        </div>
+      <div class="flex items-center">
+        <label for="tableName" class="text-gray-400 flex-col">
+          <div class="text-base">Name:</div>
+          <div class="text-xs text-red-600">*Required</div>
+        </label>
+        <input
+          class="ml-4 rounded-sm h-6"
+          mat-input
+          type="text"
+          id="tableName"
+          formControlName="tableName"
+        />
+      </div>
+      <div *ngIf="form.tableName.errors?.['required']">
+        <div class="text-orange-500">Table name is required</div>
+      </div>
     </div>
-    <div>
-        <label for="tableName">Notes: (Optional)</label>
-        <textarea type="text" id="tableNotes" formControlName="tableNotes">
-                </textarea>
+    <div class="mt-4">
+      <div class="flex items-center">
+        <label for="tableNotes" class="text-gray-400 flex-col">
+          <div class="text-base">Notes:</div>
+          <div class="text-xs text-emerald-600">Optional</div>
+        </label>
+        <textarea
+          class="rounded-sm ml-6"
+          type="text"
+          id="tableNotes"
+          formControlName="tableNotes"
+        >
+        </textarea>
+      </div>
     </div>
-    <button [disabled]="tableInfoForm.invalid" mat-flat-button type="submit">Save Table</button>
-    <button [disabled]="tableInfoForm.invalid" mat-flat-button type="submit">Close</button>
-</form>
+    <div class="w-full flex justify-end mt-4">
+      <button
+        (click)="closeDialog()"
+        color="accent"
+        mat-flat-button
+        type="submit"
+      >
+        Close
+      </button>
+      <button
+        color="primary"
+        class="ml-4"
+        [disabled]="tableInfoForm.invalid"
+        mat-flat-button
+        type="submit"
+      >
+        Save Table
+      </button>
+    </div>
+  </form>
+</div>

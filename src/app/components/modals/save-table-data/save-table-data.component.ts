@@ -68,6 +68,27 @@ export class SaveTableDataComponent implements OnInit {
         this.closeDialogTimer();
       });
   }
+  public closeDialog(): void {
+    this.matDialogRef.close();
+    this.displaySnackBar();
+  }
+
+  public displaySnackBar(): void {
+    const snackBarRef = this.snackBar.open(
+      "No such thing as a life that is better than yours",
+      "View Table",
+      {
+        horizontalPosition: "center",
+        verticalPosition: "top",
+      }
+    );
+
+    snackBarRef.onAction().subscribe(() => {
+      this.router.navigate(["/works"]);
+      snackBarRef.dismiss();
+    });
+
+  }
 
   public closeDialogTimer(): void {
     const countdown = 5;
@@ -76,20 +97,8 @@ export class SaveTableDataComponent implements OnInit {
       .subscribe((val) => {
         this.dialogClose = countdown - val;
         if (this.dialogClose === 0) {
-          this.matDialogRef.close();
-          const snackBarRef = this.snackBar.open(
-            "No such thing as a life that is better than yours",
-            "View Table",
-            {
-              horizontalPosition: "center",
-              verticalPosition: "top",
-            }
-          );
-
-          snackBarRef.onAction().subscribe(() => {
-            this.router.navigate(["/works"]);
-            snackBarRef.dismiss();
-          });
+          this.closeDialog();
+          this.displaySnackBar();
         }
       });
   }
