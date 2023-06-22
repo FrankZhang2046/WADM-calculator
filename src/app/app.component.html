@@ -1,9 +1,15 @@
 <mat-toolbar class="bg-green-600 flex justify-between">
-  <button (click)="drawer.toggle()" mat-icon-button>
+  <button
+    (click)="currentUserVal ? drawer.toggle() : drawer.close()"
+    [matTooltip]="
+      currentUserVal ? '' : 'Please log in to access additional features'
+    "
+    mat-icon-button
+  >
     <mat-icon>menu</mat-icon>
   </button>
   <div class="font-light hover:cursor-pointer" (click)="redirectMethod('/')">
-    {{ "frank zhang" }}
+    WADM calculator
   </div>
   <div
     *ngIf="(currentUser$ | async) === null"
@@ -14,7 +20,7 @@
     {{ "log in" | titlecase }}
   </div>
   <div
-    [mat-menu-trigger-for]="userProfileMenu"
+    (click)="profileDrawer.toggle()"
     *ngIf="(currentUser$ | async) !== null"
     class="h-10 mr-1 hover:cursor-pointer"
   >
@@ -32,10 +38,35 @@
   <mat-drawer #drawer mode="side" class="drawer">
     <div
       (click)="redirectMethod('/works')"
-      class="flex items-center p-4 hover:cursor-pointer"
+      class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
     >
       <mat-icon>stacked_bar_chart</mat-icon>
       <span class="ml-2">View Past Works</span>
+    </div>
+  </mat-drawer>
+
+  <mat-drawer
+    #profileDrawer
+    mode="side"
+    position="end"
+    class="profile-drawer bg-[#166d99]"
+  >
+    <div class="flex items-center p-4">
+      {{ (currentUser$ | async)?.displayName ?? (currentUser$ | async)?.email }}
+    </div>
+    <div
+      (click)="redirectMethod('/settings')"
+      class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
+    >
+      <mat-icon>settings</mat-icon>
+      <span class="ml-2">Profile Settings</span>
+    </div>
+    <div
+      (click)="logOut(); profileDrawer.close(); drawer.close()"
+      class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
+    >
+      <mat-icon>logout</mat-icon>
+      <span class="ml-2">Logout</span>
     </div>
   </mat-drawer>
 </mat-drawer-container>
