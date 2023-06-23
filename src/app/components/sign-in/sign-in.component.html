@@ -1,10 +1,12 @@
 <div class="p-4">
-  <div *ngIf="!displaySignInForm; else emailSignInForm">
+  <div class="flex flex-col" *ngIf="!displaySignInForm; else emailSignInForm">
     <button (click)="signIn('google')" mat-flat-button>
-      sign in with google
+      <mat-icon svgIcon="google-icon"></mat-icon>
+      {{ "sign in with google" | titlecase }}
     </button>
     <button (click)="signIn('email')" class="mt-2" mat-flat-button>
-      sign in with email
+      <mat-icon>email</mat-icon>
+      {{ "sign in with email" | titlecase }}
     </button>
   </div>
 </div>

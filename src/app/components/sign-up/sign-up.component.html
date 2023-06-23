@@ -1,17 +1,19 @@
 <div class="p-4 w-full">
   <div
     *ngIf="!displaySignInForm; else emailSignUpForm"
-    class="flex flex-col items-center"
+    class="flex flex-col"
   >
     <button mat-flat-button (click)="signIn('google')">
-      sign up with google
+      <mat-icon svgIcon="google-icon"></mat-icon>
+      Sign Up With Google
     </button>
     <button
       class="mt-2 justify-center"
       mat-flat-button
       (click)="signIn('email')"
     >
-      sign up with email
+      <mat-icon>email</mat-icon>
+      Sign Up With Email
     </button>
   </div>
 </div>

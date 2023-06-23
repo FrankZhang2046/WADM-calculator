@@ -15,11 +15,12 @@ import {
   Validators,
 } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
+import {MatIconModule} from "@angular/material/icon";
 
 @Component({
   selector: "app-sign-in",
   standalone: true,
-  imports: [CommonModule, MatButtonModule, ReactiveFormsModule],
+  imports: [CommonModule, MatButtonModule, ReactiveFormsModule, MatIconModule],
   templateUrl: "./sign-in.component.html",
   styleUrls: ["./sign-in.component.scss"],
 })
@@ -33,8 +34,9 @@ export class SignInComponent implements OnInit {
   constructor(
     private auth: Auth,
     private formBuilder: FormBuilder,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+  ) {
+  }
   public get form() {
     return this.signInForm.controls;
   }

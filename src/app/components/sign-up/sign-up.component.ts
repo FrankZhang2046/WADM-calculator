@@ -17,6 +17,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
+import {MatIconModule} from "@angular/material/icon";
 
 interface SignUpFormData {
   email: string;
@@ -26,7 +27,7 @@ interface SignUpFormData {
 @Component({
   selector: "app-sign-up",
   standalone: true,
-  imports: [CommonModule, MatButtonModule, ReactiveFormsModule],
+  imports: [CommonModule, MatButtonModule, ReactiveFormsModule, MatIconModule],
   templateUrl: "./sign-up.component.html",
   styleUrls: ["./sign-up.component.scss"],
 })
