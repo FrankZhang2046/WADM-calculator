@@ -8,3 +8,17 @@
     background-color: rgba(255, 255, 255, 0.2);
   }
 }
+
+.app-container {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.app-bar {
+
+}
+
+.main {
+  overflow-y: auto;
+}
