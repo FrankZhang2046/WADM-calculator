@@ -49,7 +49,9 @@
   yPosition="below"
 >
   <ng-template let-myData="data" matMenuContent>
-    <button mat-menu-item>Edit Table Data</button>
+    <button (click)="editTableData(myData)" mat-menu-item>
+      Edit Table Data
+    </button>
     <button (click)="loadTableData(myData)" mat-menu-item>
       Load Table Data
     </button>

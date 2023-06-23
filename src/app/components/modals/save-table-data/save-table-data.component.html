@@ -1,11 +1,13 @@
 <div>
-  <div class="bg-green-600 p-2 pl-4 text-white text-xs" *ngIf="true">
+  <div class="bg-green-600 p-2 pl-4 text-white text-xs" *ngIf="dialogClose">
     Your work has been saved. Dialog with be closed in
     {{ dialogClose }} seconds.
   </div>
   <div class="p-4">
     <div class="font-black text-base text-gray-300 mb-4">
-      To save your work, please enter a name and notes (optional) for the table
+      To
+      <span>{{ data ? "update your table," : "save your work," }}</span> please
+      enter a name and notes (optional) for the table
     </div>
     <form
       [formGroup]="tableInfoForm"
@@ -61,7 +63,8 @@
           mat-flat-button
           type="submit"
         >
-          Save Table
+          <span>{{ data ? "Update " : "Save " }}</span>
+          Table
         </button>
       </div>
     </form>

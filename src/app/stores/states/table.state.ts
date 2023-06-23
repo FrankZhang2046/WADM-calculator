@@ -32,6 +32,14 @@ export class TableState {
   ) {
     ctx.patchState({ retrievedTableData: action.payload });
   }
+  @Action(TableActions.UpdateTableData)
+  updateTableData(
+    ctx: StateContext<TableStateModel>,
+    action: TableActions.UpdateTableData
+  ) {
+    console.log(`payload is: `, action.payload);
+    return this.tableDataService.updateTableData(action.payload);
+  }
   @Action(TableActions.ResetRetrievedTableData)
   calculateTableData(
     ctx: StateContext<TableStateModel>,
