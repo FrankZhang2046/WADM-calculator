@@ -22,6 +22,8 @@ import { TableActions } from "src/app/stores/actions/table.action";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatMenu, MatMenuModule } from "@angular/material/menu";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { SaveTableDataComponent } from "../../components/modals/save-table-data/save-table-data.component";
 
 @Component({
   selector: "app-works",
@@ -32,6 +34,7 @@ import { MatMenu, MatMenuModule } from "@angular/material/menu";
     MatButtonModule,
     MatTooltipModule,
     MatMenuModule,
+    MatDialogModule,
   ],
   templateUrl: "./works.component.html",
   styleUrls: ["./works.component.scss"],
@@ -42,7 +45,7 @@ export class WorksComponent implements OnInit {
       state.user.currentUser
   )
   public currentUser$!: Observable<User | null>;
-  public dataSource!: CachedPersistedTableDocument[];
+  public dataSource: CachedPersistedTableDocument[] = [];
   public currentUserValue!: User | null;
   public displayedColumns: string[] = [
     "tableName",
@@ -53,7 +56,8 @@ export class WorksComponent implements OnInit {
     private store: Store,
     private firestore: Firestore,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private matDialog: MatDialog
   ) {}
   public ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
@@ -95,5 +99,12 @@ export class WorksComponent implements OnInit {
     );
     const docRef = doc(userTableCollection, myData.id);
     deleteDoc(docRef).then((res) => console.log(`res is: `, res));
+  }
+
+  public editTableData(myData: CachedPersistedTableDocument) {
+    console.log(`clicked on: `, myData);
+    this.matDialog.open(SaveTableDataComponent, {
+      data: myData,
+    });
   }
 }

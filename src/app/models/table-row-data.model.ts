@@ -19,20 +19,16 @@ export interface PersistedTableDocument {
   createdAt: object;
   tableName: string;
   tableNotes: string;
-  tableData: {
-    columnData: ColumnHeaderData[];
-    tableRowData: TableRowData[];
-  };
+  tableData: TableData;
 }
 
-export interface CachedPersistedTableDocument {
-  createdAt: object;
-  tableName: string;
-  tableNotes: string;
-  tableData: {
-    columnData: ColumnHeaderData[];
-    tableRowData: TableRowData[];
-  };
+export class CachedPersistedTableDocument implements PersistedTableDocument {
+  constructor(public createdAt: object,
+              public tableName: string,
+              public tableNotes: string,
+              public tableData: TableData,
+              public id?: string
+  ) {}
 }
 
 export interface LatestTableData {

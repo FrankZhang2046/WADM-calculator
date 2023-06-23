@@ -1,4 +1,7 @@
-import { TableRowData } from "./../../models/table-row-data.model";
+import {
+  CachedPersistedTableDocument,
+  TableRowData,
+} from "./../../models/table-row-data.model";
 import {
   ColumnHeaderData,
   LatestTableData,
@@ -15,6 +18,11 @@ export namespace TableActions {
   export class WriteTableDataToDB {
     static readonly type = `[Table] Write table data to DB`;
     constructor(public payload: TableNameAndNotes) {}
+  }
+
+  export class UpdateTableData {
+    static readonly type = `[Table] Update table data`;
+    constructor(public payload: CachedPersistedTableDocument) {}
   }
 
   export class ResetRetrievedTableData {

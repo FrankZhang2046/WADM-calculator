@@ -1,7 +1,7 @@
 import { connectAuthEmulator } from "@angular/fire/auth";
 import { TableActions } from "./../../../stores/actions/table.action";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
-import { Component, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   FormBuilder,
@@ -13,8 +13,9 @@ import {
 import { MatButtonModule } from "@angular/material/button";
 import { Store } from "@ngxs/store";
 import { count, take, timer } from "rxjs";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Router } from "@angular/router";
+import { CachedPersistedTableDocument } from "../../../models/table-row-data.model";
 
 @Component({
   selector: "app-save-table-data",
@@ -37,7 +38,9 @@ export class SaveTableDataComponent implements OnInit {
     tableNotes: [""],
   });
   public dialogClose!: number;
+  private cachedTableData!: CachedPersistedTableDocument;
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
     private store: Store,
     private matDialogRef: MatDialogRef<SaveTableDataComponent>,
@@ -50,23 +53,36 @@ export class SaveTableDataComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /* create a formGroup with two fields
-      tableName: string;
-      tableNotes: string;
-    */
+    if (this.data) {
+      console.log(`my data is: `, this.data);
+      this.cachedTableData = this.data;
+      console.log(`my cached data is: `, this.cachedTableData);
+      this.form.tableName.setValue(this.data.tableName);
+      this.form.tableNotes.setValue(this.data.tableNotes);
+    }
   }
   public onSubmit() {
     // make sure tableName is not null
-    this.store
-      .dispatch(
-        new TableActions.WriteTableDataToDB({
-          tableName: this.tableInfoForm.controls.tableName.value,
-          tableNotes: this.tableInfoForm.controls.tableNotes.value,
-        })
-      )
-      .subscribe((res) => {
-        this.closeDialogTimer();
-      });
+    if (this.data) {
+      console.log(`on submit, my data is: `, this.data);
+      this.cachedTableData.tableName = this.form.tableName.value ?? "";
+      this.cachedTableData.tableNotes = this.form.tableNotes.value ?? "";
+      console.log(`about to update`, this.cachedTableData);
+      this.store.dispatch(
+        new TableActions.UpdateTableData(this.cachedTableData)
+      );
+    } else {
+      this.store
+        .dispatch(
+          new TableActions.WriteTableDataToDB({
+            tableName: this.tableInfoForm.controls.tableName.value,
+            tableNotes: this.tableInfoForm.controls.tableNotes.value,
+          })
+        )
+        .subscribe((res) => {
+          this.closeDialogTimer();
+        });
+    }
   }
   public closeDialog(): void {
     this.matDialogRef.close();
@@ -87,7 +103,6 @@ export class SaveTableDataComponent implements OnInit {
       this.router.navigate(["/works"]);
       snackBarRef.dismiss();
     });
-
   }
 
   public closeDialogTimer(): void {
