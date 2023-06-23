@@ -40,7 +40,7 @@ export const appConfig: ApplicationConfig = {
         const auth = getAuth();
         if (!environment.production) {
           console.log(`using auth emulator:`, environment.production);
-          connectAuthEmulator(auth, "http://localhost:9099");
+          connectAuthEmulator(auth, "http://localhost:9099", {disableWarnings: true});
         }
         return auth;
       })
