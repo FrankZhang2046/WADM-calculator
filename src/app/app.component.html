@@ -1,78 +1,80 @@
-<mat-toolbar class="bg-green-600 flex justify-between">
-  <button
-    (click)="currentUserVal ? drawer.toggle() : drawer.close()"
-    [matTooltip]="
+<div class="app-container">
+  <mat-toolbar class="app-bar bg-green-600 flex justify-between">
+    <button
+      (click)="currentUserVal ? drawer.toggle() : drawer.close()"
+      [matTooltip]="
       currentUserVal ? '' : 'Please log in to access additional features'
     "
-    mat-icon-button
-  >
-    <mat-icon>menu</mat-icon>
-  </button>
-  <div class="flex items-center">
-    <img src="assets/images/site-logo-02-02.svg" alt="site-logo" class="h-12" />
-    <div class="font-light hover:cursor-pointer" (click)="redirectMethod('/')">
-      WADM calculator
-    </div>
-  </div>
-  <div
-    *ngIf="(currentUser$ | async) === null"
-    matTooltip="You'll be able to save your table data after you have logged in."
-    class="hover:cursor-pointer font-light text-base"
-    (click)="redirectMethod('log-in')"
-  >
-    {{ "log in" | titlecase }}
-  </div>
-  <div
-    (click)="profileDrawer.toggle()"
-    *ngIf="(currentUser$ | async) !== null"
-    class="h-10 mr-1 hover:cursor-pointer"
-  >
-    <img
-      class="object-cover h-full rounded-full"
-      src="assets/images/anon-profile-pic.jpeg"
-      alt=""
-    />
-  </div>
-</mat-toolbar>
-
-<mat-drawer-container autosize class="h-full bg-white">
-  <router-outlet></router-outlet>
-
-  <mat-drawer #drawer mode="side" class="drawer">
-    <div
-      (click)="redirectMethod('/works')"
-      class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
+      mat-icon-button
     >
-      <mat-icon>stacked_bar_chart</mat-icon>
-      <span class="ml-2">View Past Works</span>
-    </div>
-  </mat-drawer>
-
-  <mat-drawer
-    #profileDrawer
-    mode="side"
-    position="end"
-    class="profile-drawer bg-[#166d99]"
-  >
-    <div class="flex items-center p-4">
-      {{ (currentUser$ | async)?.displayName ?? (currentUser$ | async)?.email }}
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div class="flex items-center">
+      <img src="assets/images/site-logo-02-02.svg" alt="site-logo" class="h-12" />
+      <div class="font-light hover:cursor-pointer" (click)="redirectMethod('/')">
+        WADM calculator
+      </div>
     </div>
     <div
-      (click)="redirectMethod('/settings')"
-      class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
+      *ngIf="(currentUser$ | async) === null"
+      matTooltip="You'll be able to save your table data after you have logged in."
+      class="hover:cursor-pointer font-light text-base"
+      (click)="redirectMethod('log-in')"
     >
-      <mat-icon>settings</mat-icon>
-      <span class="ml-2">Profile Settings</span>
+      {{ "log in" | titlecase }}
     </div>
     <div
-      (click)="logOut(); profileDrawer.close(); drawer.close()"
-      class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
+      (click)="profileDrawer.toggle()"
+      *ngIf="(currentUser$ | async) !== null"
+      class="h-10 mr-1 hover:cursor-pointer"
     >
-      <mat-icon>logout</mat-icon>
-      <span class="ml-2">Logout</span>
+      <img
+        class="object-cover h-full rounded-full"
+        src="assets/images/anon-profile-pic.jpeg"
+        alt=""
+      />
     </div>
-  </mat-drawer>
-</mat-drawer-container>
+  </mat-toolbar>
+
+  <mat-drawer-container autosize class="main h-full bg-white">
+    <router-outlet></router-outlet>
+
+    <mat-drawer #drawer mode="side" class="drawer">
+      <div
+        (click)="redirectMethod('/works')"
+        class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
+      >
+        <mat-icon>stacked_bar_chart</mat-icon>
+        <span class="ml-2">View Past Works</span>
+      </div>
+    </mat-drawer>
+
+    <mat-drawer
+      #profileDrawer
+      mode="side"
+      position="end"
+      class="profile-drawer bg-[#166d99]"
+    >
+      <div class="flex items-center p-4">
+        {{ (currentUser$ | async)?.displayName ?? (currentUser$ | async)?.email }}
+      </div>
+      <div
+        (click)="redirectMethod('/settings')"
+        class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
+      >
+        <mat-icon>settings</mat-icon>
+        <span class="ml-2">Profile Settings</span>
+      </div>
+      <div
+        (click)="logOut(); profileDrawer.close(); drawer.close()"
+        class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
+      >
+        <mat-icon>logout</mat-icon>
+        <span class="ml-2">Logout</span>
+      </div>
+    </mat-drawer>
+  </mat-drawer-container>
+</div>
 
 <mat-menu #userProfileMenu="matMenu">
   <button mat-menu-item (click)="logOut()">Log Out</button>
