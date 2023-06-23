@@ -41,10 +41,15 @@ export class SignInComponent implements OnInit {
     return this.signInForm.controls;
   }
   public ngOnInit(): void {
+    // password: ["", Validators.minLength(6)],
+    // a new password field, with 2 validators: required, and min length (6)
     this.signInForm = this.formBuilder.group({
-      email: ["", Validators.required, Validators.email],
-      password: ["", Validators.required, Validators.minLength(6)],
+      email: ["", Validators.compose([Validators.required, Validators.email])],
+      password: ["", Validators.compose([Validators.required, Validators.minLength(6)])]
     });
+
+    this.signInForm.controls.password.valueChanges
+      .subscribe(value => console.log(`value is: `, value));
   }
   public signIn(signInMethod: string) {
     switch (signInMethod) {
