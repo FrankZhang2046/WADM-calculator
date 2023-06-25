@@ -15,11 +15,13 @@ import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 import { TableState } from "./stores/states/table.state";
 import { AuthState } from "./stores/states/auth.state";
 import { environment } from "../environments/environment";
+import {HttpClientModule, provideHttpClient} from "@angular/common/http";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
+    provideHttpClient(),
     importProvidersFrom(NgxsModule.forRoot([TableState, AuthState])),
     importProvidersFrom(NgxsReduxDevtoolsPluginModule.forRoot()),
     importProvidersFrom(

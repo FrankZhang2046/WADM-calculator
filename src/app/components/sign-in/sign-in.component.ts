@@ -15,11 +15,12 @@ import {
   Validators,
 } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
+import {MatIconModule} from "@angular/material/icon";
 
 @Component({
   selector: "app-sign-in",
   standalone: true,
-  imports: [CommonModule, MatButtonModule, ReactiveFormsModule],
+  imports: [CommonModule, MatButtonModule, ReactiveFormsModule, MatIconModule],
   templateUrl: "./sign-in.component.html",
   styleUrls: ["./sign-in.component.scss"],
 })
@@ -33,16 +34,22 @@ export class SignInComponent implements OnInit {
   constructor(
     private auth: Auth,
     private formBuilder: FormBuilder,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+  ) {
+  }
   public get form() {
     return this.signInForm.controls;
   }
   public ngOnInit(): void {
+    // password: ["", Validators.minLength(6)],
+    // a new password field, with 2 validators: required, and min length (6)
     this.signInForm = this.formBuilder.group({
-      email: ["", Validators.required, Validators.email],
-      password: ["", Validators.required, Validators.minLength(6)],
+      email: ["", Validators.compose([Validators.required, Validators.email])],
+      password: ["", Validators.compose([Validators.required, Validators.minLength(6)])]
     });
+
+    this.signInForm.controls.password.valueChanges
+      .subscribe(value => console.log(`value is: `, value));
   }
   public signIn(signInMethod: string) {
     switch (signInMethod) {

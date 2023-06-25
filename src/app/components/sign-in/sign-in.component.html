@@ -1,31 +1,32 @@
 <div class="p-4">
-  <div *ngIf="!displaySignInForm; else emailSignInForm">
+  <div class="flex flex-col" *ngIf="!displaySignInForm; else emailSignInForm">
     <button (click)="signIn('google')" mat-flat-button>
-      sign in with google
+      <mat-icon svgIcon="google-icon"></mat-icon>
+      {{ "sign in with google" | titlecase }}
     </button>
     <button (click)="signIn('email')" class="mt-2" mat-flat-button>
-      sign in with email
+      <mat-icon>email</mat-icon>
+      {{ "sign in with email" | titlecase }}
     </button>
   </div>
 </div>
 <ng-template #emailSignInForm>
   <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="email">Email</label>
-      <input type="email" id="email" formControlName="email" />
+    <div class="grid grid-cols-[80px_1fr]">
+      <label for="email" class="w-20">Email</label>
+      <input type="email" class="flex-1 pl-2" id="email" formControlName="email" />
       <div
         *ngIf="form.email.invalid && (form.email.dirty || form.email.touched)"
-        class="error-message"
+        class="col-span-2 error-message"
       >
         <div *ngIf="form.email.errors">Email is required.</div>
         <div *ngIf="form.email.errors">Invalid email format.</div>
       </div>
     </div>
-
-    <div class="mt-2">
+    <div class="mt-2 grid grid-cols-[80px_1fr]">
       <label for="password">Password</label>
       <input
-        class="ml-2"
+        class="ml-2 pl-2"
         type="password"
         id="password"
         formControlName="password"
@@ -35,7 +36,7 @@
           form.password.invalid &&
           (form.password.dirty || form.password.touched)
         "
-        class="error-message"
+        class="error-message col-span-2"
       >
         <div *ngIf="form.password.errors">Password is required.</div>
         <div *ngIf="form.password.errors">

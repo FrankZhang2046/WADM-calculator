@@ -70,7 +70,7 @@ export class SaveTableDataComponent implements OnInit {
       console.log(`about to update`, this.cachedTableData);
       this.store.dispatch(
         new TableActions.UpdateTableData(this.cachedTableData)
-      );
+      ).subscribe(() => this.closeDialog());
     } else {
       this.store
         .dispatch(
@@ -86,7 +86,9 @@ export class SaveTableDataComponent implements OnInit {
   }
   public closeDialog(): void {
     this.matDialogRef.close();
-    this.displaySnackBar();
+    if (!this.data) {
+      this.displaySnackBar();
+    }
   }
 
   public displaySnackBar(): void {

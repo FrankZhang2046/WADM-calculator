@@ -17,6 +17,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
+import {MatIconModule} from "@angular/material/icon";
 
 interface SignUpFormData {
   email: string;
@@ -26,7 +27,7 @@ interface SignUpFormData {
 @Component({
   selector: "app-sign-up",
   standalone: true,
-  imports: [CommonModule, MatButtonModule, ReactiveFormsModule],
+  imports: [CommonModule, MatButtonModule, ReactiveFormsModule, MatIconModule],
   templateUrl: "./sign-up.component.html",
   styleUrls: ["./sign-up.component.scss"],
 })
@@ -48,9 +49,9 @@ export class SignUpComponent implements OnInit {
   public displaySignInForm: boolean = false;
   public ngOnInit(): void {
     this.signUpForm = this.formBuilder.group({
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ["", [Validators.required, Validators.minLength(6)]],
+      email: ["", Validators.compose([Validators.required, Validators.email])],
+      password: ["", Validators.compose([Validators.required, Validators.minLength(6)])],
+      confirmPassword: ["", Validators.compose([Validators.required, Validators.minLength(6)])],
     });
 
     // listen for confirmPassword's valueChange event, if the value isn't the same as the password field's value, set 'passwordMismatch' error on confirmPassword
@@ -59,7 +60,6 @@ export class SignUpComponent implements OnInit {
         this.signUpForm.controls["confirmPassword"].setErrors({
           passwordMismatch: true,
         });
-        console.log("password mismatch", this.signUpForm);
       } else {
         this.signUpForm.controls["confirmPassword"].setErrors(null);
       }

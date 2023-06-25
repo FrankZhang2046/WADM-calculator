@@ -9,7 +9,7 @@ import { CustomHtmlTableComponent } from "./components/custom-html-table/custom-
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
+import {MatIconModule, MatIconRegistry} from "@angular/material/icon";
 import {
   Auth,
   User,
@@ -22,6 +22,7 @@ import { AuthActions } from "./stores/actions/user.action";
 import { Observable } from "rxjs";
 import { MatDrawer, MatSidenavModule } from "@angular/material/sidenav";
 import { environment } from "../environments/environment";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: "app-root",
@@ -51,8 +52,16 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private auth: Auth,
-    private store: Store
-  ) {}
+    private store: Store,
+    private iconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+
+  ) {
+    this.iconRegistry.addSvgIcon(
+      'google-icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/google-icon.svg')
+    )
+  }
   public redirectMethod(targetUrl: string) {
     this.router.navigateByUrl(targetUrl);
   }

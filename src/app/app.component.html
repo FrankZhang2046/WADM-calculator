@@ -59,6 +59,7 @@
         {{ (currentUser$ | async)?.displayName ?? (currentUser$ | async)?.email }}
       </div>
       <div
+        matTooltip="Feature coming soon..."
         (click)="redirectMethod('/settings')"
         class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
       >
