@@ -20,25 +20,23 @@
 
 <ng-template #emailSignUpForm>
   <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
-    <div>
-      <div class="flex justify-between w-full">
+      <div class="grid grid-cols-[80px_1fr]">
         <label for="email">Email</label>
-        <input class="ml-2" type="email" id="email" formControlName="email" />
-      </div>
-      <div
-        *ngIf="f.email.invalid && (f['email'].dirty || f['email'].touched)"
-        class="error-message"
-      >
-        <div *ngIf="f.email.errors">Email is required.</div>
-        <div *ngIf="f['email'].errors">Invalid email format.</div>
-      </div>
-    </div>
+        <input class="ml-2 pl-2" type="email" id="email" formControlName="email" />
 
-    <div class="mt-2">
-      <div class="flex w-full justify-between">
+        <div
+          *ngIf="f.email.invalid && (f['email'].dirty || f['email'].touched)"
+          class="col-span-2 error-message"
+        >
+          <div *ngIf="f.email.errors?.['required']">Email is required.</div>
+          <div *ngIf="f['email'].errors?.['email']">Invalid email format.</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-[80px_1fr] mt-2">
         <label for="password">Password</label>
         <input
-          class="ml-2"
+          class="ml-2 pl-2"
           type="password"
           id="password"
           formControlName="password"
@@ -49,18 +47,17 @@
           f['password'].invalid &&
           (f['password'].dirty || f['password'].touched)
         "
-        class="error-message"
+        class="col-span-2 error-message"
       >
-        <div *ngIf="f['password'].errors">Password is required.</div>
-        <div *ngIf="f['password'].errors">
+        <div *ngIf="f['password'].errors?.['required']">Password is required.</div>
+        <div *ngIf="f['password'].errors?.['minlength']">
           Password must be at least 6 characters.
         </div>
       </div>
-    </div>
-    <div class="mt-2">
+    <div class="grid grid-cols-[80px_1fr] mt-2">
       <label for="confirmPassword">Confirm Password</label>
       <input
-        class="ml-2"
+        class="ml-2 pl-2"
         type="password"
         id="confirmPassword"
         formControlName="confirmPassword"
@@ -70,9 +67,10 @@
           f['confirmPassword'].invalid &&
           (f['confirmPassword'].dirty || f['confirmPassword'].touched)
         "
-        class="error-message"
+        class="col-span-2 error-message"
       >
-        <div *ngIf="f['confirmPassword'].errors">Password is required.</div>
+        <div *ngIf="f['confirmPassword'].errors?.['required']">Password is required.</div>
+        <div *ngIf="f['confirmPassword'].errors?.['minlength']">Password should be at least 6 characters long.</div>
         <div *ngIf="f['confirmPassword']?.errors?.['passwordMismatch']">
           Password mismatched.
         </div>
@@ -83,7 +81,7 @@
       <button (click)="displaySignInForm = false" mat-flat-button>
         Cancel
       </button>
-      <button mat-flat-button type="submit" [disabled]="signUpForm.invalid">
+      <button mat-flat-button type="submit" color="primary" [disabled]="signUpForm.invalid">
         Sign Up
       </button>
     </div>
