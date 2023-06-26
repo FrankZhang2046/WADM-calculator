@@ -1,9 +1,23 @@
-<div class="bg-white h-max">
-    <h3 class="p-2">
-        Are you sure you would like to delete this column/row?
-    </h3>
-    <div class="bg-white flex w-full">
-        <button id="confirm-deletion" mat-flat-button (click)="closeDialog(true)">Yes</button>
-        <button class="ml-4" id="cancel-deletion" mat-flat-button (click)="closeDialog(false)">No</button>
-    </div>
+<div class="p-4">
+  <h3 class="p-2 text-gray-300 font-base">
+    Are you sure you would like to delete this column/row?
+  </h3>
+  <div class="flex w-full justify-end">
+    <button
+      class="ml-4"
+      id="cancel-deletion"
+      mat-flat-button
+      (click)="closeDialog(false)"
+    >
+      No
+    </button>
+    <button
+      id="confirm-deletion"
+      class="ml-4"
+      mat-flat-button
+      (click)="closeDialog(true)"
+    >
+      Yes
+    </button>
+  </div>
 </div>
