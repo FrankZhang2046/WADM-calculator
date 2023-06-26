@@ -41,6 +41,7 @@
             class="draggable-cell"
             [cdkDragDisabled]="displayResults"
             cdkDrag
+            (mouseleave)="clearHighlightedTableElement()"
             (mouseover)="
               highlightTableElement(tableOperationConstants.columnHeader, [
                 colIdx
@@ -99,7 +100,7 @@
               : null
           "
           [class.to-delete]="rowIndex === rowToDelete"
-          class="text-left"
+          class="text-left relative"
           *ngIf="
             !(
               modifiedTableElementIdx.tableElement ===
@@ -108,10 +109,25 @@
             );
             else headerRenameInputTemplate
           "
+          (mouseleave)="clearHighlightedTableElement()"
+          (mouseover)="
+            highlightTableElement(tableOperationConstants.rowHeader, [rowIndex])
+          "
           (click)="
             modifyTableElement(tableOperationConstants.rowHeader, [rowIndex])
           "
         >
+          <div
+            *ngIf="
+              highlightedTableElementIdx.tableElement ===
+                tableOperationConstants.rowHeader &&
+              highlightedTableElementIdx.idx[0] === rowIndex
+            "
+            (click)="rowColumnDeleteMethod($event)"
+            class="absolute left-[-25px] rounded-tl rounded-bl bg-red-500 hover:cursor-pointer"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </div>
           {{ row.fieldName | titlecase }}
         </th>
         <td

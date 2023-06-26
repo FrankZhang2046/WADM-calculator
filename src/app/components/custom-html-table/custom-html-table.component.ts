@@ -180,7 +180,7 @@ export class CustomHtmlTableComponent implements OnInit {
           this.highlightedTableElementIdx.tableElement ===
           this.tableOperationConstants.rowHeader
         ) {
-          this.signalRowForDeletion(this.highlightedTableElementIdx.idx[0]);
+          this.signalRowColumnForDeletion();
         } else {
           this.tableTraversal(event.key);
         }
@@ -193,7 +193,7 @@ export class CustomHtmlTableComponent implements OnInit {
           this.highlightedTableElementIdx.tableElement ===
           this.tableOperationConstants.columnHeader
         ) {
-          this.signalColumnForDeletion(this.highlightedTableElementIdx.idx[0]);
+          this.signalRowColumnForDeletion();
         } else {
           this.tableTraversal(event.key);
         }
@@ -454,7 +454,7 @@ export class CustomHtmlTableComponent implements OnInit {
   /*
   method to clear the highlight class of a cached table HTMLElement, and assign null to the variable
    */
-  private clearHighlightedTableElement() {
+  public clearHighlightedTableElement() {
     this.highlightedTableElementIdx = {
       tableElement: null,
       idx: [],
@@ -757,21 +757,31 @@ export class CustomHtmlTableComponent implements OnInit {
       );
     }
   }
-  public signalColumnForDeletion(columnToDelete: number): void {
-    if (this.columnToDelete === null || this.columnToDelete === undefined) {
-      this.columnToDelete = columnToDelete;
-      this.rowToDelete = null;
-    } else {
-      this.columnToDelete = null;
-    }
-  }
 
-  private signalRowForDeletion(rowToDelete: number): void {
-    if (this.rowToDelete === null || this.rowToDelete === undefined) {
-      this.rowToDelete = rowToDelete;
-      this.columnToDelete = null;
-    } else {
-      this.rowToDelete = null;
+  /*
+    signalling the column/row to delete by coloring the cells red
+   */
+  public signalRowColumnForDeletion(): void {
+    if (
+      this.highlightedTableElementIdx.tableElement ===
+      this.tableOperationConstants.columnHeader
+    ) {
+      if (this.columnToDelete === null || this.columnToDelete === undefined) {
+        this.columnToDelete = this.highlightedTableElementIdx.idx[0];
+        this.rowToDelete = null;
+      } else {
+        this.columnToDelete = null;
+      }
+    } else if (
+      this.highlightedTableElementIdx.tableElement ===
+      this.tableOperationConstants.rowHeader
+    ) {
+      if (this.rowToDelete === null || this.rowToDelete === undefined) {
+        this.rowToDelete = this.highlightedTableElementIdx.idx[0];
+        this.columnToDelete = null;
+      } else {
+        this.rowToDelete = null;
+      }
     }
   }
 
@@ -862,7 +872,7 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public rowColumnDeleteMethod(event: MouseEvent) {
     // * mark row/column for deletion
-    this.signalColumnForDeletion(this.highlightedTableElementIdx.idx[0]);
+    this.signalRowColumnForDeletion();
     this.rowColumnDeletionDelegation();
     console.log(`deleting a table element`);
     event.stopPropagation();
