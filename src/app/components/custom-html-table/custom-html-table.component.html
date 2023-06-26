@@ -41,12 +41,33 @@
             class="draggable-cell"
             [cdkDragDisabled]="displayResults"
             cdkDrag
+            (mouseover)="
+              highlightTableElement(tableOperationConstants.columnHeader, [
+                colIdx
+              ])
+            "
             (mousedown)="$event.stopPropagation()"
             cdkDragLockAxis="x"
             (click)="
               modifyTableElement(tableOperationConstants.columnHeader, [colIdx])
             "
           >
+            <div
+              *ngIf="
+                highlightedTableElementIdx.tableElement ===
+                  tableOperationConstants.columnHeader &&
+                highlightedTableElementIdx.idx[0] === colIdx
+              "
+              (click)="
+                highlightTableElement(tableOperationConstants.columnHeader, [
+                  colIdx
+                ]);
+                rowColumnDeleteMethod($event)
+              "
+              class="hover:cursor-pointer absolute top-[48px] w-[50px] rounded-tl-lg rounded-tr-lg bg-red-500"
+            >
+              <mat-icon>delete_forever</mat-icon>
+            </div>
             {{ column.columnName | titlecase }}
           </th>
         </ng-container>

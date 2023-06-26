@@ -229,40 +229,43 @@ export class CustomHtmlTableComponent implements OnInit {
         }
         break;
       case "Backspace":
-        if (
-          !this.confirmDeletionModalOpened &&
-          this.hasEitherColumnOrRowToDelete
-        ) {
-          const confirmDeletionDialogRef = this.matDialog.open(
-            ConfirmDeletionComponent
-          );
-
-          confirmDeletionDialogRef
-            .afterOpened()
-            .subscribe((res) => (this.confirmDeletionModalOpened = true));
-
-          confirmDeletionDialogRef.afterClosed().subscribe((res) => {
-            if (res === true) {
-              if (
-                this.columnToDelete !== null &&
-                this.columnToDelete !== undefined
-              ) {
-                this.deleteColumn(this.columnToDelete);
-                this.columnToDelete = null;
-              }
-              if (this.rowToDelete !== null && this.rowToDelete !== undefined) {
-                this.deleteRow(this.rowToDelete);
-                this.rowToDelete = null;
-              }
-            }
-            this.confirmDeletionModalOpened = false;
-          });
-        }
+        this.rowColumnDeletionDelegation();
         break;
       default:
         break;
     }
   }
+
+  private rowColumnDeletionDelegation() {
+    if (!this.confirmDeletionModalOpened && this.hasEitherColumnOrRowToDelete) {
+      //todo this need to be extracted into a reusable method
+      const confirmDeletionDialogRef = this.matDialog.open(
+        ConfirmDeletionComponent
+      );
+
+      confirmDeletionDialogRef
+        .afterOpened()
+        .subscribe((res) => (this.confirmDeletionModalOpened = true));
+
+      confirmDeletionDialogRef.afterClosed().subscribe((res) => {
+        if (res === true) {
+          if (
+            this.columnToDelete !== null &&
+            this.columnToDelete !== undefined
+          ) {
+            this.deleteColumn(this.columnToDelete);
+            this.columnToDelete = null;
+          }
+          if (this.rowToDelete !== null && this.rowToDelete !== undefined) {
+            this.deleteRow(this.rowToDelete);
+            this.rowToDelete = null;
+          }
+        }
+        this.confirmDeletionModalOpened = false;
+      });
+    }
+  }
+
   public deleteColumn(columnToDelete: number) {
     // delete item at index columnToDelete from columnData
     this.columnData.splice(columnToDelete, 1);
@@ -855,5 +858,13 @@ export class CustomHtmlTableComponent implements OnInit {
       .then(() =>
         this.store.dispatch(new TableActions.ResetRetrievedTableData())
       );
+  }
+
+  public rowColumnDeleteMethod(event: MouseEvent) {
+    // * mark row/column for deletion
+    this.signalColumnForDeletion(this.highlightedTableElementIdx.idx[0]);
+    this.rowColumnDeletionDelegation();
+    console.log(`deleting a table element`);
+    event.stopPropagation();
   }
 }
