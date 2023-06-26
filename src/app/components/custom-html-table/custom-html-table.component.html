@@ -41,12 +41,34 @@
             class="draggable-cell"
             [cdkDragDisabled]="displayResults"
             cdkDrag
+            (mouseleave)="clearHighlightedTableElement()"
+            (mouseover)="
+              highlightTableElement(tableOperationConstants.columnHeader, [
+                colIdx
+              ])
+            "
             (mousedown)="$event.stopPropagation()"
             cdkDragLockAxis="x"
             (click)="
               modifyTableElement(tableOperationConstants.columnHeader, [colIdx])
             "
           >
+            <div
+              *ngIf="
+                highlightedTableElementIdx.tableElement ===
+                  tableOperationConstants.columnHeader &&
+                highlightedTableElementIdx.idx[0] === colIdx
+              "
+              (click)="
+                highlightTableElement(tableOperationConstants.columnHeader, [
+                  colIdx
+                ]);
+                rowColumnDeleteMethod($event)
+              "
+              class="hover:cursor-pointer absolute top-[48px] w-[50px] rounded-tl-lg rounded-tr-lg bg-red-500"
+            >
+              <mat-icon>delete_forever</mat-icon>
+            </div>
             {{ column.columnName | titlecase }}
           </th>
         </ng-container>
@@ -78,7 +100,7 @@
               : null
           "
           [class.to-delete]="rowIndex === rowToDelete"
-          class="text-left"
+          class="text-left relative"
           *ngIf="
             !(
               modifiedTableElementIdx.tableElement ===
@@ -87,10 +109,25 @@
             );
             else headerRenameInputTemplate
           "
+          (mouseleave)="clearHighlightedTableElement()"
+          (mouseover)="
+            highlightTableElement(tableOperationConstants.rowHeader, [rowIndex])
+          "
           (click)="
             modifyTableElement(tableOperationConstants.rowHeader, [rowIndex])
           "
         >
+          <div
+            *ngIf="
+              highlightedTableElementIdx.tableElement ===
+                tableOperationConstants.rowHeader &&
+              highlightedTableElementIdx.idx[0] === rowIndex
+            "
+            (click)="rowColumnDeleteMethod($event)"
+            class="absolute left-[-25px] rounded-tl rounded-bl bg-red-500 hover:cursor-pointer"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </div>
           {{ row.fieldName | titlecase }}
         </th>
         <td

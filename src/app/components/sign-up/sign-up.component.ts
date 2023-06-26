@@ -97,4 +97,15 @@ export class SignUpComponent implements OnInit {
     // TODO: Implement the sign-up logic using Firebase or your preferred authentication service
     this.authService.signUpWithEmailAndPassword(email, password);
   }
+
+  /*
+  method to toggle target password input component's type between password and string
+   */
+  public togglePasswordVisibility(inputComponent: HTMLInputElement, visible: boolean) {
+    if (visible) {
+      inputComponent.type = 'text';
+    } else {
+      inputComponent.type = 'password';
+    }
+  }
 }
