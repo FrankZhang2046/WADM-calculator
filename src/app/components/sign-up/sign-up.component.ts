@@ -103,7 +103,7 @@ export class SignUpComponent implements OnInit {
    */
   public togglePasswordVisibility(inputComponent: HTMLInputElement, visible: boolean) {
     if (visible) {
-      inputComponent.type = 'string';
+      inputComponent.type = 'text';
     } else {
       inputComponent.type = 'password';
     }

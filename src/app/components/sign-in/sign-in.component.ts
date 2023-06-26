@@ -70,4 +70,12 @@ export class SignInComponent implements OnInit {
       this.form.password.value
     );
   }
+
+  public togglePasswordVisibility(inputComponent: HTMLInputElement, visible: boolean) {
+    if (visible) {
+      inputComponent.type = "text";
+    } else {
+      inputComponent.type = "password";
+    }
+  }
 }

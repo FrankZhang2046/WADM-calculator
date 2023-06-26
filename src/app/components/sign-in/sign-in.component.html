@@ -14,23 +14,30 @@
   <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
     <div class="grid grid-cols-[80px_1fr]">
       <label for="email" class="w-20">Email</label>
-      <input type="email" class="flex-1 pl-2" id="email" formControlName="email" />
+      <input type="email" class="flex-1 pl-2" id="email" formControlName="email"/>
       <div
         *ngIf="form.email.invalid && (form.email.dirty || form.email.touched)"
         class="col-span-2 error-message"
       >
-        <div *ngIf="form.email.errors">Email is required.</div>
-        <div *ngIf="form.email.errors">Invalid email format.</div>
+        <div *ngIf="form.email.errors?.['required']">Email is required.</div>
+        <div *ngIf="form.email.errors?.['email']">Invalid email format.</div>
       </div>
     </div>
     <div class="mt-2 grid grid-cols-[80px_1fr]">
       <label for="password">Password</label>
-      <input
-        class="ml-2 pl-2"
-        type="password"
-        id="password"
-        formControlName="password"
-      />
+      <div class="grid grid-cols-[1fr_20px]">
+        <input
+          #passwordInput
+          class="ml-2 pl-2"
+          type="password"
+          id="password"
+          formControlName="password"
+        />
+      <div (click)="togglePasswordVisibility(passwordInput, passwordInput.type === 'password')">
+        <mat-icon>{{passwordInput.type === 'password' ? 'visibility' : 'visibility_off'}}</mat-icon>
+      </div>
+      </div>
+      <!-- password field error messages-->
       <div
         *ngIf="
           form.password.invalid &&
