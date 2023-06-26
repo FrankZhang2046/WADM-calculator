@@ -254,13 +254,13 @@ export class CustomHtmlTableComponent implements OnInit {
             this.columnToDelete !== undefined
           ) {
             this.deleteColumn(this.columnToDelete);
-            this.columnToDelete = null;
           }
           if (this.rowToDelete !== null && this.rowToDelete !== undefined) {
             this.deleteRow(this.rowToDelete);
-            this.rowToDelete = null;
           }
         }
+        this.columnToDelete = null;
+        this.rowToDelete = null;
         this.confirmDeletionModalOpened = false;
       });
     }
