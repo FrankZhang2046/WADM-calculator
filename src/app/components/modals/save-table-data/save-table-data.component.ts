@@ -1,4 +1,3 @@
-import { connectAuthEmulator } from "@angular/fire/auth";
 import { TableActions } from "./../../../stores/actions/table.action";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { Component, Inject, OnInit } from "@angular/core";
@@ -12,7 +11,7 @@ import {
 } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { Store } from "@ngxs/store";
-import { count, take, timer } from "rxjs";
+import { Subscription, take, timer } from "rxjs";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { CachedPersistedTableDocument } from "../../../models/table-row-data.model";
@@ -51,6 +50,7 @@ export class SaveTableDataComponent implements OnInit {
   public get form() {
     return this.tableInfoForm.controls;
   }
+  public timerObservable!: Subscription;
 
   ngOnInit(): void {
     if (this.data) {
@@ -68,9 +68,9 @@ export class SaveTableDataComponent implements OnInit {
       this.cachedTableData.tableName = this.form.tableName.value ?? "";
       this.cachedTableData.tableNotes = this.form.tableNotes.value ?? "";
       console.log(`about to update`, this.cachedTableData);
-      this.store.dispatch(
-        new TableActions.UpdateTableData(this.cachedTableData)
-      ).subscribe(() => this.closeDialog());
+      this.store
+        .dispatch(new TableActions.UpdateTableData(this.cachedTableData))
+        .subscribe(() => this.closeDialog());
     } else {
       this.store
         .dispatch(
@@ -80,24 +80,29 @@ export class SaveTableDataComponent implements OnInit {
           })
         )
         .subscribe((res) => {
+          // * display success message and close dialog
           this.closeDialogTimer();
         });
     }
   }
-  public closeDialog(): void {
+  public closeDialog(displaySnackbar: boolean = true): void {
     this.matDialogRef.close();
-    if (!this.data) {
+    if (this.timerObservable) {
+      this.timerObservable.unsubscribe();
+    }
+    if (!this.data && !displaySnackbar) {
       this.displaySnackBar();
     }
   }
 
   public displaySnackBar(): void {
     const snackBarRef = this.snackBar.open(
-      "No such thing as a life that is better than yours",
+      "Your work has been saved.",
       "View Table",
       {
         horizontalPosition: "center",
         verticalPosition: "top",
+        duration: 5000,
       }
     );
 
@@ -109,7 +114,7 @@ export class SaveTableDataComponent implements OnInit {
 
   public closeDialogTimer(): void {
     const countdown = 5;
-    timer(0, 1000)
+    this.timerObservable = timer(0, 1000)
       .pipe(take(countdown + 1))
       .subscribe((val) => {
         this.dialogClose = countdown - val;

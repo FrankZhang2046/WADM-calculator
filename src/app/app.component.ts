@@ -9,7 +9,7 @@ import { CustomHtmlTableComponent } from "./components/custom-html-table/custom-
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
-import {MatIconModule, MatIconRegistry} from "@angular/material/icon";
+import { MatIconModule, MatIconRegistry } from "@angular/material/icon";
 import {
   Auth,
   User,
@@ -22,7 +22,7 @@ import { AuthActions } from "./stores/actions/user.action";
 import { Observable } from "rxjs";
 import { MatDrawer, MatSidenavModule } from "@angular/material/sidenav";
 import { environment } from "../environments/environment";
-import {DomSanitizer} from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "app-root",
@@ -49,33 +49,39 @@ export class AppComponent implements OnInit {
   )
   public currentUser$!: Observable<User | null>;
   public currentUserVal!: User | null;
+
   constructor(
     private router: Router,
     private auth: Auth,
     private store: Store,
     private iconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
-
   ) {
     this.iconRegistry.addSvgIcon(
-      'google-icon',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/google-icon.svg')
-    )
+      "google-icon",
+      this.domSanitizer.bypassSecurityTrustResourceUrl(
+        "../assets/icons/google-icon.svg"
+      )
+    );
   }
+
   public redirectMethod(targetUrl: string) {
     this.router.navigateByUrl(targetUrl);
   }
+
   public ngOnInit(): void {
     onAuthStateChanged(this.auth, (user) => {
       this.currentUserVal = user;
       this.store.dispatch(new AuthActions.RegisterCurrentUser(user));
+      // todo clean up this code, redirection should not be handled here
       if (user) {
         if (!this.router.url.includes("works")) {
-          this.redirectMethod("/");
+          // this.redirectMethod("/");
         }
       }
     });
   }
+
   public logOut() {
     signOut(this.auth);
   }

@@ -10,18 +10,21 @@ import {
 })
 export class AuthService {
   constructor(private auth: Auth) {}
+
   public signInWithEmailAndPassword(
     email: string | null,
     password: string | null
-  ): void {
+  ): Promise<any> {
     if (!email || !password) {
-      return;
+      return new Promise((res, rej) => res(null));
     }
-    signInWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        console.log(`credential: `, userCredential);
-      })
-      .catch((error) => console.log(`error: `, error));
+    return signInWithEmailAndPassword(this.auth, email, password);
+    //   .then(
+    //   (userCredential) => {
+    //     console.log(`credential: `, userCredential);
+    //     return userCredential;
+    //   }
+    // );
   }
 
   public signUpWithEmailAndPassword(

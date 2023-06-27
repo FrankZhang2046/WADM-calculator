@@ -1,12 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
-import {
-  Auth,
-  GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "@angular/fire/auth";
+import { Auth, GoogleAuthProvider, signInWithPopup } from "@angular/fire/auth";
 import {
   FormBuilder,
   FormControl,
@@ -15,7 +10,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
-import {MatIconModule} from "@angular/material/icon";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: "app-sign-in",
@@ -25,6 +20,7 @@ import {MatIconModule} from "@angular/material/icon";
   styleUrls: ["./sign-in.component.scss"],
 })
 export class SignInComponent implements OnInit {
+  @Output() signInStatus = new EventEmitter();
   public signInForm!: FormGroup<{
     email: FormControl<string | null>;
     password: FormControl<string | null>;
@@ -34,27 +30,37 @@ export class SignInComponent implements OnInit {
   constructor(
     private auth: Auth,
     private formBuilder: FormBuilder,
-    private authService: AuthService,
-  ) {
-  }
+    private authService: AuthService
+  ) {}
+
   public get form() {
     return this.signInForm.controls;
   }
+
   public ngOnInit(): void {
     // password: ["", Validators.minLength(6)],
     // a new password field, with 2 validators: required, and min length (6)
     this.signInForm = this.formBuilder.group({
       email: ["", Validators.compose([Validators.required, Validators.email])],
-      password: ["", Validators.compose([Validators.required, Validators.minLength(6)])]
+      password: [
+        "",
+        Validators.compose([Validators.required, Validators.minLength(6)]),
+      ],
     });
 
-    this.signInForm.controls.password.valueChanges
-      .subscribe(value => console.log(`value is: `, value));
+    this.signInForm.controls.password.valueChanges.subscribe((value) =>
+      console.log(`value is: `, value)
+    );
   }
+
   public signIn(signInMethod: string) {
     switch (signInMethod) {
       case "google":
-        signInWithPopup(this.auth, new GoogleAuthProvider());
+        signInWithPopup(this.auth, new GoogleAuthProvider())
+          .then((result) => {
+            console.log("result is: ", result);
+          })
+          .catch((error) => console.log(error));
         break;
       case "email":
         this.displaySignInForm = true;
@@ -63,15 +69,27 @@ export class SignInComponent implements OnInit {
         break;
     }
   }
+
   public onSubmit(): void {
     // sign in the user with email and password
-    this.authService.signInWithEmailAndPassword(
-      this.form.email.value,
-      this.form.password.value
-    );
+    this.authService
+      .signInWithEmailAndPassword(
+        this.form.email.value,
+        this.form.password.value
+      )
+      .then((userCredential) => {
+        this.signInStatus.emit({ status: "success", message: userCredential });
+      })
+      .catch((error) => {
+        const errorMsg = error;
+        this.signInStatus.emit({ status: "error", message: error.code });
+      });
   }
 
-  public togglePasswordVisibility(inputComponent: HTMLInputElement, visible: boolean) {
+  public togglePasswordVisibility(
+    inputComponent: HTMLInputElement,
+    visible: boolean
+  ) {
     if (visible) {
       inputComponent.type = "text";
     } else {
