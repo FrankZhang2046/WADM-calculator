@@ -1,8 +1,26 @@
-<div class="w-full flex justify-center text-black">
-  <div class="w-80 mt-4 bg-emerald-300 rounded-lg min-h-fit">
+<div class="w-full flex flex-col items-center text-black">
+  <div
+    *ngIf="authMessage.status !== ''"
+    [class.bg-emerald-200]="authMessage.status === 'success'"
+    [class.bg-red-200]="authMessage.status === 'error'"
+    class="w-fit rounded-xl flex justify-center mt-4 p-4"
+  >
+    <div
+      [class.text-red-900]="authMessage.status === 'error'"
+      [class.text-green-900]="authMessage.status === 'success'"
+      class=""
+    >
+      <div *ngIf="authMessage.status === 'error'">
+        Error: {{ authMessage.message }}
+      </div>
+    </div>
+  </div>
+  <div class="self-center w-80 mt-4 bg-emerald-300 rounded-lg min-h-fit">
     <mat-tab-group>
       <mat-tab label="SIGN IN">
-        <app-sign-in></app-sign-in>
+        <app-sign-in
+          (signInStatus)="handleSignInStatusEvent($event)"
+        ></app-sign-in>
       </mat-tab>
       <mat-tab label="SIGN UP">
         <app-sign-up></app-sign-up>
