@@ -1,0 +1,24 @@
+<div class="h-max p-4">
+  <h3 class="text-gray-300">
+    Are you sure you would like to delete this table?
+  </h3>
+  <div class="flex w-full justify-end">
+    <button
+      (click)="onCancel()"
+      class="ml-4"
+      id="cancel-deletion"
+      mat-flat-button
+    >
+      No
+    </button>
+    <button
+      (click)="onConfirm()"
+      class="ml-4"
+      id="confirm-deletion"
+      color="primary"
+      mat-flat-button
+    >
+      Yes
+    </button>
+  </div>
+</div>
