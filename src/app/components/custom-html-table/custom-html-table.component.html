@@ -147,6 +147,12 @@
             );
             else tableDataUpdateInputTemplate
           "
+          (mouseover)="
+            highlightTableElement(tableOperationConstants.fieldWeight, [
+              rowIndex
+            ])
+          "
+          (mouseleave)="clearHighlightedTableElement()"
           (click)="
             modifyTableElement(tableOperationConstants.fieldWeight, [rowIndex])
           "
@@ -179,6 +185,13 @@
               else tableDataUpdateInputTemplate
             "
             class="text-blue-600 text-center w-20"
+            (mouseover)="
+              highlightTableElement(tableOperationConstants.cell, [
+                rowIndex,
+                cellIdx
+              ])
+            "
+            (mouseleave)="clearHighlightedTableElement()"
             (click)="
               modifyTableElement(tableOperationConstants.cell, [
                 rowIndex,
