@@ -3,15 +3,22 @@
     <button
       (click)="currentUserVal ? drawer.toggle() : drawer.close()"
       [matTooltip]="
-      currentUserVal ? '' : 'Please log in to access additional features'
-    "
+        currentUserVal ? '' : 'Please log in to access additional features'
+      "
       mat-icon-button
     >
       <mat-icon>menu</mat-icon>
     </button>
     <div class="flex items-center">
-      <img src="assets/images/site-logo-02-02.svg" alt="site-logo" class="h-12" />
-      <div class="font-light hover:cursor-pointer" (click)="redirectMethod('/')">
+      <img
+        src="assets/images/site-logo-02-02.svg"
+        alt="site-logo"
+        class="h-12"
+      />
+      <div
+        class="font-light hover:cursor-pointer"
+        (click)="redirectMethod('/')"
+      >
         WADM calculator
       </div>
     </div>
@@ -56,7 +63,9 @@
       class="profile-drawer bg-[#166d99]"
     >
       <div class="flex items-center p-4">
-        {{ (currentUser$ | async)?.displayName ?? (currentUser$ | async)?.email }}
+        {{
+          (currentUser$ | async)?.displayName ?? (currentUser$ | async)?.email
+        }}
       </div>
       <div
         matTooltip="Feature coming soon..."
@@ -75,6 +84,16 @@
       </div>
     </mat-drawer>
   </mat-drawer-container>
+
+  <footer
+    class="h-10 opacity-80 bg-green-400 flex items-center justify-center items-center"
+  >
+    <div>developed by <em>Frank Zhang</em></div>
+    <a href="mailto:frankbusinessmail@gmail.com" class="flex ml-4 items-center">
+      <mat-icon>email</mat-icon>
+      <div class="text-sm ml-2">Contact</div>
+    </a>
+  </footer>
 </div>
 
 <mat-menu #userProfileMenu="matMenu">
