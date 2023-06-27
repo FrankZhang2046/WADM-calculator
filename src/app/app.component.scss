@@ -1,6 +1,7 @@
 @import "../styles/variables";
+
 .drawer {
-    background-color: #4d002c;
+  background-color: #4d002c;
 }
 
 .nav-menu-item {
@@ -12,7 +13,7 @@
 .app-container {
   height: 100%;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
 }
 
 .app-bar {

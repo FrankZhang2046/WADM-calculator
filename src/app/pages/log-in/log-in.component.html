@@ -13,17 +13,29 @@
       <div *ngIf="authMessage.status === 'error'">
         Error: {{ authMessage.message }}
       </div>
+      <div *ngIf="authMessage.status === 'success'">
+        Successfully logged in, redirecting to the main page in
+        {{ remainingTime }} seconds.
+        <button mat-flat-button color="primary" (click)="navigateMethod()">
+          Redirect Now
+        </button>
+      </div>
     </div>
   </div>
-  <div class="self-center w-80 mt-4 bg-emerald-300 rounded-lg min-h-fit">
+  <div
+    *ngIf="authMessage.status !== 'success'"
+    class="self-center w-80 mt-4 bg-emerald-300 rounded-lg min-h-fit"
+  >
     <mat-tab-group>
       <mat-tab label="SIGN IN">
         <app-sign-in
-          (signInStatus)="handleSignInStatusEvent($event)"
+          (signInStatus)="handleAuthStatusEvent($event)"
         ></app-sign-in>
       </mat-tab>
       <mat-tab label="SIGN UP">
-        <app-sign-up></app-sign-up>
+        <app-sign-up
+          (signUpStatus)="handleAuthStatusEvent($event)"
+        ></app-sign-up>
       </mat-tab>
     </mat-tab-group>
   </div>

@@ -58,9 +58,11 @@ export class SignInComponent implements OnInit {
       case "google":
         signInWithPopup(this.auth, new GoogleAuthProvider())
           .then((result) => {
-            console.log("result is: ", result);
+            this.signInStatus.emit({ status: "success", message: result });
           })
-          .catch((error) => console.log(error));
+          .catch((error) =>
+            this.signInStatus.emit({ status: "error", message: error.code })
+          );
         break;
       case "email":
         this.displaySignInForm = true;

@@ -24,6 +24,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatMenu, MatMenuModule } from "@angular/material/menu";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { SaveTableDataComponent } from "../../components/modals/save-table-data/save-table-data.component";
+import { TableDeletionModalComponent } from "../../components/modals/table-deletion-modal/table-deletion-modal.component";
 
 @Component({
   selector: "app-works",
@@ -52,6 +53,7 @@ export class WorksComponent implements OnInit {
     "tableNotes",
     "actionControl",
   ];
+
   constructor(
     private store: Store,
     private firestore: Firestore,
@@ -59,6 +61,7 @@ export class WorksComponent implements OnInit {
     private route: ActivatedRoute,
     private matDialog: MatDialog
   ) {}
+
   public ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       console.log(`params are: `, params);
@@ -80,6 +83,7 @@ export class WorksComponent implements OnInit {
       }
     });
   }
+
   public loadTableData(tableRow: any) {
     console.log(`table row data is: `, tableRow);
     this.store.dispatch(
@@ -98,7 +102,16 @@ export class WorksComponent implements OnInit {
       `appData/tables/${this.currentUserValue?.uid}`
     );
     const docRef = doc(userTableCollection, myData.id);
-    deleteDoc(docRef).then((res) => console.log(`res is: `, res));
+
+    const tableDeletionModalRef = this.matDialog.open(
+      TableDeletionModalComponent
+    );
+
+    tableDeletionModalRef.afterClosed().subscribe((res) => {
+      if (res) {
+        deleteDoc(docRef).then((res) => console.log(`res is: `, res));
+      }
+    });
   }
 
   public editTableData(myData: CachedPersistedTableDocument) {

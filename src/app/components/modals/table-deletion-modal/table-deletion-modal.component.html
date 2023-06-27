@@ -1,21 +1,22 @@
 <div class="h-max p-4">
   <h3 class="text-gray-300">
-    Are you sure you would like to delete this column/row?
+    Are you sure you would like to delete this table?
   </h3>
   <div class="flex w-full justify-end">
     <button
+      (click)="onCancel()"
       class="ml-4"
       id="cancel-deletion"
       mat-flat-button
-      (click)="closeDialog(false)"
     >
       No
     </button>
     <button
+      (click)="onConfirm()"
       class="ml-4"
       id="confirm-deletion"
+      color="primary"
       mat-flat-button
-      (click)="closeDialog(true)"
     >
       Yes
     </button>
