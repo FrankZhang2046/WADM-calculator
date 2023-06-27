@@ -30,14 +30,10 @@ export class AuthService {
   public signUpWithEmailAndPassword(
     email: string | null,
     password: string | null
-  ) {
+  ): Promise<any> {
     if (!email || !password) {
-      return;
+      return new Promise((res, rej) => res(null));
     }
-    createUserWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        console.log(`credential: `, userCredential);
-      })
-      .catch((error) => console.log(`error: `, error));
+    return createUserWithEmailAndPassword(this.auth, email, password);
   }
 }
