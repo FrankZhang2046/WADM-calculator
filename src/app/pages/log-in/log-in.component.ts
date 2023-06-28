@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { MatTabsModule } from "@angular/material/tabs";
 import { SignUpComponent } from "src/app/components/sign-up/sign-up.component";
 import { SignInComponent } from "src/app/components/sign-in/sign-in.component";
-import { interval, take, timer } from "rxjs";
+import { interval, Subscription, take, timer } from "rxjs";
 import { Router } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 
@@ -23,6 +23,7 @@ import { MatButtonModule } from "@angular/material/button";
 export class LogInComponent {
   constructor(private router: Router) {}
 
+  public authMessageClearTimeout!: any;
   public remainingTime!: number;
   public authMessage: { status: string; message: any } = {
     status: "",
@@ -33,8 +34,12 @@ export class LogInComponent {
     handle the sign in status event from the sign in component
    */
   public handleAuthStatusEvent($event: any) {
+    clearTimeout(this.authMessageClearTimeout);
     this.authMessage = $event;
     console.log(`auth event is: `, this.authMessage);
+    this.authMessageClearTimeout = setTimeout(() => {
+      this.authMessage = { status: "", message: null };
+    }, 5000);
     // this.clearAuthMessage();
   }
 
