@@ -23,12 +23,6 @@ export class AuthService {
         throw error;
       }
     );
-    //   .then(
-    //   (userCredential) => {
-    //     console.log(`credential: `, userCredential);
-    //     return userCredential;
-    //   }
-    // );
   }
 
   public signUpWithEmailAndPassword(

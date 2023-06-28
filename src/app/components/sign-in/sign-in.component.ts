@@ -21,11 +21,19 @@ import { AuthStateModel } from "../../stores/states/auth.state";
 import { TableStateModel } from "../../stores/states/table.state";
 import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { ComfirmPasswordResetComponent } from "../modals/comfirm-password-reset/comfirm-password-reset.component";
 
 @Component({
   selector: "app-sign-in",
   standalone: true,
-  imports: [CommonModule, MatButtonModule, ReactiveFormsModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatIconModule,
+  ],
   templateUrl: "./sign-in.component.html",
   styleUrls: ["./sign-in.component.scss"],
 })
@@ -46,7 +54,8 @@ export class SignInComponent implements OnInit {
   constructor(
     private auth: Auth,
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private matDialog: MatDialog
   ) {
     this.currentUser$.subscribe((value) => (this.currentUserValue = value));
   }
@@ -116,6 +125,10 @@ export class SignInComponent implements OnInit {
     } else {
       inputComponent.type = "password";
     }
+  }
+
+  public openPasswordResetModal() {
+    this.matDialog.open(ComfirmPasswordResetComponent);
   }
 
   sendPasswordResetEmailToFirebase() {
