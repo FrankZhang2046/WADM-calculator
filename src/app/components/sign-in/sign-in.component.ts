@@ -22,7 +22,9 @@ import { TableStateModel } from "../../stores/states/table.state";
 import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { ComfirmPasswordResetComponent } from "../modals/comfirm-password-reset/comfirm-password-reset.component";
+import { ConfirmPasswordResetComponent } from "../modals/confirm-password-reset/confirm-password-reset.component";
+import { AppState } from "../../stores/states/app-state.state";
+import { DisplayPasswordResetModalPipe } from "../../pipes/display-password-reset-modal.pipe";
 
 @Component({
   selector: "app-sign-in",
@@ -33,23 +35,21 @@ import { ComfirmPasswordResetComponent } from "../modals/comfirm-password-reset/
     MatButtonModule,
     ReactiveFormsModule,
     MatIconModule,
+    DisplayPasswordResetModalPipe,
   ],
   templateUrl: "./sign-in.component.html",
   styleUrls: ["./sign-in.component.scss"],
 })
 export class SignInComponent implements OnInit {
   @Output() signInStatus = new EventEmitter();
-  @Select(
-    (state: { user: AuthStateModel; table: TableStateModel }) =>
-      state.user.currentUser
-  )
+  @Select((state: AppState) => state.user.currentUser)
   currentUser$!: Observable<User | null>;
   public signInForm!: FormGroup<{
     email: FormControl<string | null>;
     password: FormControl<string | null>;
   }>;
   public displaySignInForm!: boolean;
-  private currentUserValue!: User | null;
+  public currentUserValue!: User | null;
 
   constructor(
     private auth: Auth,
@@ -128,16 +128,6 @@ export class SignInComponent implements OnInit {
   }
 
   public openPasswordResetModal() {
-    this.matDialog.open(ComfirmPasswordResetComponent);
-  }
-
-  sendPasswordResetEmailToFirebase() {
-    sendPasswordResetEmail(this.auth, this.currentUserValue?.email ?? "")
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) =>
-        this.signInStatus.emit({ status: "error", message: error.code })
-      );
+    this.matDialog.open(ConfirmPasswordResetComponent);
   }
 }
