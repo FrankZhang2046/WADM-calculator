@@ -34,7 +34,8 @@ export class LogInComponent {
    */
   public handleAuthStatusEvent($event: any) {
     this.authMessage = $event;
-    this.clearAuthMessage();
+    console.log(`auth event is: `, this.authMessage);
+    // this.clearAuthMessage();
   }
 
   /*

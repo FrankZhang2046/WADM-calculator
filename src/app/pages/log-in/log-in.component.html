@@ -1,6 +1,5 @@
 <div class="w-full flex flex-col items-center text-black">
   <div
-    *ngIf="authMessage.status !== ''"
     [class.bg-emerald-200]="authMessage.status === 'success'"
     [class.bg-red-200]="authMessage.status === 'error'"
     class="w-fit rounded-xl flex justify-center mt-4 p-4"
@@ -29,6 +28,7 @@
     <mat-tab-group>
       <mat-tab label="SIGN IN">
         <app-sign-in
+          class="relative"
           (signInStatus)="handleAuthStatusEvent($event)"
         ></app-sign-in>
       </mat-tab>
