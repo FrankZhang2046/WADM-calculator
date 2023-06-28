@@ -519,6 +519,7 @@ export class CustomHtmlTableComponent implements OnInit {
   public ngOnInit(): void {
     this.currentUser$.subscribe((user) => (this.currentUserVal = user));
     this.retrievedTableData$.subscribe((tableData: TableData | null) => {
+      // * when user decided to load a saved table data
       if (tableData && Object.keys(tableData).length > 0) {
         this.hydrateUIFromCachedTableData(tableData);
       }
@@ -573,6 +574,7 @@ export class CustomHtmlTableComponent implements OnInit {
     this.tableData = tableData.tableRowData;
     this.displayResults = true;
     this.compileChartData();
+    this.findBestOption();
   }
 
   /*
