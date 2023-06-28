@@ -13,8 +13,26 @@
         Error: {{ authMessage.message }} <br />This message will disappear in
         {{ remainingTime }} seconds.
       </div>
-      <div *ngIf="authMessage.status === 'success'">
+      <div
+        *ngIf="
+          authMessage.status === 'success' &&
+          authMessage.message === 'logged in'
+        "
+      >
         Successfully logged in, redirecting to the main page in
+        {{ remainingTime }} seconds.
+        <button mat-flat-button color="primary" (click)="navigateMethod()">
+          Redirect Now
+        </button>
+      </div>
+      <div
+        *ngIf="
+          authMessage.status === 'success' &&
+          authMessage.message === 'password reset'
+        "
+      >
+        Please check your email for a password reset link, this message will
+        disappear in
         {{ remainingTime }} seconds.
         <button mat-flat-button color="primary" (click)="navigateMethod()">
           Redirect Now

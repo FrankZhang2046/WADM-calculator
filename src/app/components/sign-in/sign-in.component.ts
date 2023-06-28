@@ -85,7 +85,7 @@ export class SignInComponent implements OnInit {
       case "google":
         signInWithPopup(this.auth, new GoogleAuthProvider())
           .then((result) => {
-            this.signInStatus.emit({ status: "success", message: result });
+            this.signInStatus.emit({ status: "success", message: "logged in" });
           })
           .catch((error) =>
             this.signInStatus.emit({ status: "error", message: error.code })
@@ -107,7 +107,7 @@ export class SignInComponent implements OnInit {
         this.form.password.value
       )
       .then((userCredential) => {
-        this.signInStatus.emit({ status: "success", message: userCredential });
+        this.signInStatus.emit({ status: "success", message: "logged in" });
       })
       .catch((error) => {
         console.error(`error caught in sign in component`, error);
@@ -128,6 +128,17 @@ export class SignInComponent implements OnInit {
   }
 
   public openPasswordResetModal() {
-    this.matDialog.open(ConfirmPasswordResetComponent);
+    const dialogRef = this.matDialog.open(ConfirmPasswordResetComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`result is: `, result);
+      if (result === true) {
+        this.signInStatus.emit({
+          status: "success",
+          message: "password reset",
+        });
+      } else if (result !== false) {
+        this.signInStatus.emit({ status: "error", message: result.code });
+      }
+    });
   }
 }

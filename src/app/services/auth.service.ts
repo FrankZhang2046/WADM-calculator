@@ -36,12 +36,11 @@ export class AuthService {
     return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
-  public sendPasswordResetEmail(email: string | null): any {
-    console.log(`trying to reset password for: `, email);
-    sendPasswordResetEmail(this.auth, email ?? "")
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => console.log(`reset email error is: `, error));
+  public sendPasswordResetEmail(email: string | null): Promise<any> {
+    if (email !== null) {
+      return sendPasswordResetEmail(this.auth, email ?? "");
+    } else {
+      return new Promise((res, rej) => res(null));
+    }
   }
 }

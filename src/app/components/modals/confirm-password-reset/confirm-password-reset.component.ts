@@ -53,12 +53,15 @@ export class ConfirmPasswordResetComponent implements OnInit {
     }
   }
 
-  public closeDialog() {
-    this.matDialogRef.close();
+  public closeDialog(dialogCloseVal: any): void {
+    console.log(`dialogCloseVal: `, dialogCloseVal);
+    this.matDialogRef.close(dialogCloseVal);
   }
 
   public redirectToPasswordResetPage() {
-    console.log(`form submission triggered: `);
-    this.authService.sendPasswordResetEmail(this.emailForm.value);
+    this.authService
+      .sendPasswordResetEmail(this.emailForm.value)
+      .then(() => this.closeDialog(true))
+      .catch((error) => this.closeDialog(error));
   }
 }
