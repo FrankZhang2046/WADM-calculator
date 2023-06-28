@@ -22,6 +22,9 @@
           "
         >
           <th
+            [class.chosen-column-header]="
+              highestResultColumnIdx.includes(colIdx)
+            "
             [ngClass]="
               highlightedTableElementIdx.tableElement ===
                 tableOperationConstants.columnHeader &&
@@ -147,11 +150,6 @@
             );
             else tableDataUpdateInputTemplate
           "
-          (mouseover)="
-            highlightTableElement(tableOperationConstants.fieldWeight, [
-              rowIndex
-            ])
-          "
           (mouseleave)="clearHighlightedTableElement()"
           (click)="
             modifyTableElement(tableOperationConstants.fieldWeight, [rowIndex])
@@ -168,6 +166,7 @@
           "
         >
           <td
+            [class.chosen-cell]="highestResultColumnIdx.includes(cellIdx)"
             [class.to-delete]="
               columnToDelete === cellIdx || rowIndex === rowToDelete
             "
@@ -185,12 +184,6 @@
               else tableDataUpdateInputTemplate
             "
             class="text-blue-600 text-center w-20"
-            (mouseover)="
-              highlightTableElement(tableOperationConstants.cell, [
-                rowIndex,
-                cellIdx
-              ])
-            "
             (mouseleave)="clearHighlightedTableElement()"
             (click)="
               modifyTableElement(tableOperationConstants.cell, [
@@ -206,7 +199,11 @@
 
       <tr *ngIf="displayResults">
         <th colspan="2">{{ "results" | titlecase }}</th>
-        <td class="text-center text-blue-600" *ngFor="let column of columnData">
+        <td
+          [class.chosen-result-cell]="highestResultColumnIdx.includes(colIdx)"
+          class="text-center text-blue-600"
+          *ngFor="let column of columnData; let colIdx = index"
+        >
           {{ column.result }}
         </td>
       </tr>
