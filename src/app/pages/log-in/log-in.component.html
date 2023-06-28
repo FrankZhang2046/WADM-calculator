@@ -10,7 +10,8 @@
       class=""
     >
       <div *ngIf="authMessage.status === 'error'">
-        Error: {{ authMessage.message }}
+        Error: {{ authMessage.message }} <br />This message will disappear in
+        {{ remainingTime }} seconds.
       </div>
       <div *ngIf="authMessage.status === 'success'">
         Successfully logged in, redirecting to the main page in

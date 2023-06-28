@@ -23,7 +23,7 @@ import { MatButtonModule } from "@angular/material/button";
 export class LogInComponent {
   constructor(private router: Router) {}
 
-  public authMessageClearTimeout!: any;
+  public authMessageClearTimeout!: Subscription;
   public remainingTime!: number;
   public authMessage: { status: string; message: any } = {
     status: "",
@@ -34,30 +34,32 @@ export class LogInComponent {
     handle the sign in status event from the sign in component
    */
   public handleAuthStatusEvent($event: any) {
-    clearTimeout(this.authMessageClearTimeout);
+    if (this.authMessageClearTimeout) {
+      this.authMessageClearTimeout.unsubscribe();
+    }
     this.authMessage = $event;
     console.log(`auth event is: `, this.authMessage);
-    this.authMessageClearTimeout = setTimeout(() => {
-      this.authMessage = { status: "", message: null };
-    }, 5000);
-    // this.clearAuthMessage();
+    this.clearAuthMessage();
   }
 
   /*
   use the timer rx operator to clear the auth message after a few seconds
    */
   public clearAuthMessage() {
-    timer(0, 1000)
+    this.authMessageClearTimeout = timer(0, 1000)
       .pipe(take(6))
       .subscribe((val: number) => {
         if (this.authMessage.status === "success") {
-          console.log(val);
           this.remainingTime = 5 - val;
           if (this.remainingTime === 0) {
+            this.authMessage = { status: "", message: null };
             this.navigateMethod();
           }
-        } else {
-          this.authMessage = { status: "", message: null };
+        } else if (this.authMessage.status === "error") {
+          this.remainingTime = 5 - val;
+          if (this.remainingTime === 0) {
+            this.authMessage = { status: "", message: null };
+          }
         }
       });
   }
