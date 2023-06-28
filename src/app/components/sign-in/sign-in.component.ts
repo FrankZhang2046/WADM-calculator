@@ -21,32 +21,41 @@ import { AuthStateModel } from "../../stores/states/auth.state";
 import { TableStateModel } from "../../stores/states/table.state";
 import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { ConfirmPasswordResetComponent } from "../modals/confirm-password-reset/confirm-password-reset.component";
+import { AppState } from "../../stores/states/app-state.state";
+import { DisplayPasswordResetModalPipe } from "../../pipes/display-password-reset-modal.pipe";
 
 @Component({
   selector: "app-sign-in",
   standalone: true,
-  imports: [CommonModule, MatButtonModule, ReactiveFormsModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    DisplayPasswordResetModalPipe,
+  ],
   templateUrl: "./sign-in.component.html",
   styleUrls: ["./sign-in.component.scss"],
 })
 export class SignInComponent implements OnInit {
   @Output() signInStatus = new EventEmitter();
-  @Select(
-    (state: { user: AuthStateModel; table: TableStateModel }) =>
-      state.user.currentUser
-  )
+  @Select((state: AppState) => state.user.currentUser)
   currentUser$!: Observable<User | null>;
   public signInForm!: FormGroup<{
     email: FormControl<string | null>;
     password: FormControl<string | null>;
   }>;
   public displaySignInForm!: boolean;
-  private currentUserValue!: User | null;
+  public currentUserValue!: User | null;
 
   constructor(
     private auth: Auth,
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private matDialog: MatDialog
   ) {
     this.currentUser$.subscribe((value) => (this.currentUserValue = value));
   }
@@ -76,7 +85,7 @@ export class SignInComponent implements OnInit {
       case "google":
         signInWithPopup(this.auth, new GoogleAuthProvider())
           .then((result) => {
-            this.signInStatus.emit({ status: "success", message: result });
+            this.signInStatus.emit({ status: "success", message: "logged in" });
           })
           .catch((error) =>
             this.signInStatus.emit({ status: "error", message: error.code })
@@ -98,7 +107,7 @@ export class SignInComponent implements OnInit {
         this.form.password.value
       )
       .then((userCredential) => {
-        this.signInStatus.emit({ status: "success", message: userCredential });
+        this.signInStatus.emit({ status: "success", message: "logged in" });
       })
       .catch((error) => {
         console.error(`error caught in sign in component`, error);
@@ -118,13 +127,18 @@ export class SignInComponent implements OnInit {
     }
   }
 
-  sendPasswordResetEmailToFirebase() {
-    sendPasswordResetEmail(this.auth, this.currentUserValue?.email ?? "")
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) =>
-        this.signInStatus.emit({ status: "error", message: error.code })
-      );
+  public openPasswordResetModal() {
+    const dialogRef = this.matDialog.open(ConfirmPasswordResetComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`result is: `, result);
+      if (result === true) {
+        this.signInStatus.emit({
+          status: "success",
+          message: "password reset",
+        });
+      } else if (result !== false) {
+        this.signInStatus.emit({ status: "error", message: result.code });
+      }
+    });
   }
 }

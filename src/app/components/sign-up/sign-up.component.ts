@@ -84,7 +84,7 @@ export class SignUpComponent implements OnInit {
       case "google":
         signInWithPopup(this.auth, new GoogleAuthProvider())
           .then((userCred) => {
-            this.signUpStatus.emit({ status: "success", message: userCred });
+            this.signUpStatus.emit({ status: "success", message: "logged in" });
           })
           .catch((error) => {
             console.log(`sign up problem: `, error);
@@ -117,7 +117,7 @@ export class SignUpComponent implements OnInit {
     this.authService
       .signUpWithEmailAndPassword(email, password)
       .then((res) =>
-        this.signUpStatus.emit({ status: "success", message: res })
+        this.signUpStatus.emit({ status: "success", message: "logged in" })
       )
       .catch((err) =>
         this.signUpStatus.emit({ status: "error", message: err.code })

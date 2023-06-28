@@ -62,10 +62,22 @@
       position="end"
       class="profile-drawer bg-[#166d99]"
     >
-      <div class="flex items-center p-4">
-        {{
-          (currentUser$ | async)?.displayName ?? (currentUser$ | async)?.email
-        }}
+      <div class="flex flex-col items-center p-4">
+        <div>
+          {{
+            (currentUser$ | async)?.displayName ?? (currentUser$ | async)?.email
+          }}
+        </div>
+        <div class="text-xs flex self-center items-center">
+          <mat-icon class="text-base">{{
+            currentUserVal?.emailVerified ? "check_circle" : "error"
+          }}</mat-icon>
+          {{
+            currentUserVal?.emailVerified
+              ? "Email verified"
+              : "Please verify your email"
+          }}
+        </div>
       </div>
       <div
         matTooltip="Feature coming soon..."
@@ -86,7 +98,7 @@
   </mat-drawer-container>
 
   <footer
-    class="h-10 text-gray-700 bg-green-400 flex items-center justify-center items-center"
+    class="h-10 text-gray-700 bg-green-400 flex items-center justify-center"
   >
     <div>
       developed by
