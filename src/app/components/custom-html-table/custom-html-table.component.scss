@@ -77,11 +77,11 @@ th {
 
 .chosen-cell {
   border: 2px solid red;
-  border-top: none;
-  border-bottom: none;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
-.chosen-last-cell {
+.chosen-result-cell {
   border: 2px solid red;
-  border-top: none;
+  border-top: 1px solid #ddd;
 }

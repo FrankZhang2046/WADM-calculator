@@ -22,6 +22,9 @@
           "
         >
           <th
+            [class.chosen-column-header]="
+              highestResultColumnIdx.includes(colIdx)
+            "
             [ngClass]="
               highlightedTableElementIdx.tableElement ===
                 tableOperationConstants.columnHeader &&
@@ -163,6 +166,7 @@
           "
         >
           <td
+            [class.chosen-cell]="highestResultColumnIdx.includes(cellIdx)"
             [class.to-delete]="
               columnToDelete === cellIdx || rowIndex === rowToDelete
             "
@@ -195,7 +199,11 @@
 
       <tr *ngIf="displayResults">
         <th colspan="2">{{ "results" | titlecase }}</th>
-        <td class="text-center text-blue-600" *ngFor="let column of columnData">
+        <td
+          [class.chosen-result-cell]="highestResultColumnIdx.includes(colIdx)"
+          class="text-center text-blue-600"
+          *ngFor="let column of columnData; let colIdx = index"
+        >
           {{ column.result }}
         </td>
       </tr>
