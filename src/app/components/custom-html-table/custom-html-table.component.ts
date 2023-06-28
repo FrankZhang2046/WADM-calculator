@@ -92,6 +92,7 @@ export class CustomHtmlTableComponent implements OnInit {
   };
   public highestResultColumnIdx: number[] = [];
   public currentUserVal!: User | null;
+
   // events
   public chartClicked({
     event,
@@ -117,6 +118,7 @@ export class CustomHtmlTableComponent implements OnInit {
   public columnToDelete!: number | null;
   public rowToDelete!: number | null;
   public confirmDeletionModalOpened!: boolean;
+
   public get hasEitherColumnOrRowToDelete(): boolean {
     return (
       (this.columnToDelete !== null && this.columnToDelete !== undefined) ||
@@ -274,6 +276,7 @@ export class CustomHtmlTableComponent implements OnInit {
       row.fieldValues.splice(columnToDelete, 1);
     });
   }
+
   public deleteRow(rowToDelete: number) {
     // delete item at index rowToDelete from tableData
     this.tableData.splice(rowToDelete, 1);
@@ -600,6 +603,7 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public columnData: ColumnHeaderData[] = [];
   public tableData: TableRowData[] = [];
+
   public trackByFn(index: number, item: any): number {
     return index;
   }
@@ -615,6 +619,7 @@ export class CustomHtmlTableComponent implements OnInit {
       this.columnData.length - 1,
     ]);
   }
+
   public addRow(): void {
     this.clearHighlightedTableElement();
     this.tableData.push({
@@ -646,9 +651,11 @@ export class CustomHtmlTableComponent implements OnInit {
       this.headerRenamingInputComponent.focus();
     });
   }
+
   public inputFocusOutHandler(): void {
     this.submitForm();
   }
+
   // row drop method shifts the order of the tableData array around
   public rowDropMethod($event: CdkDragDrop<TableRowData[]>) {
     this.clearHighlightedTableElement();
@@ -803,6 +810,7 @@ export class CustomHtmlTableComponent implements OnInit {
 
     this.barChartData = chartData;
   }
+
   /*
   persist latest calculated table data to the store
   */
@@ -822,19 +830,24 @@ export class CustomHtmlTableComponent implements OnInit {
   public resetHighlightedTableElement(): void {
     this.highlightedTableElementIdx = { tableElement: null, idx: [] };
   }
+
   public resetModifiedTableElement(): void {
     this.modifiedTableElementIdx = { tableElement: null, idx: [] };
   }
+
   public resetColumnData(): void {
     this.columnData = [];
   }
+
   public resetTableData(): void {
     this.tableData = [];
   }
+
   public resetTableElementDeletionVariables(): void {
     this.columnToDelete = null;
     this.rowToDelete = null;
   }
+
   /*
   reset all the variables in table so the user can build a new form
   */
@@ -847,10 +860,16 @@ export class CustomHtmlTableComponent implements OnInit {
     this.displayResults = false;
     this.seedTable();
     this.resetTableElementDeletionVariables();
+    this.resetHighestScore();
   }
+
+  private resetHighestScore() {
+    this.highestResultColumnIdx = [];
+  }
+
   /*
-    method to either redirect user to log-in page if they are not logged in, or persist the table state to db
-  */
+      method to either redirect user to log-in page if they are not logged in, or persist the table state to db
+    */
   public saveTable(): void {
     if (!this.currentUserVal) {
       // todo need to display a message assuring the user their work has been saved

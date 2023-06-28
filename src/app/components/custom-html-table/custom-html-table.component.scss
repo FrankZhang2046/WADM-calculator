@@ -1,7 +1,7 @@
 @import "../../../styles/variables";
 
 input {
-    border: solid 1px grey;
+  border: solid 1px grey;
 }
 
 .to-delete {
@@ -14,6 +14,7 @@ input {
 
 #add-candidate-btn {
   color: black;
+
   &:hover {
     background: $complementary-color;
     color: white;
@@ -26,7 +27,7 @@ input {
 }
 
 #add-criterion-btn {
-    background-color: $complementary-color;
+  background-color: $complementary-color;
 }
 
 .highlight {
@@ -34,34 +35,53 @@ input {
 }
 
 th.add-criterion {
-    border: none;
-    .button-container {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-    }
-    div {
-        min-width: 400px;
-        width: 100%;
-    }
+  border: none;
+
+  .button-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  div {
+    min-width: 400px;
+    width: 100%;
+  }
 }
 
 td,
 th {
-    border: 1px solid #ddd;
-    padding: 8px;
-    color: black;
+  border: 1px solid #ddd;
+  padding: 8px;
+  color: black;
 }
+
 .draggable-cell {
-    background-color: white;
+  background-color: white;
 }
 
 .table-row {
-    background-color: white;
-    width: fit-content;
+  background-color: white;
+  width: fit-content;
 }
 
 .add-row-btn {
-    background-color: green !important;
+  background-color: green !important;
+}
+
+.chosen-column-header {
+  border: 2px solid red;
+  border-bottom: none;
+}
+
+.chosen-cell {
+  border: 2px solid red;
+  border-top: none;
+  border-bottom: none;
+}
+
+.chosen-last-cell {
+  border: 2px solid red;
+  border-top: none;
 }
