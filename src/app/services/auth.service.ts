@@ -18,7 +18,11 @@ export class AuthService {
     if (!email || !password) {
       return new Promise((res, rej) => res(null));
     }
-    return signInWithEmailAndPassword(this.auth, email, password);
+    return signInWithEmailAndPassword(this.auth, email, password).catch(
+      (error) => {
+        throw error;
+      }
+    );
     //   .then(
     //   (userCredential) => {
     //     console.log(`credential: `, userCredential);

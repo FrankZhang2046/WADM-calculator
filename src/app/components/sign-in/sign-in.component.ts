@@ -1,7 +1,13 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
-import { Auth, GoogleAuthProvider, signInWithPopup } from "@angular/fire/auth";
+import {
+  Auth,
+  GoogleAuthProvider,
+  sendPasswordResetEmail,
+  signInWithPopup,
+  User,
+} from "@angular/fire/auth";
 import {
   FormBuilder,
   FormControl,
@@ -11,6 +17,10 @@ import {
 } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
 import { MatIconModule } from "@angular/material/icon";
+import { AuthStateModel } from "../../stores/states/auth.state";
+import { TableStateModel } from "../../stores/states/table.state";
+import { Select } from "@ngxs/store";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-sign-in",
@@ -21,17 +31,25 @@ import { MatIconModule } from "@angular/material/icon";
 })
 export class SignInComponent implements OnInit {
   @Output() signInStatus = new EventEmitter();
+  @Select(
+    (state: { user: AuthStateModel; table: TableStateModel }) =>
+      state.user.currentUser
+  )
+  currentUser$!: Observable<User | null>;
   public signInForm!: FormGroup<{
     email: FormControl<string | null>;
     password: FormControl<string | null>;
   }>;
   public displaySignInForm!: boolean;
+  private currentUserValue!: User | null;
 
   constructor(
     private auth: Auth,
     private formBuilder: FormBuilder,
     private authService: AuthService
-  ) {}
+  ) {
+    this.currentUser$.subscribe((value) => (this.currentUserValue = value));
+  }
 
   public get form() {
     return this.signInForm.controls;
@@ -83,6 +101,7 @@ export class SignInComponent implements OnInit {
         this.signInStatus.emit({ status: "success", message: userCredential });
       })
       .catch((error) => {
+        console.error(`error caught in sign in component`, error);
         const errorMsg = error;
         this.signInStatus.emit({ status: "error", message: error.code });
       });
@@ -97,5 +116,15 @@ export class SignInComponent implements OnInit {
     } else {
       inputComponent.type = "password";
     }
+  }
+
+  sendPasswordResetEmailToFirebase() {
+    sendPasswordResetEmail(this.auth, this.currentUserValue?.email ?? "")
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) =>
+        this.signInStatus.emit({ status: "error", message: error.code })
+      );
   }
 }

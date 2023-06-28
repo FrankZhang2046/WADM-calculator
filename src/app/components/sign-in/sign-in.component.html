@@ -9,12 +9,23 @@
       {{ "sign in with email" | titlecase }}
     </button>
   </div>
+  <div
+    class="mt-3 hover:cursor-pointer text-xs text-green-800"
+    (click)="sendPasswordResetEmailToFirebase()"
+  >
+    Forgot your password?
+  </div>
 </div>
 <ng-template #emailSignInForm>
   <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
     <div class="grid grid-cols-[80px_1fr]">
       <label for="email" class="w-20">Email</label>
-      <input type="email" class="flex-1 pl-2" id="email" formControlName="email"/>
+      <input
+        type="email"
+        class="flex-1 pl-2"
+        id="email"
+        formControlName="email"
+      />
       <div
         *ngIf="form.email.invalid && (form.email.dirty || form.email.touched)"
         class="col-span-2 error-message"
@@ -33,9 +44,18 @@
           id="password"
           formControlName="password"
         />
-      <div (click)="togglePasswordVisibility(passwordInput, passwordInput.type === 'password')">
-        <mat-icon>{{passwordInput.type === 'password' ? 'visibility' : 'visibility_off'}}</mat-icon>
-      </div>
+        <div
+          (click)="
+            togglePasswordVisibility(
+              passwordInput,
+              passwordInput.type === 'password'
+            )
+          "
+        >
+          <mat-icon>{{
+            passwordInput.type === "password" ? "visibility" : "visibility_off"
+          }}</mat-icon>
+        </div>
       </div>
       <!-- password field error messages-->
       <div
