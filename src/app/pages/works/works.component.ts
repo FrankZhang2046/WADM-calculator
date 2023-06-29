@@ -117,7 +117,14 @@ export class WorksComponent implements OnInit {
   public editTableData(myData: CachedPersistedTableDocument) {
     console.log(`clicked on: `, myData);
     this.matDialog.open(SaveTableDataComponent, {
-      data: myData,
+      data: {
+        tableData: myData,
+        type: "edit",
+      },
     });
+  }
+
+  public redirectToMain() {
+    this.router.navigate(["/"]);
   }
 }

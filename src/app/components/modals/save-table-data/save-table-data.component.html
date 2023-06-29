@@ -6,8 +6,10 @@
   <div class="p-4">
     <div class="font-black text-base text-gray-300 mb-4">
       To
-      <span>{{ data ? "update your table," : "save your work," }}</span> please
-      enter a name and notes (optional) for the table
+      <span>{{
+        data?.type === "edit" ? "update your table," : "save your work,"
+      }}</span>
+      please enter a name and notes (optional) for the table
     </div>
     <form
       [formGroup]="tableInfoForm"
@@ -63,7 +65,7 @@
           mat-flat-button
           type="submit"
         >
-          <span>{{ data ? "Update " : "Save " }}</span>
+          <span>{{ data.type === "edit" ? "Update " : "Save " }}</span>
           Table
         </button>
       </div>

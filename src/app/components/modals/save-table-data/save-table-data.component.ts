@@ -14,7 +14,11 @@ import { Store } from "@ngxs/store";
 import { Subscription, take, timer } from "rxjs";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Router } from "@angular/router";
-import { CachedPersistedTableDocument } from "../../../models/table-row-data.model";
+import {
+  CachedPersistedTableDocument,
+  LatestTableData,
+} from "../../../models/table-row-data.model";
+import { SaveTableDataModalData } from "../../../models/modal.model";
 
 @Component({
   selector: "app-save-table-data",
@@ -38,32 +42,38 @@ export class SaveTableDataComponent implements OnInit {
   });
   public dialogClose!: number;
   private cachedTableData!: CachedPersistedTableDocument;
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: SaveTableDataModalData,
     private formBuilder: FormBuilder,
     private store: Store,
     private matDialogRef: MatDialogRef<SaveTableDataComponent>,
     private snackBar: MatSnackBar,
     private router: Router
   ) {}
+
   // * getter method that returns the formGroup's control
   public get form() {
     return this.tableInfoForm.controls;
   }
+
   public timerObservable!: Subscription;
 
   ngOnInit(): void {
     if (this.data) {
-      console.log(`my data is: `, this.data);
-      this.cachedTableData = this.data;
-      console.log(`my cached data is: `, this.cachedTableData);
-      this.form.tableName.setValue(this.data.tableName);
-      this.form.tableNotes.setValue(this.data.tableNotes);
+      if (this.data.type === "edit") {
+        console.log(`my data is: `, this.data);
+        this.cachedTableData = this.data.tableData;
+        console.log(`my cached data is: `, this.cachedTableData.tableData);
+        this.form.tableName.setValue(this.data.tableData.tableName);
+        this.form.tableNotes.setValue(this.data.tableData.tableNotes);
+      }
     }
   }
+
   public onSubmit() {
     // make sure tableName is not null
-    if (this.data) {
+    if (this.data.type === "edit") {
       console.log(`on submit, my data is: `, this.data);
       this.cachedTableData.tableName = this.form.tableName.value ?? "";
       this.cachedTableData.tableNotes = this.form.tableNotes.value ?? "";
@@ -74,10 +84,13 @@ export class SaveTableDataComponent implements OnInit {
     } else {
       this.store
         .dispatch(
-          new TableActions.WriteTableDataToDB({
-            tableName: this.tableInfoForm.controls.tableName.value,
-            tableNotes: this.tableInfoForm.controls.tableNotes.value,
-          })
+          new TableActions.WriteTableDataToDB(
+            new LatestTableData(
+              this.data.tableData,
+              this.form.tableName.value,
+              this.form.tableNotes.value
+            )
+          )
         )
         .subscribe((res) => {
           // * display success message and close dialog
@@ -85,6 +98,7 @@ export class SaveTableDataComponent implements OnInit {
         });
     }
   }
+
   public closeDialog(displaySnackbar: boolean = true): void {
     this.matDialogRef.close();
     if (this.timerObservable) {

@@ -40,6 +40,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { Router } from "@angular/router";
 import { SaveTableDataComponent } from "../modals/save-table-data/save-table-data.component";
 import { DetermineRetrievedTableDataUIControlPipe } from "../../pipes/determine-retrieved-table-data-ui-control.pipe";
+import { AppState } from "../../stores/states/app-state.state";
 
 @Component({
   selector: "app-custom-html-table",
@@ -137,6 +138,8 @@ export class CustomHtmlTableComponent implements OnInit {
       state.table.retrievedTableData
   )
   public retrievedTableData$!: Observable<TableData | null>;
+  @Select((state: AppState) => state.table.lastCalculatedTableData)
+  public lastCalculatedTableData$!: Observable<TableData | null>;
 
   constructor(
     public matDialog: MatDialog,
@@ -518,6 +521,12 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public ngOnInit(): void {
     this.currentUser$.subscribe((user) => (this.currentUserVal = user));
+    this.lastCalculatedTableData$.subscribe((tableData: TableData | null) => {
+      // * when user decided to load a saved table data
+      if (tableData && Object.keys(tableData).length > 0) {
+        this.hydrateUIFromCachedTableData(tableData);
+      }
+    });
     this.retrievedTableData$.subscribe((tableData: TableData | null) => {
       // * when user decided to load a saved table data
       if (tableData && Object.keys(tableData).length > 0) {
@@ -702,9 +711,11 @@ export class CustomHtmlTableComponent implements OnInit {
     const tableWidth = tableEle?.offsetWidth ? tableEle.offsetWidth : 0;
     this.chartWidth = (tableWidth - 48).toString() + "px";
     this.findBestOption();
-
     this.compileChartData();
-    this.cacheLatestCalculatedTableData();
+    // * if the user is not logged in, cache the table data for later use
+    if (!this.currentUserVal) {
+      this.cacheLatestCalculatedTableData();
+    }
   }
 
   public dismissDisplayMessage(time: number) {
@@ -819,12 +830,8 @@ export class CustomHtmlTableComponent implements OnInit {
   public cacheLatestCalculatedTableData() {
     this.store.dispatch(
       new TableActions.CacheCalculatedTableData({
-        tableName: null,
-        tableNotes: null,
-        tableData: {
-          columnData: this.columnData,
-          tableRowData: this.tableData,
-        },
+        columnData: this.columnData,
+        tableRowData: this.tableData,
       })
     );
   }
@@ -878,7 +885,15 @@ export class CustomHtmlTableComponent implements OnInit {
       this.router.navigate(["/log-in"]);
     } else {
       // todo open up a new modal asking user to enter table name and notes (optional)
-      this.matDialog.open(SaveTableDataComponent);
+      this.matDialog.open(SaveTableDataComponent, {
+        data: {
+          tableData: {
+            columnData: this.columnData,
+            tableRowData: this.tableData,
+          },
+          type: "save",
+        },
+      });
       return;
     }
   }
