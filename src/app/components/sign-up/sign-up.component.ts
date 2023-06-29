@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   sendEmailVerification,
   signInWithPopup,
+  User,
 } from "@angular/fire/auth";
 import { Router } from "@angular/router";
 import {
@@ -117,23 +118,42 @@ export class SignUpComponent implements OnInit {
     this.authService
       .signUpWithEmailAndPassword(email, password)
       .then((res) => {
-        this.signUpStatus.emit({ status: "success", message: "logged in" });
         const actionCodeSettings = {
           url: environment.production
             ? "https://wadm-calculator.web.app/works"
             : "http://localhost:4200",
           handleCodeInApp: true,
         };
-        sendEmailVerification(res.user, actionCodeSettings);
+        if ((res.user as User).providerData[0].providerId === "password") {
+          this.sendEmailVerification(res.user, actionCodeSettings);
+        } else {
+          this.signUpStatus.emit({ status: "success", message: "logged in" });
+        }
       })
       .catch((err) =>
         this.signUpStatus.emit({ status: "error", message: err.code })
       );
   }
 
+  private sendEmailVerification(
+    userObject: User,
+    actionCodeSettings: { handleCodeInApp: boolean; url: string }
+  ) {
+    sendEmailVerification(userObject, actionCodeSettings)
+      .then((res) =>
+        this.signUpStatus.emit({
+          status: "success",
+          message: "verification sent",
+        })
+      )
+      .catch((error) =>
+        this.signUpStatus.emit({ status: "error", message: error.code })
+      );
+  }
+
   /*
-  method to toggle target password input component's type between password and string
-   */
+    method to toggle target password input component's type between password and string
+     */
   public togglePasswordVisibility(
     inputComponent: HTMLInputElement,
     visible: boolean
