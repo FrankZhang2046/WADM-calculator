@@ -45,7 +45,6 @@
 
   <mat-drawer-container autosize class="main h-full bg-white">
     <router-outlet></router-outlet>
-
     <mat-drawer #drawer mode="side" class="drawer">
       <div
         (click)="redirectMethod('/works')"
@@ -62,38 +61,11 @@
       position="end"
       class="profile-drawer bg-[#166d99]"
     >
-      <div class="flex flex-col items-center p-4">
-        <div>
-          {{
-            (currentUser$ | async)?.displayName ?? (currentUser$ | async)?.email
-          }}
-        </div>
-        <div class="text-xs flex self-center items-center">
-          <mat-icon class="text-base">{{
-            currentUserVal?.emailVerified ? "check_circle" : "error"
-          }}</mat-icon>
-          {{
-            currentUserVal?.emailVerified
-              ? "Email verified"
-              : "Please verify your email"
-          }}
-        </div>
-      </div>
-      <div
-        matTooltip="Feature coming soon..."
-        (click)="redirectMethod('/settings')"
-        class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
-      >
-        <mat-icon>settings</mat-icon>
-        <span class="ml-2">Profile Settings</span>
-      </div>
-      <div
-        (click)="logOut(); profileDrawer.close(); drawer.close()"
-        class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
-      >
-        <mat-icon>logout</mat-icon>
-        <span class="ml-2">Logout</span>
-      </div>
+      <app-profile-management
+        [profileDrawerRef]="profileDrawer"
+        [navDrawerRef]="drawer"
+      ></app-profile-management>
+      <app-tutorial></app-tutorial>
     </mat-drawer>
   </mat-drawer-container>
 
@@ -112,7 +84,3 @@
     </a>
   </footer>
 </div>
-
-<mat-menu #userProfileMenu="matMenu">
-  <button mat-menu-item (click)="logOut()">Log Out</button>
-</mat-menu>
