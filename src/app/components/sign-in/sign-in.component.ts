@@ -4,9 +4,7 @@ import { MatButtonModule } from "@angular/material/button";
 import {
   Auth,
   GoogleAuthProvider,
-  sendPasswordResetEmail,
   signInWithPopup,
-  signInWithRedirect,
   User,
 } from "@angular/fire/auth";
 import {
@@ -18,13 +16,11 @@ import {
 } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
 import { MatIconModule } from "@angular/material/icon";
-import { AuthStateModel } from "../../stores/states/auth.state";
-import { TableStateModel } from "../../stores/states/table.state";
 import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { ConfirmPasswordResetComponent } from "../modals/confirm-password-reset/confirm-password-reset.component";
-import { AppState } from "../../stores/states/app-state.state";
+import { AppStateModel } from "../../stores/states/app-state.state";
 import { DisplayPasswordResetModalPipe } from "../../pipes/display-password-reset-modal.pipe";
 
 @Component({
@@ -43,7 +39,7 @@ import { DisplayPasswordResetModalPipe } from "../../pipes/display-password-rese
 })
 export class SignInComponent implements OnInit {
   @Output() signInStatus = new EventEmitter();
-  @Select((state: AppState) => state.user.currentUser)
+  @Select((state: AppStateModel) => state.user.currentUser)
   currentUser$!: Observable<User | null>;
   public signInForm!: FormGroup<{
     email: FormControl<string | null>;
@@ -66,8 +62,6 @@ export class SignInComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // password: ["", Validators.minLength(6)],
-    // a new password field, with 2 validators: required, and min length (6)
     this.signInForm = this.formBuilder.group({
       email: ["", Validators.compose([Validators.required, Validators.email])],
       password: [

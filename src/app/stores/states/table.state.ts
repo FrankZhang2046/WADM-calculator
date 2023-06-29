@@ -67,4 +67,14 @@ export class TableState {
       lastCalculatedTableData: action.payload,
     });
   }
+
+  @Action(TableActions.FlushCalculatedTableData)
+  flushLatestTableData(
+    ctx: StateContext<TableStateModel>,
+    action: TableActions.FlushCalculatedTableData
+  ): void {
+    ctx.patchState({
+      lastCalculatedTableData: {} as TableData,
+    });
+  }
 }

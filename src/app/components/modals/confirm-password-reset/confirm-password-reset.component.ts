@@ -12,7 +12,7 @@ import {
 import { MatDialogRef } from "@angular/material/dialog";
 import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { AppState } from "../../../stores/states/app-state.state";
+import { AppStateModel } from "../../../stores/states/app-state.state";
 import { User } from "@angular/fire/auth";
 import { AuthService } from "../../../services/auth.service";
 
@@ -31,7 +31,7 @@ import { AuthService } from "../../../services/auth.service";
   styleUrls: ["./confirm-password-reset.component.scss"],
 })
 export class ConfirmPasswordResetComponent implements OnInit {
-  @Select((state: AppState) => state.user.currentUser)
+  @Select((state: AppStateModel) => state.user.currentUser)
   currentUser$!: Observable<User | null>;
   public currentUserValue!: User | null;
 

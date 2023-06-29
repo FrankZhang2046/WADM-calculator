@@ -11,6 +11,12 @@ import {
 } from "src/app/models/table-row-data.model";
 
 export namespace TableActions {
+  export class FlushCalculatedTableData {
+    static readonly type = `[Table] Flush calculated table data`;
+
+    constructor() {}
+  }
+
   export class CacheCalculatedTableData {
     static readonly type = `[Table] Cache latest calculated table data`;
 
