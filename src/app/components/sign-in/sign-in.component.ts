@@ -77,7 +77,6 @@ export class SignInComponent implements OnInit {
     });
 
     this.signInForm.controls.password.valueChanges.subscribe((value) =>
-      console.log(`value is: `, value)
     );
   }
 
@@ -131,7 +130,6 @@ export class SignInComponent implements OnInit {
   public openPasswordResetModal() {
     const dialogRef = this.matDialog.open(ConfirmPasswordResetComponent);
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`result is: `, result);
       if (result === true) {
         this.signInStatus.emit({
           status: "success",

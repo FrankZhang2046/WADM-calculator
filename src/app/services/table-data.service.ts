@@ -44,7 +44,6 @@ export class TableDataService {
   }
 
   public updateTableData(tableDataToUpdate: CachedPersistedTableDocument) {
-    console.log(`data to update: `, tableDataToUpdate);
     const docToUpdate = { ...tableDataToUpdate };
     const currentUser = this.store.select((state) => state.user.currentUser);
     return new Promise((resolve, reject) => {

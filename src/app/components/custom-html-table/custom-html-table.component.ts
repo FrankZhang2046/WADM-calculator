@@ -101,9 +101,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }: {
     event?: ChartEvent;
     active?: {}[];
-  }): void {
-    // console.log(event, active);
-  }
+  }): void {}
 
   public chartHovered({
     event,
@@ -111,9 +109,7 @@ export class CustomHtmlTableComponent implements OnInit {
   }: {
     event?: ChartEvent;
     active?: {}[];
-  }): void {
-    // console.log(event, active);
-  }
+  }): void {}
 
   public tableOperationConstants = TableOperationConstants;
   public columnToDelete!: number | null;
@@ -910,7 +906,6 @@ export class CustomHtmlTableComponent implements OnInit {
     // * mark row/column for deletion
     this.signalRowColumnForDeletion();
     this.rowColumnDeletionDelegation();
-    console.log(`deleting a table element`);
     event.stopPropagation();
   }
 }
