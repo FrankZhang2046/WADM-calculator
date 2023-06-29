@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   sendPasswordResetEmail,
   signInWithPopup,
+  signInWithRedirect,
   User,
 } from "@angular/fire/auth";
 import {

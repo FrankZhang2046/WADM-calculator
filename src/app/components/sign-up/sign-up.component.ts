@@ -3,13 +3,12 @@ import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import {
   Auth,
-  signInWithEmailAndPassword,
   GoogleAuthProvider,
+  sendEmailVerification,
   signInWithPopup,
 } from "@angular/fire/auth";
 import { Router } from "@angular/router";
 import {
-  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -19,6 +18,7 @@ import {
 import { AuthService } from "src/app/services/auth.service";
 import { MatIconModule } from "@angular/material/icon";
 import { AuthStatus } from "../modals/auth-status.model";
+import { environment } from "../../../environments/environment";
 
 interface SignUpFormData {
   email: string;
@@ -116,9 +116,16 @@ export class SignUpComponent implements OnInit {
     // TODO: Implement the sign-up logic using Firebase or your preferred authentication service
     this.authService
       .signUpWithEmailAndPassword(email, password)
-      .then((res) =>
-        this.signUpStatus.emit({ status: "success", message: "logged in" })
-      )
+      .then((res) => {
+        this.signUpStatus.emit({ status: "success", message: "logged in" });
+        const actionCodeSettings = {
+          url: environment.production
+            ? "https://wadm-calculator.web.app/works"
+            : "http://localhost:4200",
+          handleCodeInApp: true,
+        };
+        sendEmailVerification(res.user, actionCodeSettings);
+      })
       .catch((err) =>
         this.signUpStatus.emit({ status: "error", message: err.code })
       );
