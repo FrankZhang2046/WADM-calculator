@@ -38,7 +38,6 @@ export class LogInComponent {
       this.authMessageClearTimeout.unsubscribe();
     }
     this.authMessage = $event;
-    console.log(`auth event is: `, this.authMessage);
     this.clearAuthMessage();
   }
 

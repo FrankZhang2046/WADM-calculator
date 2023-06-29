@@ -54,7 +54,6 @@ export class ConfirmPasswordResetComponent implements OnInit {
   }
 
   public closeDialog(dialogCloseVal: any): void {
-    console.log(`dialogCloseVal: `, dialogCloseVal);
     this.matDialogRef.close(dialogCloseVal);
   }
 

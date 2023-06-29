@@ -4,7 +4,5 @@ import { AppComponent } from "./app/app.component";
 import { environment } from "./environments/environment";
 
 bootstrapApplication(AppComponent, appConfig)
-  .then((ref) => {
-    console.log(`in bootstrap current environment is: `, environment);
-  })
+  .then((ref) => {})
   .catch((err) => console.error(err));

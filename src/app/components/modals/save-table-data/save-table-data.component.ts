@@ -62,9 +62,7 @@ export class SaveTableDataComponent implements OnInit {
   ngOnInit(): void {
     if (this.data) {
       if (this.data.type === "edit") {
-        console.log(`my data is: `, this.data);
         this.cachedTableData = this.data.tableData;
-        console.log(`my cached data is: `, this.cachedTableData.tableData);
         this.form.tableName.setValue(this.data.tableData.tableName);
         this.form.tableNotes.setValue(this.data.tableData.tableNotes);
       }
@@ -74,10 +72,8 @@ export class SaveTableDataComponent implements OnInit {
   public onSubmit() {
     // make sure tableName is not null
     if (this.data.type === "edit") {
-      console.log(`on submit, my data is: `, this.data);
       this.cachedTableData.tableName = this.form.tableName.value ?? "";
       this.cachedTableData.tableNotes = this.form.tableNotes.value ?? "";
-      console.log(`about to update`, this.cachedTableData);
       this.store
         .dispatch(new TableActions.UpdateTableData(this.cachedTableData))
         .subscribe(() => this.closeDialog());

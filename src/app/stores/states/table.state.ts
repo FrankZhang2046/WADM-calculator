@@ -39,7 +39,6 @@ export class TableState {
     ctx: StateContext<TableStateModel>,
     action: TableActions.UpdateTableData
   ) {
-    console.log(`payload is: `, action.payload);
     return this.tableDataService.updateTableData(action.payload);
   }
 

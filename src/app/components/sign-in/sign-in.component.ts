@@ -75,10 +75,6 @@ export class SignInComponent implements OnInit {
         Validators.compose([Validators.required, Validators.minLength(6)]),
       ],
     });
-
-    this.signInForm.controls.password.valueChanges.subscribe((value) =>
-      console.log(`value is: `, value)
-    );
   }
 
   public signIn(signInMethod: string) {
@@ -131,7 +127,6 @@ export class SignInComponent implements OnInit {
   public openPasswordResetModal() {
     const dialogRef = this.matDialog.open(ConfirmPasswordResetComponent);
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`result is: `, result);
       if (result === true) {
         this.signInStatus.emit({
           status: "success",
