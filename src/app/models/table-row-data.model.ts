@@ -23,18 +23,21 @@ export interface PersistedTableDocument {
 }
 
 export class CachedPersistedTableDocument implements PersistedTableDocument {
-  constructor(public createdAt: object,
-              public tableName: string,
-              public tableNotes: string,
-              public tableData: TableData,
-              public id?: string
+  constructor(
+    public createdAt: object,
+    public tableName: string,
+    public tableNotes: string,
+    public tableData: TableData,
+    public id?: string
   ) {}
 }
 
-export interface LatestTableData {
-  tableData: TableData;
-  tableName: string | null;
-  tableNotes?: string | null;
+export class LatestTableData {
+  constructor(
+    public tableData: TableData,
+    public tableName: string | null,
+    public tableNotes?: string | null
+  ) {}
 }
 
 export interface TableData {

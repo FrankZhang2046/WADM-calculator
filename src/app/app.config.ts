@@ -15,7 +15,7 @@ import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 import { TableState } from "./stores/states/table.state";
 import { AuthState } from "./stores/states/auth.state";
 import { environment } from "../environments/environment";
-import {HttpClientModule, provideHttpClient} from "@angular/common/http";
+import { HttpClientModule, provideHttpClient } from "@angular/common/http";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,7 +31,6 @@ export const appConfig: ApplicationConfig = {
       provideFirestore(() => {
         const firestore = getFirestore();
         if (!environment.production) {
-          console.log(`using firestore emulator:`, environment.production);
           connectFirestoreEmulator(firestore, "localhost", 8080);
         }
         return firestore;
@@ -41,8 +40,9 @@ export const appConfig: ApplicationConfig = {
       provideAuth(() => {
         const auth = getAuth();
         if (!environment.production) {
-          console.log(`using auth emulator:`, environment.production);
-          connectAuthEmulator(auth, "http://localhost:9099", {disableWarnings: true});
+          connectAuthEmulator(auth, "http://localhost:9099", {
+            disableWarnings: true,
+          });
         }
         return auth;
       })

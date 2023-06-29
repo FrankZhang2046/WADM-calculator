@@ -88,7 +88,6 @@ export class SignUpComponent implements OnInit {
             this.signUpStatus.emit({ status: "success", message: "logged in" });
           })
           .catch((error) => {
-            console.log(`sign up problem: `, error);
             this.signUpStatus.emit({ status: "error", message: error.code });
           });
         break;

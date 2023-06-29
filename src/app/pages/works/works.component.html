@@ -62,7 +62,13 @@
   <div class="w-full flex justify-center mt-4">
     <div class="rounded-lg p-4 w-fit bg-red-200">
       <div class="p-2 text-red-800">
-        You haven't created any table, create one now.
+        You haven't created any table,
+        <span
+          matTooltip="redirect to the main page"
+          class="hover:cursor-pointer underline"
+          (click)="redirectToMain()"
+          >create one now.
+        </span>
       </div>
     </div>
   </div>

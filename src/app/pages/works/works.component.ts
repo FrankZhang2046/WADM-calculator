@@ -63,9 +63,7 @@ export class WorksComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      console.log(`params are: `, params);
-    });
+    this.route.queryParams.subscribe((params) => {});
     this.currentUser$.subscribe((user) => {
       this.currentUserValue = user;
       if (this.currentUserValue) {
@@ -85,16 +83,13 @@ export class WorksComponent implements OnInit {
   }
 
   public loadTableData(tableRow: any) {
-    console.log(`table row data is: `, tableRow);
     this.store.dispatch(
       new TableActions.RegisterRetrievedTableData(tableRow.tableData)
     );
     this.router.navigate(["/"]);
   }
 
-  rowHoveredMethod($event: any) {
-    console.log(`hovered row is: `, ($event.activated = true));
-  }
+  rowHoveredMethod($event: any) {}
 
   public deleteTable(myData: any) {
     const userTableCollection = collection(
@@ -109,15 +104,21 @@ export class WorksComponent implements OnInit {
 
     tableDeletionModalRef.afterClosed().subscribe((res) => {
       if (res) {
-        deleteDoc(docRef).then((res) => console.log(`res is: `, res));
+        deleteDoc(docRef);
       }
     });
   }
 
   public editTableData(myData: CachedPersistedTableDocument) {
-    console.log(`clicked on: `, myData);
     this.matDialog.open(SaveTableDataComponent, {
-      data: myData,
+      data: {
+        tableData: myData,
+        type: "edit",
+      },
     });
+  }
+
+  public redirectToMain() {
+    this.router.navigate(["/"]);
   }
 }

@@ -25,6 +25,7 @@ import { update } from "@angular/fire/database";
 })
 export class TableDataService {
   constructor(private firestore: Firestore, private store: Store) {}
+
   /* method that writes table data to db
     @param tableData: table data to be written to db
   */
@@ -37,13 +38,13 @@ export class TableDataService {
           this.firestore,
           `appData/tables/${user?.uid}`
         );
-        resolve(addDoc(tableCollection, tableData));
+        resolve(addDoc(tableCollection, { ...tableData }));
       });
     });
   }
+
   public updateTableData(tableDataToUpdate: CachedPersistedTableDocument) {
-    console.log(`data to update: `, tableDataToUpdate);
-    const docToUpdate = {...tableDataToUpdate};
+    const docToUpdate = { ...tableDataToUpdate };
     const currentUser = this.store.select((state) => state.user.currentUser);
     return new Promise((resolve, reject) => {
       currentUser.pipe(take(1)).subscribe((user) => {

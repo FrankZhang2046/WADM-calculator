@@ -23,6 +23,8 @@ import { Observable } from "rxjs";
 import { MatDrawer, MatSidenavModule } from "@angular/material/sidenav";
 import { environment } from "../environments/environment";
 import { DomSanitizer } from "@angular/platform-browser";
+import { ProfileManagementComponent } from "./components/profile-management/profile-management.component";
+import { TutorialComponent } from "./components/tutorial/tutorial.component";
 
 @Component({
   selector: "app-root",
@@ -38,6 +40,8 @@ import { DomSanitizer } from "@angular/platform-browser";
     MatButtonModule,
     MatIconModule,
     MatSidenavModule,
+    ProfileManagementComponent,
+    TutorialComponent,
   ],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
@@ -80,10 +84,6 @@ export class AppComponent implements OnInit {
         }
       }
     });
-  }
-
-  public logOut() {
-    signOut(this.auth);
   }
 
   protected readonly user = user;
