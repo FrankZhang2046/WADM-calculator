@@ -38,6 +38,19 @@
           Redirect Now
         </button>
       </div>
+      <div
+        *ngIf="
+          authMessage.status === 'success' &&
+          authMessage.message === 'verification sent'
+        "
+      >
+        Successfully logged in. Please check your email for a verification link,
+        this message will disappear in
+        {{ remainingTime }} seconds.
+        <button mat-flat-button color="primary" (click)="navigateMethod()">
+          Redirect Now
+        </button>
+      </div>
     </div>
   </div>
   <div
