@@ -58,6 +58,7 @@ export class AppComponent implements OnInit {
   public currentUserVal!: User | null;
   @Select((state: AppReduxStateModel) => state.application.appState)
   applicationState$!: Observable<"tutorial" | "work" | null>;
+  public appStateVal!: "tutorial" | "work" | null;
 
   constructor(
     private router: Router,
@@ -79,6 +80,9 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.applicationState$.subscribe(
+      (appState) => (this.appStateVal = appState)
+    );
     onAuthStateChanged(this.auth, (user) => {
       this.currentUserVal = user;
       this.store.dispatch(new AuthActions.RegisterCurrentUser(user));
@@ -97,5 +101,13 @@ export class AppComponent implements OnInit {
     this.store.dispatch(
       new ApplicationActions.UpdateApplicationState("tutorial")
     );
+  }
+
+  public toggleProfileDrawer(profileManagementDrawer: MatDrawer): void {
+    console.log(profileManagementDrawer);
+    profileManagementDrawer.toggle();
+    if (this.appStateVal !== "tutorial") {
+      profileManagementDrawer.close();
+    }
   }
 }
