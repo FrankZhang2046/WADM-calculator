@@ -12,7 +12,7 @@ import {
 import { MatDialogRef } from "@angular/material/dialog";
 import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { AppStateModel } from "../../../stores/states/app-state.state";
+import { AppStateModel } from "../../../models/app-state.model";
 import { User } from "@angular/fire/auth";
 import { AuthService } from "../../../services/auth.service";
 

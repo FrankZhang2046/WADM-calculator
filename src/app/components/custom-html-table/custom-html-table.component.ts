@@ -40,7 +40,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { Router } from "@angular/router";
 import { SaveTableDataComponent } from "../modals/save-table-data/save-table-data.component";
 import { DetermineRetrievedTableDataUIControlPipe } from "../../pipes/determine-retrieved-table-data-ui-control.pipe";
-import { AppStateModel } from "../../stores/states/app-state.state";
+import { AppStateModel } from "../../models/app-state.model";
 import { CacheResultBeforeRedirectionComponent } from "../modals/cache-result-before-redirection/cache-result-before-redirection.component";
 
 @Component({

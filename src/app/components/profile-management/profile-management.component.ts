@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { Select } from "@ngxs/store";
-import { AppStateModel } from "../../stores/states/app-state.state";
+import { AppStateModel } from "../../models/app-state.model";
 import { Observable } from "rxjs";
 import { Auth, signOut, User } from "@angular/fire/auth";
 import { Router } from "@angular/router";

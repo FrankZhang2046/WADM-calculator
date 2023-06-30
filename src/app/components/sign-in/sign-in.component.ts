@@ -20,7 +20,7 @@ import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { ConfirmPasswordResetComponent } from "../modals/confirm-password-reset/confirm-password-reset.component";
-import { AppStateModel } from "../../stores/states/app-state.state";
+import { AppStateModel } from "src/app/models/app-state.model";
 import { DisplayPasswordResetModalPipe } from "../../pipes/display-password-reset-modal.pipe";
 
 @Component({
