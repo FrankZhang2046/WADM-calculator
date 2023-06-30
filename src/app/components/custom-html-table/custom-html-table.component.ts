@@ -41,6 +41,7 @@ import { Router } from "@angular/router";
 import { SaveTableDataComponent } from "../modals/save-table-data/save-table-data.component";
 import { DetermineRetrievedTableDataUIControlPipe } from "../../pipes/determine-retrieved-table-data-ui-control.pipe";
 import { AppStateModel } from "../../stores/states/app-state.state";
+import { CacheResultBeforeRedirectionComponent } from "../modals/cache-result-before-redirection/cache-result-before-redirection.component";
 
 @Component({
   selector: "app-custom-html-table",
@@ -519,8 +520,13 @@ export class CustomHtmlTableComponent implements OnInit {
     this.currentUser$.subscribe((user) => (this.currentUserVal = user));
     this.lastCalculatedTableData$.subscribe((tableData: TableData | null) => {
       // * when user decided to load a saved table data
-      if (tableData && Object.keys(tableData).length > 0) {
+      if (
+        !this.displayResults &&
+        tableData &&
+        Object.keys(tableData).length > 0
+      ) {
         this.hydrateUIFromCachedTableData(tableData);
+        this.store.dispatch(new TableActions.FlushCalculatedTableData());
       }
     });
     this.retrievedTableData$.subscribe((tableData: TableData | null) => {
@@ -708,10 +714,6 @@ export class CustomHtmlTableComponent implements OnInit {
     this.chartWidth = (tableWidth - 48).toString() + "px";
     this.findBestOption();
     this.compileChartData();
-    // * if the user is not logged in, cache the table data for later use
-    if (!this.currentUserVal) {
-      this.cacheLatestCalculatedTableData();
-    }
   }
 
   public dismissDisplayMessage(time: number) {
@@ -877,8 +879,16 @@ export class CustomHtmlTableComponent implements OnInit {
     */
   public saveTable(): void {
     if (!this.currentUserVal) {
-      // todo need to display a message assuring the user their work has been saved
-      this.router.navigate(["/log-in"]);
+      // * if the user is not logged in, cache the table data for later use
+      this.matDialog
+        .open(CacheResultBeforeRedirectionComponent)
+        .afterClosed()
+        .subscribe((value) => {
+          if (value) {
+            this.cacheLatestCalculatedTableData();
+            this.router.navigate(["/log-in"]);
+          }
+        });
     } else {
       // todo open up a new modal asking user to enter table name and notes (optional)
       this.matDialog.open(SaveTableDataComponent, {
