@@ -519,8 +519,13 @@ export class CustomHtmlTableComponent implements OnInit {
     this.currentUser$.subscribe((user) => (this.currentUserVal = user));
     this.lastCalculatedTableData$.subscribe((tableData: TableData | null) => {
       // * when user decided to load a saved table data
-      if (tableData && Object.keys(tableData).length > 0) {
+      if (
+        !this.displayResults &&
+        tableData &&
+        Object.keys(tableData).length > 0
+      ) {
         this.hydrateUIFromCachedTableData(tableData);
+        this.store.dispatch(new TableActions.FlushCalculatedTableData());
       }
     });
     this.retrievedTableData$.subscribe((tableData: TableData | null) => {
@@ -708,10 +713,6 @@ export class CustomHtmlTableComponent implements OnInit {
     this.chartWidth = (tableWidth - 48).toString() + "px";
     this.findBestOption();
     this.compileChartData();
-    // * if the user is not logged in, cache the table data for later use
-    if (!this.currentUserVal) {
-      this.cacheLatestCalculatedTableData();
-    }
   }
 
   public dismissDisplayMessage(time: number) {
@@ -877,6 +878,8 @@ export class CustomHtmlTableComponent implements OnInit {
     */
   public saveTable(): void {
     if (!this.currentUserVal) {
+      // * if the user is not logged in, cache the table data for later use
+      this.cacheLatestCalculatedTableData();
       // todo need to display a message assuring the user their work has been saved
       this.router.navigate(["/log-in"]);
     } else {
