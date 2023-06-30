@@ -42,6 +42,7 @@ import { SaveTableDataComponent } from "../modals/save-table-data/save-table-dat
 import { DetermineRetrievedTableDataUIControlPipe } from "../../pipes/determine-retrieved-table-data-ui-control.pipe";
 import { AppReduxStateModel } from "../../models/app-redux-state.model";
 import { CacheResultBeforeRedirectionComponent } from "../modals/cache-result-before-redirection/cache-result-before-redirection.component";
+import { VideoTutorialComponent } from "../modals/video-tutorial/video-tutorial.component";
 
 @Component({
   selector: "app-custom-html-table",

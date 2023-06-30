@@ -1,6 +1,4 @@
 import { MatMenuModule } from "@angular/material/menu";
-import { TableStateModel } from "./stores/states/table.state";
-import { AuthStateModel } from "./stores/states/auth.state";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router, RouterOutlet } from "@angular/router";
@@ -31,6 +29,8 @@ import {
   ApplicationStateModel,
 } from "./stores/states/app.state";
 import { AppReduxStateModel } from "./models/app-redux-state.model";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { VideoTutorialComponent } from "./components/modals/video-tutorial/video-tutorial.component";
 
 @Component({
   selector: "app-root",
@@ -48,6 +48,7 @@ import { AppReduxStateModel } from "./models/app-redux-state.model";
     MatSidenavModule,
     ProfileManagementComponent,
     TutorialComponent,
+    MatDialogModule,
   ],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
@@ -65,7 +66,8 @@ export class AppComponent implements OnInit {
     private auth: Auth,
     private store: Store,
     private iconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private matDialog: MatDialog
   ) {
     this.iconRegistry.addSvgIcon(
       "google-icon",
@@ -98,9 +100,10 @@ export class AppComponent implements OnInit {
   protected readonly user = user;
 
   public goToTutorial() {
-    this.store.dispatch(
-      new ApplicationActions.UpdateApplicationState("tutorial")
-    );
+    this.matDialog.open(VideoTutorialComponent);
+    // this.store.dispatch(
+    //   new ApplicationActions.UpdateApplicationState("tutorial")
+    // );
   }
 
   public toggleProfileDrawer(profileManagementDrawer: MatDrawer): void {
