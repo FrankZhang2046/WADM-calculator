@@ -41,6 +41,7 @@ import { Router } from "@angular/router";
 import { SaveTableDataComponent } from "../modals/save-table-data/save-table-data.component";
 import { DetermineRetrievedTableDataUIControlPipe } from "../../pipes/determine-retrieved-table-data-ui-control.pipe";
 import { AppStateModel } from "../../stores/states/app-state.state";
+import { CacheResultBeforeRedirectionComponent } from "../modals/cache-result-before-redirection/cache-result-before-redirection.component";
 
 @Component({
   selector: "app-custom-html-table",
@@ -879,9 +880,15 @@ export class CustomHtmlTableComponent implements OnInit {
   public saveTable(): void {
     if (!this.currentUserVal) {
       // * if the user is not logged in, cache the table data for later use
-      this.cacheLatestCalculatedTableData();
-      // todo need to display a message assuring the user their work has been saved
-      this.router.navigate(["/log-in"]);
+      this.matDialog
+        .open(CacheResultBeforeRedirectionComponent)
+        .afterClosed()
+        .subscribe((value) => {
+          if (value) {
+            this.cacheLatestCalculatedTableData();
+            this.router.navigate(["/log-in"]);
+          }
+        });
     } else {
       // todo open up a new modal asking user to enter table name and notes (optional)
       this.matDialog.open(SaveTableDataComponent, {

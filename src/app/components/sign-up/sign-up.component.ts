@@ -18,7 +18,7 @@ import {
 } from "@angular/forms";
 import { AuthService } from "src/app/services/auth.service";
 import { MatIconModule } from "@angular/material/icon";
-import { AuthStatus } from "../modals/auth-status.model";
+import { AuthStatus } from "../../models/auth-status.model";
 import { environment } from "../../../environments/environment";
 
 interface SignUpFormData {

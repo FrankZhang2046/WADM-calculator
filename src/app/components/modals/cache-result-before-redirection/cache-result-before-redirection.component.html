@@ -1,0 +1,24 @@
+<div class="p-4">
+  <p matDialogContent>
+    Please sign in to save your work. You'll be redirected to the login page.
+    <br />
+    Don't worry, your work will still be here after you've signed in.
+  </p>
+  <div class="flex w-full justify-end">
+    <button
+      matTooltip="You work will be lost"
+      mat-flat-button
+      (click)="closeDialog(false)"
+    >
+      Cancel
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      class="ml-4"
+      (click)="closeDialog(true)"
+    >
+      Confirm
+    </button>
+  </div>
+</div>
