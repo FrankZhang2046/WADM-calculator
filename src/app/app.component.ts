@@ -1,6 +1,4 @@
 import { MatMenuModule } from "@angular/material/menu";
-import { TableStateModel } from "./stores/states/table.state";
-import { AuthStateModel } from "./stores/states/auth.state";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router, RouterOutlet } from "@angular/router";
@@ -25,6 +23,14 @@ import { environment } from "../environments/environment";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ProfileManagementComponent } from "./components/profile-management/profile-management.component";
 import { TutorialComponent } from "./components/tutorial/tutorial.component";
+import { ApplicationActions } from "./stores/actions/app.action";
+import {
+  ApplicationState,
+  ApplicationStateModel,
+} from "./stores/states/app.state";
+import { AppReduxStateModel } from "./models/app-redux-state.model";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { VideoTutorialComponent } from "./components/modals/video-tutorial/video-tutorial.component";
 
 @Component({
   selector: "app-root",
@@ -42,24 +48,26 @@ import { TutorialComponent } from "./components/tutorial/tutorial.component";
     MatSidenavModule,
     ProfileManagementComponent,
     TutorialComponent,
+    MatDialogModule,
   ],
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements OnInit {
-  @Select(
-    (state: { user: AuthStateModel; table: TableStateModel }) =>
-      state.user.currentUser
-  )
+  @Select((state: AppReduxStateModel) => state.user.currentUser)
   public currentUser$!: Observable<User | null>;
   public currentUserVal!: User | null;
+  @Select((state: AppReduxStateModel) => state.application.appState)
+  applicationState$!: Observable<"tutorial" | "work" | null>;
+  public appStateVal!: "tutorial" | "work" | null;
 
   constructor(
     private router: Router,
     private auth: Auth,
     private store: Store,
     private iconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private matDialog: MatDialog
   ) {
     this.iconRegistry.addSvgIcon(
       "google-icon",
@@ -74,6 +82,9 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.applicationState$.subscribe(
+      (appState) => (this.appStateVal = appState)
+    );
     onAuthStateChanged(this.auth, (user) => {
       this.currentUserVal = user;
       this.store.dispatch(new AuthActions.RegisterCurrentUser(user));
@@ -87,4 +98,19 @@ export class AppComponent implements OnInit {
   }
 
   protected readonly user = user;
+
+  public goToTutorial() {
+    this.matDialog.open(VideoTutorialComponent);
+    // this.store.dispatch(
+    //   new ApplicationActions.UpdateApplicationState("tutorial")
+    // );
+  }
+
+  public toggleProfileDrawer(profileManagementDrawer: MatDrawer): void {
+    console.log(profileManagementDrawer);
+    profileManagementDrawer.toggle();
+    if (this.appStateVal !== "tutorial") {
+      profileManagementDrawer.close();
+    }
+  }
 }

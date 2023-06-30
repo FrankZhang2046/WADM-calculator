@@ -1,1 +1,6 @@
-<p>tutorial works!</p>
+<div class="p-4 w-80">
+  <div *ngFor="let step of tutorialText">
+    <h3>{{ step.header }}</h3>
+    <p class="text-sm">{{ step.text }}</p>
+  </div>
+</div>

@@ -20,7 +20,7 @@ import { Select } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { ConfirmPasswordResetComponent } from "../modals/confirm-password-reset/confirm-password-reset.component";
-import { AppStateModel } from "../../stores/states/app-state.state";
+import { AppReduxStateModel } from "src/app/models/app-redux-state.model";
 import { DisplayPasswordResetModalPipe } from "../../pipes/display-password-reset-modal.pipe";
 
 @Component({
@@ -39,7 +39,7 @@ import { DisplayPasswordResetModalPipe } from "../../pipes/display-password-rese
 })
 export class SignInComponent implements OnInit {
   @Output() signInStatus = new EventEmitter();
-  @Select((state: AppStateModel) => state.user.currentUser)
+  @Select((state: AppReduxStateModel) => state.user.currentUser)
   currentUser$!: Observable<User | null>;
   public signInForm!: FormGroup<{
     email: FormControl<string | null>;

@@ -16,13 +16,16 @@ import { TableState } from "./stores/states/table.state";
 import { AuthState } from "./stores/states/auth.state";
 import { environment } from "../environments/environment";
 import { HttpClientModule, provideHttpClient } from "@angular/common/http";
+import { ApplicationState } from "./stores/states/app.state";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(),
-    importProvidersFrom(NgxsModule.forRoot([TableState, AuthState])),
+    importProvidersFrom(
+      NgxsModule.forRoot([TableState, AuthState, ApplicationState])
+    ),
     importProvidersFrom(NgxsReduxDevtoolsPluginModule.forRoot()),
     importProvidersFrom(
       provideFirebaseApp(() => initializeApp(firebaseConfig))

@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { Select } from "@ngxs/store";
-import { AppStateModel } from "../../stores/states/app-state.state";
+import { AppReduxStateModel } from "../../models/app-redux-state.model";
 import { Observable } from "rxjs";
 import { Auth, signOut, User } from "@angular/fire/auth";
 import { Router } from "@angular/router";
@@ -18,7 +18,7 @@ import { MatDrawer } from "@angular/material/sidenav";
   styleUrls: ["./profile-management.component.scss"],
 })
 export class ProfileManagementComponent {
-  @Select((state: AppStateModel) => state.user.currentUser)
+  @Select((state: AppReduxStateModel) => state.user.currentUser)
   currentUser$!: Observable<User | null>;
   public currentUserVal!: User | null;
   @Input() public profileDrawerRef!: MatDrawer;
