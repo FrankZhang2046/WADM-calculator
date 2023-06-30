@@ -40,7 +40,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { Router } from "@angular/router";
 import { SaveTableDataComponent } from "../modals/save-table-data/save-table-data.component";
 import { DetermineRetrievedTableDataUIControlPipe } from "../../pipes/determine-retrieved-table-data-ui-control.pipe";
-import { AppStateModel } from "../../models/app-state.model";
+import { AppReduxStateModel } from "../../models/app-redux-state.model";
 import { CacheResultBeforeRedirectionComponent } from "../modals/cache-result-before-redirection/cache-result-before-redirection.component";
 
 @Component({
@@ -135,7 +135,7 @@ export class CustomHtmlTableComponent implements OnInit {
       state.table.retrievedTableData
   )
   public retrievedTableData$!: Observable<TableData | null>;
-  @Select((state: AppStateModel) => state.table.lastCalculatedTableData)
+  @Select((state: AppReduxStateModel) => state.table.lastCalculatedTableData)
   public lastCalculatedTableData$!: Observable<TableData | null>;
 
   constructor(

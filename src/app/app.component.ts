@@ -25,6 +25,12 @@ import { environment } from "../environments/environment";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ProfileManagementComponent } from "./components/profile-management/profile-management.component";
 import { TutorialComponent } from "./components/tutorial/tutorial.component";
+import { ApplicationActions } from "./stores/actions/app.action";
+import {
+  ApplicationState,
+  ApplicationStateModel,
+} from "./stores/states/app.state";
+import { AppReduxStateModel } from "./models/app-redux-state.model";
 
 @Component({
   selector: "app-root",
@@ -47,12 +53,11 @@ import { TutorialComponent } from "./components/tutorial/tutorial.component";
   styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements OnInit {
-  @Select(
-    (state: { user: AuthStateModel; table: TableStateModel }) =>
-      state.user.currentUser
-  )
+  @Select((state: AppReduxStateModel) => state.user.currentUser)
   public currentUser$!: Observable<User | null>;
   public currentUserVal!: User | null;
+  @Select((state: AppReduxStateModel) => state.application.appState)
+  applicationState$!: Observable<"tutorial" | "work" | null>;
 
   constructor(
     private router: Router,
@@ -87,4 +92,10 @@ export class AppComponent implements OnInit {
   }
 
   protected readonly user = user;
+
+  public goToTutorial() {
+    this.store.dispatch(
+      new ApplicationActions.UpdateApplicationState("tutorial")
+    );
+  }
 }

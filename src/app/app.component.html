@@ -53,6 +53,13 @@
         <mat-icon>stacked_bar_chart</mat-icon>
         <span class="ml-2">View Past Works</span>
       </div>
+      <div
+        (click)="goToTutorial()"
+        class="flex items-center p-4 hover:cursor-pointer nav-menu-item"
+      >
+        <mat-icon>school</mat-icon>
+        <span class="ml-2">View Tutorial</span>
+      </div>
     </mat-drawer>
 
     <mat-drawer
@@ -61,11 +68,15 @@
       position="end"
       class="profile-drawer bg-[#166d99]"
     >
-      <!--      <app-profile-management-->
-      <!--        [profileDrawerRef]="profileDrawer"-->
-      <!--        [navDrawerRef]="drawer"-->
-      <!--      ></app-profile-management>-->
-      <app-tutorial class="w-40"></app-tutorial>
+      <app-profile-management
+        *ngIf="!((applicationState$ | async) === 'tutorial')"
+        [profileDrawerRef]="profileDrawer"
+        [navDrawerRef]="drawer"
+      ></app-profile-management>
+      <app-tutorial
+        *ngIf="(applicationState$ | async) === 'tutorial'"
+        class="w-40"
+      ></app-tutorial>
     </mat-drawer>
   </mat-drawer-container>
 
