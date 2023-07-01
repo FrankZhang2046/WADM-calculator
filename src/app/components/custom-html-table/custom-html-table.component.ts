@@ -43,12 +43,14 @@ import { DetermineRetrievedTableDataUIControlPipe } from "../../pipes/determine-
 import { AppReduxStateModel } from "../../models/app-redux-state.model";
 import { CacheResultBeforeRedirectionComponent } from "../modals/cache-result-before-redirection/cache-result-before-redirection.component";
 import { VideoTutorialComponent } from "../modals/video-tutorial/video-tutorial.component";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-custom-html-table",
   standalone: true,
   imports: [
     MatTooltipModule,
+    MatSnackBarModule,
     NgChartsModule,
     AssertArrayEqualityPipe,
     MatDialogModule,
@@ -143,7 +145,8 @@ export class CustomHtmlTableComponent implements OnInit {
     public matDialog: MatDialog,
     private store: Store,
     private firestore: Firestore,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   public submitForm() {
@@ -518,6 +521,14 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.snackBar
+      .open("We've prepared a video tutorial.", "View Tutorial", {
+        horizontalPosition: "center",
+        verticalPosition: "top",
+        duration: 8000,
+      })
+      .onAction()
+      .subscribe(() => this.matDialog.open(VideoTutorialComponent));
     this.currentUser$.subscribe((user) => (this.currentUserVal = user));
     this.lastCalculatedTableData$.subscribe((tableData: TableData | null) => {
       // * when user decided to load a saved table data

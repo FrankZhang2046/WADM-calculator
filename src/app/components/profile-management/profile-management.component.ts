@@ -34,6 +34,7 @@ export class ProfileManagementComponent {
     signOut(this.auth).then(() => {
       this.profileDrawerRef.close();
       this.navDrawerRef.close();
+      this.redirectMethod("/");
     });
   }
 

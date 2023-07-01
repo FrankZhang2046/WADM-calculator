@@ -23,14 +23,10 @@ import { environment } from "../environments/environment";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ProfileManagementComponent } from "./components/profile-management/profile-management.component";
 import { TutorialComponent } from "./components/tutorial/tutorial.component";
-import { ApplicationActions } from "./stores/actions/app.action";
-import {
-  ApplicationState,
-  ApplicationStateModel,
-} from "./stores/states/app.state";
 import { AppReduxStateModel } from "./models/app-redux-state.model";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { VideoTutorialComponent } from "./components/modals/video-tutorial/video-tutorial.component";
+import { collection, doc, Firestore, getDoc } from "@angular/fire/firestore";
 
 @Component({
   selector: "app-root",
@@ -62,6 +58,7 @@ export class AppComponent implements OnInit {
   public appStateVal!: "tutorial" | "work" | null;
 
   constructor(
+    private firestore: Firestore,
     private router: Router,
     private auth: Auth,
     private store: Store,
@@ -90,9 +87,13 @@ export class AppComponent implements OnInit {
       this.store.dispatch(new AuthActions.RegisterCurrentUser(user));
       // todo clean up this code, redirection should not be handled here
       if (user) {
-        if (!this.router.url.includes("works")) {
-          // this.redirectMethod("/");
-        }
+        const userCustomization = doc(
+          this.firestore,
+          `customization/${user.uid}`
+        );
+        getDoc(userCustomization)
+          .then((doc) => console.log(`customization: `, doc.data()))
+          .catch((error) => console.log(`customization error: `, error));
       }
     });
   }
