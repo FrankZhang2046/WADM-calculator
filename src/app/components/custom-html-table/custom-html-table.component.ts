@@ -42,6 +42,7 @@ import {
 import {VideoTutorialComponent} from "../modals/video-tutorial/video-tutorial.component";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {ApplicationStateModel} from "../../stores/states/app.state";
+import {TableDataService} from "../../services/table-data.service";
 
 @Component({
   selector: "app-custom-html-table",
@@ -151,7 +152,8 @@ export class CustomHtmlTableComponent implements OnInit {
     private store: Store,
     private firestore: Firestore,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private tableDataService: TableDataService
   ) {
   }
 
@@ -527,6 +529,13 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.tableDataService.clearTableSubject.subscribe(
+      clearTableCommand => {
+        if (clearTableCommand) {
+          this.restartTableState();
+        }
+      }
+    )
     this.appState$.subscribe((appState) => {
       this.appStateVal = appState;
       if (appState.dismissTutorialPermanently || appState.dismissTutorialForSession) {
@@ -951,5 +960,9 @@ export class CustomHtmlTableComponent implements OnInit {
     this.signalRowColumnForDeletion();
     this.rowColumnDeletionDelegation();
     event.stopPropagation();
+  }
+
+  public sendClearTableCommand() {
+    this.tableDataService.clearTable();
   }
 }
