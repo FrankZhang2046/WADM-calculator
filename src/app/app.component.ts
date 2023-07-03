@@ -1,13 +1,13 @@
-import { MatMenuModule } from "@angular/material/menu";
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { Router, RouterOutlet } from "@angular/router";
-import { DraggableTableComponent } from "./components/draggable-table/draggable-table.component";
-import { CustomHtmlTableComponent } from "./components/custom-html-table/custom-html-table.component";
-import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule, MatIconRegistry } from "@angular/material/icon";
+import {MatMenuModule} from "@angular/material/menu";
+import {Component, OnInit, ViewChild} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {Router, RouterOutlet} from "@angular/router";
+import {DraggableTableComponent} from "./components/draggable-table/draggable-table.component";
+import {CustomHtmlTableComponent} from "./components/custom-html-table/custom-html-table.component";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatButtonModule} from "@angular/material/button";
+import {MatIconModule, MatIconRegistry} from "@angular/material/icon";
 import {
   Auth,
   User,
@@ -15,18 +15,18 @@ import {
   signOut,
   user,
 } from "@angular/fire/auth";
-import { Select, Store } from "@ngxs/store";
-import { AuthActions } from "./stores/actions/user.action";
-import { Observable } from "rxjs";
-import { MatDrawer, MatSidenavModule } from "@angular/material/sidenav";
-import { environment } from "../environments/environment";
-import { DomSanitizer } from "@angular/platform-browser";
-import { ProfileManagementComponent } from "./components/profile-management/profile-management.component";
-import { TutorialComponent } from "./components/tutorial/tutorial.component";
-import { AppReduxStateModel } from "./models/app-redux-state.model";
-import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { VideoTutorialComponent } from "./components/modals/video-tutorial/video-tutorial.component";
-import { collection, doc, Firestore, getDoc } from "@angular/fire/firestore";
+import {Select, Store} from "@ngxs/store";
+import {AuthActions} from "./stores/actions/user.action";
+import {Observable} from "rxjs";
+import {MatDrawer, MatSidenavModule} from "@angular/material/sidenav";
+import {environment} from "../environments/environment";
+import {DomSanitizer} from "@angular/platform-browser";
+import {ProfileManagementComponent} from "./components/profile-management/profile-management.component";
+import {TutorialComponent} from "./components/tutorial/tutorial.component";
+import {AppReduxStateModel} from "./models/app-redux-state.model";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import {VideoTutorialComponent} from "./components/modals/video-tutorial/video-tutorial.component";
+import {collection, doc, Firestore, getDoc} from "@angular/fire/firestore";
 
 @Component({
   selector: "app-root",
@@ -92,7 +92,15 @@ export class AppComponent implements OnInit {
           `customization/${user.uid}`
         );
         getDoc(userCustomization)
-          .then((doc) => console.log(`customization: `, doc.data()))
+          .then((doc) => {
+            const configObject = doc.data();
+            if (configObject?.['displayTutorial']) {
+              // todo need to cache this piece of state in ngxs
+              // this.store.dispatch(
+              //   new ApplicationActions.UpdateApplicationState("tutorial")
+              // );
+            }
+          })
           .catch((error) => console.log(`customization error: `, error));
       }
     });
