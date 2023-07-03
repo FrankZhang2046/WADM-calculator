@@ -4,16 +4,16 @@ import {ApplicationActions} from "../actions/app.action";
 
 export interface ApplicationStateModel {
   appState: "tutorial" | "work" | null;
-  dismissTutorialPermanently: boolean;
-  dismissTutorialForSession: boolean;
+  dismissTutorialPermanently: boolean | null;
+  dismissTutorialForSession: boolean | null;
 }
 
 @State<ApplicationStateModel>({
   name: "application",
   defaults: {
     appState: null,
-    dismissTutorialForSession: false,
-    dismissTutorialPermanently: false,
+    dismissTutorialForSession: null,
+    dismissTutorialPermanently: null,
   },
 })
 @Injectable()

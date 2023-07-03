@@ -28,6 +28,7 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {VideoTutorialComponent} from "./components/modals/video-tutorial/video-tutorial.component";
 import {collection, doc, Firestore, getDoc} from "@angular/fire/firestore";
 import {ApplicationActions} from "./stores/actions/app.action";
+import {ApplicationState} from "./stores/states/app.state";
 
 @Component({
   selector: "app-root",
@@ -101,9 +102,21 @@ export class AppComponent implements OnInit {
               this.store.dispatch(
                 new ApplicationActions.UpdateTutorialDismissedPermanently(configObject?.['dismissTutorialPermanently'])
               );
+            } else {
+              this.store.dispatch(
+                [
+                  new ApplicationActions.UpdateTutorialDismissedPermanently(false),
+                  new ApplicationActions.UpdateTutorialDismissedForSession(false)
+                ]
+              );
             }
           })
           .catch((error) => console.log(`customization error: `, error));
+      } else if (user === null) {
+        this.store.dispatch([
+          new ApplicationActions.UpdateTutorialDismissedForSession(false),
+          new ApplicationActions.UpdateTutorialDismissedPermanently(false),
+        ]);
       }
     });
   }

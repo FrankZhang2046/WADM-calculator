@@ -14,6 +14,7 @@ import {Select, Store} from "@ngxs/store";
 import {Observable} from "rxjs";
 import {User} from "@angular/fire/auth";
 import {ApplicationActions} from "../../../stores/actions/app.action";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @Component({
   selector: "app-video-tutorial",
