@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { MatButtonModule } from "@angular/material/button";
-import { MatDialogRef } from "@angular/material/dialog";
+import {Component} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {MatButtonModule} from "@angular/material/button";
+import {MatDialogRef} from "@angular/material/dialog";
 import {
   doc,
   Firestore,
@@ -9,10 +9,10 @@ import {
   setDoc,
   updateDoc,
 } from "@angular/fire/firestore";
-import { AppReduxStateModel } from "../../../models/app-redux-state.model";
-import { Select } from "@ngxs/store";
-import { Observable } from "rxjs";
-import { User } from "@angular/fire/auth";
+import {AppReduxStateModel} from "../../../models/app-redux-state.model";
+import {Select} from "@ngxs/store";
+import {Observable} from "rxjs";
+import {User} from "@angular/fire/auth";
 
 @Component({
   selector: "app-video-tutorial",
@@ -44,16 +44,17 @@ export class VideoTutorialComponent {
       this.firestore,
       `customization/${this.currentUserVal?.uid}`
     );
-    getDoc(userCustomization).then((doc) => {
-      if (doc.exists()) {
-        updateDoc(userCustomization, { masterRace: "asian" })
-          .then(() => console.log(`you won't show the tutorial again.`))
-          .catch((error) => console.log(`customization error: `, error));
-      } else {
-        setDoc(userCustomization, { displayTutorial: false })
-          .then(() => console.log(`you won't show the tutorial again.`))
-          .catch((error) => console.log(`customization error: `, error));
-      }
-    });
+    getDoc(userCustomization)
+      .then((doc) => {
+        if (doc.exists()) {
+          return updateDoc(userCustomization, {displayTutorial: false})
+        } else {
+          return setDoc(userCustomization, {displayTutorial: false})
+        }
+      }).then(res => {
+      console.log(`customization updated, will not show tut again`, res)
+      this.closeDialog()
+    })
+      .catch(error => console.log(`customization error: `, error));
   }
 }
