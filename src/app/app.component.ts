@@ -27,6 +27,7 @@ import {AppReduxStateModel} from "./models/app-redux-state.model";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {VideoTutorialComponent} from "./components/modals/video-tutorial/video-tutorial.component";
 import {collection, doc, Firestore, getDoc} from "@angular/fire/firestore";
+import {ApplicationActions} from "./stores/actions/app.action";
 
 @Component({
   selector: "app-root",
@@ -94,11 +95,12 @@ export class AppComponent implements OnInit {
         getDoc(userCustomization)
           .then((doc) => {
             const configObject = doc.data();
-            if (configObject?.['displayTutorial']) {
+            if (configObject?.['dismissTutorialPermanently']) {
+              console.log(`configObject: `, configObject)
               // todo need to cache this piece of state in ngxs
-              // this.store.dispatch(
-              //   new ApplicationActions.UpdateApplicationState("tutorial")
-              // );
+              this.store.dispatch(
+                new ApplicationActions.UpdateTutorialDismissedPermanently(configObject?.['dismissTutorialPermanently'])
+              );
             }
           })
           .catch((error) => console.log(`customization error: `, error));

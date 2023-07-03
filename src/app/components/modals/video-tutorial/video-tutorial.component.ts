@@ -10,9 +10,10 @@ import {
   updateDoc,
 } from "@angular/fire/firestore";
 import {AppReduxStateModel} from "../../../models/app-redux-state.model";
-import {Select} from "@ngxs/store";
+import {Select, Store} from "@ngxs/store";
 import {Observable} from "rxjs";
 import {User} from "@angular/fire/auth";
+import {ApplicationActions} from "../../../stores/actions/app.action";
 
 @Component({
   selector: "app-video-tutorial",
@@ -28,7 +29,8 @@ export class VideoTutorialComponent {
 
   constructor(
     private matDialogRef: MatDialogRef<VideoTutorialComponent>,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private store: Store
   ) {
     this.currentUser$.subscribe((user) => {
       this.currentUserVal = user;
@@ -47,14 +49,19 @@ export class VideoTutorialComponent {
     getDoc(userCustomization)
       .then((doc) => {
         if (doc.exists()) {
-          return updateDoc(userCustomization, {displayTutorial: false})
+          return updateDoc(userCustomization, {dismissTutorialPermanently: true})
         } else {
-          return setDoc(userCustomization, {displayTutorial: false})
+          return setDoc(userCustomization, {dismissTutorialPermanently: true})
         }
       }).then(res => {
       console.log(`customization updated, will not show tut again`, res)
       this.closeDialog()
     })
       .catch(error => console.log(`customization error: `, error));
+  }
+
+  public dismissForSession() {
+    this.store.dispatch(new ApplicationActions.UpdateTutorialDismissedForSession(true));
+    this.closeDialog();
   }
 }
