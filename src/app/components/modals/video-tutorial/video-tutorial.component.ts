@@ -46,7 +46,7 @@ export class VideoTutorialComponent {
     );
     getDoc(userCustomization).then((doc) => {
       if (doc.exists()) {
-        updateDoc(userCustomization, { displayTutorial: false })
+        updateDoc(userCustomization, { masterRace: "asian" })
           .then(() => console.log(`you won't show the tutorial again.`))
           .catch((error) => console.log(`customization error: `, error));
       } else {
