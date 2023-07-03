@@ -145,7 +145,6 @@ export class CustomHtmlTableComponent implements OnInit {
   public retrievedTableData$!: Observable<TableData | null>;
   @Select((state: AppReduxStateModel) => state.table.lastCalculatedTableData)
   public lastCalculatedTableData$!: Observable<TableData | null>;
-  public snackBarRef!: Subscription;
 
   constructor(
     public matDialog: MatDialog,
@@ -530,15 +529,13 @@ export class CustomHtmlTableComponent implements OnInit {
   public ngOnInit(): void {
     this.appState$.subscribe((appState) => {
       this.appStateVal = appState;
-      console.log(`appStateVal: `, this.appStateVal);
-      if (!appState.dismissTutorialPermanently) {
-        if (!appState.dismissTutorialForSession) {
-          this.displayTutorial();
-        } else {
-          this.snackBarRef?.unsubscribe();
-        }
+      if (appState.dismissTutorialPermanently || appState.dismissTutorialForSession) {
+        return;
       } else {
-        this.snackBarRef?.unsubscribe();
+        if (appState.dismissTutorialPermanently === false && appState.dismissTutorialForSession === false) {
+          // * user is anon
+          this.displayTutorial();
+        }
       }
     })
     this.currentUser$.subscribe((user) => {
@@ -569,16 +566,14 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   private displayTutorial() {
-    if (!this.snackBarRef) {
-      this.snackBarRef = this.snackBar
-        .open("We've prepared a video tutorial.", "View Tutorial", {
-          horizontalPosition: "center",
-          verticalPosition: "top",
-          duration: 5000,
-        })
-        .onAction()
-        .subscribe(() => this.matDialog.open(VideoTutorialComponent));
-    }
+    this.snackBar
+      .open("We've prepared a video tutorial.", "View Tutorial", {
+        horizontalPosition: "center",
+        verticalPosition: "top",
+        duration: 5000,
+      })
+      .onAction()
+      .subscribe(() => this.matDialog.open(VideoTutorialComponent));
   }
 
   private updateTableHeader(value: string | null) {
