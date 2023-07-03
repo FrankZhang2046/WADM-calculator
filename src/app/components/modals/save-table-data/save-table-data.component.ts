@@ -1,7 +1,7 @@
-import { TableActions } from "./../../../stores/actions/table.action";
-import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
-import { Component, Inject, OnInit } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import {TableActions} from "./../../../stores/actions/table.action";
+import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import {Component, Inject, OnInit} from "@angular/core";
+import {CommonModule} from "@angular/common";
 import {
   FormBuilder,
   FormControl,
@@ -9,16 +9,16 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { MatButtonModule } from "@angular/material/button";
-import { Store } from "@ngxs/store";
-import { Subscription, take, timer } from "rxjs";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Router } from "@angular/router";
+import {MatButtonModule} from "@angular/material/button";
+import {Store} from "@ngxs/store";
+import {Subscription, take, timer} from "rxjs";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {Router} from "@angular/router";
 import {
   CachedPersistedTableDocument,
   LatestTableData,
 } from "../../../models/table-row-data.model";
-import { SaveTableDataModalData } from "../../../models/modal.model";
+import {SaveTableDataModalData} from "../../../models/modal.model";
 
 @Component({
   selector: "app-save-table-data",
@@ -50,7 +50,8 @@ export class SaveTableDataComponent implements OnInit {
     private matDialogRef: MatDialogRef<SaveTableDataComponent>,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {}
+  ) {
+  }
 
   // * getter method that returns the formGroup's control
   public get form() {
@@ -100,7 +101,7 @@ export class SaveTableDataComponent implements OnInit {
     if (this.timerObservable) {
       this.timerObservable.unsubscribe();
     }
-    if (!this.data && !displaySnackbar) {
+    if (this.data.type === 'save' && !displaySnackbar) {
       this.displaySnackBar();
     }
   }

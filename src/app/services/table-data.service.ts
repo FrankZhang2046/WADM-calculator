@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import {Injectable} from "@angular/core";
 import {
   CachedPersistedTableDocument,
   PersistedTableDocument,
@@ -13,18 +13,17 @@ import {
   getDoc,
   setDoc,
 } from "@angular/fire/firestore";
-import { Select, Store } from "@ngxs/store";
-import { TableStateModel } from "../stores/states/table.state";
-import { AuthStateModel } from "../stores/states/auth.state";
-import { Observable, take } from "rxjs";
-import { User } from "@angular/fire/auth";
-import { update } from "@angular/fire/database";
+import {Store} from "@ngxs/store";
+import {Observable, Subject, take} from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class TableDataService {
-  constructor(private firestore: Firestore, private store: Store) {}
+  public clearTableSubject: Subject<boolean> = new Subject();
+
+  constructor(private firestore: Firestore, private store: Store) {
+  }
 
   /* method that writes table data to db
     @param tableData: table data to be written to db
@@ -38,13 +37,13 @@ export class TableDataService {
           this.firestore,
           `appData/tables/${user?.uid}`
         );
-        resolve(addDoc(tableCollection, { ...tableData }));
+        resolve(addDoc(tableCollection, {...tableData}));
       });
     });
   }
 
   public updateTableData(tableDataToUpdate: CachedPersistedTableDocument) {
-    const docToUpdate = { ...tableDataToUpdate };
+    const docToUpdate = {...tableDataToUpdate};
     const currentUser = this.store.select((state) => state.user.currentUser);
     return new Promise((resolve, reject) => {
       currentUser.pipe(take(1)).subscribe((user) => {
@@ -56,5 +55,12 @@ export class TableDataService {
         resolve(updateDoc(docRef, docToUpdate));
       });
     });
+  }
+
+  /*
+  emit new value from the clearTableSubject to let table component know that it should clear the table
+   */
+  public clearTable(): void {
+    this.clearTableSubject.next(true);
   }
 }
