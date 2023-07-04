@@ -8,5 +8,8 @@ service cloud.firestore {
     match /appData/tables/{uid}/{docId} {
       allow read, write: if doesUserHavePermission(uid);
     }
+    match /customization/{uid} {
+      allow read, write: if uid != "undefined" && doesUserHavePermission(uid);
+    }
   }
 }

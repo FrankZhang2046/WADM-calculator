@@ -55,7 +55,6 @@ export class VideoTutorialComponent {
           return setDoc(userCustomization, {dismissTutorialPermanently: true})
         }
       }).then(res => {
-      console.log(`customization updated, will not show tut again`, res)
       this.closeDialog()
     })
       .catch(error => console.log(`customization error: `, error));

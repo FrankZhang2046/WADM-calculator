@@ -97,7 +97,6 @@ export class AppComponent implements OnInit {
           .then((doc) => {
             const configObject = doc.data();
             if (configObject?.['dismissTutorialPermanently']) {
-              console.log(`configObject: `, configObject)
               // todo need to cache this piece of state in ngxs
               this.store.dispatch(
                 new ApplicationActions.UpdateTutorialDismissedPermanently(configObject?.['dismissTutorialPermanently'])
@@ -131,7 +130,6 @@ export class AppComponent implements OnInit {
   }
 
   public toggleProfileDrawer(profileManagementDrawer: MatDrawer): void {
-    console.log(profileManagementDrawer);
     profileManagementDrawer.toggle();
     if (this.appStateVal !== "tutorial") {
       profileManagementDrawer.close();
