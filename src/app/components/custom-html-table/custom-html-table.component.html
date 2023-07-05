@@ -1,39 +1,39 @@
 <div class="flex w-full justify-center mt-10">
   <table class="w-fit">
     <thead>
-    <tr>
-      <th colspan="2"></th>
-      <th [colSpan]="columnData.length" class="bg-green-600 text-white">
-        {{ "options" | titlecase }}
-      </th>
-    </tr>
-    <tr
-      cdkDropList
-      cdkDropListOrientation="horizontal"
-      (cdkDropListDropped)="columnDropMethod($event)"
-    >
-      <th>{{ "criteria" | titlecase }}</th>
-      <th>{{ "weight" | titlecase }}</th>
-      <ng-container
-        *ngFor="
+      <tr>
+        <th colspan="2"></th>
+        <th [colSpan]="columnData.length" class="bg-green-600 text-white">
+          {{ "options" | titlecase }}
+        </th>
+      </tr>
+      <tr
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        (cdkDropListDropped)="columnDropMethod($event)"
+      >
+        <th>{{ "criteria" | titlecase }}</th>
+        <th>{{ "weight" | titlecase }}</th>
+        <ng-container
+          *ngFor="
             let column of columnData;
             let colIdx = index;
             trackBy: trackByFn
           "
-      >
-        <th
-          [class.chosen-column-header]="
+        >
+          <th
+            [class.chosen-column-header]="
               highestResultColumnIdx.includes(colIdx)
             "
-          [ngClass]="
+            [ngClass]="
               highlightedTableElementIdx.tableElement ===
                 tableOperationConstants.columnHeader &&
               highlightedTableElementIdx.idx[0] === colIdx
                 ? 'highlight'
                 : null
             "
-          [class.to-delete]="columnToDelete === colIdx"
-          *ngIf="
+            [class.to-delete]="columnToDelete === colIdx"
+            *ngIf="
               !(
                 modifiedTableElementIdx.tableElement ===
                   tableOperationConstants.columnHeader &&
@@ -41,70 +41,71 @@
               );
               else headerRenameInputTemplate
             "
-          class="draggable-cell"
-          [cdkDragDisabled]="displayResults"
-          cdkDrag
-          (mouseleave)="clearHighlightedTableElement()"
-          (mouseover)="
+            class="draggable-cell"
+            [cdkDragDisabled]="displayResults"
+            cdkDrag
+            (mouseleave)="clearHighlightedTableElement()"
+            (mouseover)="
               highlightTableElement(tableOperationConstants.columnHeader, [
                 colIdx
               ])
             "
-          (mousedown)="$event.stopPropagation()"
-          cdkDragLockAxis="x"
-          (click)="
+            (mousedown)="$event.stopPropagation()"
+            cdkDragLockAxis="x"
+            (click)="
               modifyTableElement(tableOperationConstants.columnHeader, [colIdx])
             "
-        >
-          <div
-            *ngIf="
+          >
+            <div
+              *ngIf="
                 highlightedTableElementIdx.tableElement ===
                   tableOperationConstants.columnHeader &&
                 highlightedTableElementIdx.idx[0] === colIdx
               "
-            (click)="
+              (click)="
                 highlightTableElement(tableOperationConstants.columnHeader, [
                   colIdx
                 ]);
                 rowColumnDeleteMethod($event)
               "
-            class="hover:cursor-pointer absolute top-[48px] w-[50px] rounded-tl-lg rounded-tr-lg bg-red-500"
-          >
-            <mat-icon>delete_forever</mat-icon>
-          </div>
-          {{ column.columnName | titlecase }}
-        </th>
-      </ng-container>
-      <button
-        *ngIf="!displayResults"
-        id="add-candidate-btn"
-        class="opacity-40 hover:opacity-100 z-0"
-        mat-icon-button
-        (click)="addCandidate()"
-      >
-        <mat-icon>add</mat-icon>
-      </button>
-    </tr>
+              class="hover:cursor-pointer absolute top-[48px] w-[50px] rounded-tl-lg rounded-tr-lg bg-red-500"
+            >
+              <mat-icon>delete_forever</mat-icon>
+            </div>
+            {{ column.columnName | titlecase }}
+          </th>
+        </ng-container>
+        <button
+          *ngIf="!displayResults"
+          id="add-candidate-btn"
+          class="opacity-40 hover:opacity-100 z-0"
+          mat-icon-button
+          (keydown.enter)="trapEnterKey($event)"
+          (click)="addCandidate()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </tr>
     </thead>
     <tbody cdkDropList (cdkDropListDropped)="rowDropMethod($event)">
-    <tr
-      cdkDrag
-      [cdkDragDisabled]="displayResults"
-      *ngFor="let row of tableData; let rowIndex = index"
-      class="table-row"
-    >
-      <!-- implement table header modification for row headers -->
-      <th
-        [ngClass]="
+      <tr
+        cdkDrag
+        [cdkDragDisabled]="displayResults"
+        *ngFor="let row of tableData; let rowIndex = index"
+        class="table-row"
+      >
+        <!-- implement table header modification for row headers -->
+        <th
+          [ngClass]="
             highlightedTableElementIdx.tableElement ===
               tableOperationConstants.rowHeader &&
             highlightedTableElementIdx.idx[0] === rowIndex
               ? 'highlight'
               : null
           "
-        [class.to-delete]="rowIndex === rowToDelete"
-        class="text-left relative"
-        *ngIf="
+          [class.to-delete]="rowIndex === rowToDelete"
+          class="text-left relative"
+          *ngIf="
             !(
               modifiedTableElementIdx.tableElement ===
                 tableOperationConstants.rowHeader &&
@@ -112,37 +113,37 @@
             );
             else headerRenameInputTemplate
           "
-        (mouseleave)="clearHighlightedTableElement()"
-        (mouseover)="
+          (mouseleave)="clearHighlightedTableElement()"
+          (mouseover)="
             highlightTableElement(tableOperationConstants.rowHeader, [rowIndex])
           "
-        (click)="
+          (click)="
             modifyTableElement(tableOperationConstants.rowHeader, [rowIndex])
           "
-      >
-        <div
-          *ngIf="
+        >
+          <div
+            *ngIf="
               highlightedTableElementIdx.tableElement ===
                 tableOperationConstants.rowHeader &&
               highlightedTableElementIdx.idx[0] === rowIndex
             "
-          (click)="rowColumnDeleteMethod($event)"
-          class="absolute left-[-25px] rounded-tl rounded-bl bg-red-500 hover:cursor-pointer"
-        >
-          <mat-icon>delete_forever</mat-icon>
-        </div>
-        {{ row.fieldName | titlecase }}
-      </th>
-      <td
-        [class.to-delete]="rowIndex === rowToDelete"
-        [ngClass]="
+            (click)="rowColumnDeleteMethod($event)"
+            class="absolute left-[-25px] rounded-tl rounded-bl bg-red-500 hover:cursor-pointer"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </div>
+          {{ row.fieldName | titlecase }}
+        </th>
+        <td
+          [class.to-delete]="rowIndex === rowToDelete"
+          [ngClass]="
             highlightedTableElementIdx.tableElement ===
               tableOperationConstants.fieldWeight &&
             highlightedTableElementIdx.idx[0] === rowIndex
               ? 'highlight'
               : null
           "
-        *ngIf="
+          *ngIf="
             !(
               modifiedTableElementIdx.tableElement ===
                 tableOperationConstants.fieldWeight &&
@@ -150,31 +151,31 @@
             );
             else tableDataUpdateInputTemplate
           "
-        (mouseleave)="clearHighlightedTableElement()"
-        (click)="
+          (mouseleave)="clearHighlightedTableElement()"
+          (click)="
             modifyTableElement(tableOperationConstants.fieldWeight, [rowIndex])
           "
-        class="text-center text-blue-600"
-      >
-        {{ row.fieldWeight }}
-      </td>
-      <ng-container
-        *ngFor="
+          class="text-center text-blue-600"
+        >
+          {{ row.fieldWeight }}
+        </td>
+        <ng-container
+          *ngFor="
             let item of row.fieldValues;
             let cellIdx = index;
             trackBy: trackByFn
           "
-      >
-        <td
-          [class.chosen-cell]="highestResultColumnIdx.includes(cellIdx)"
-          [class.to-delete]="
+        >
+          <td
+            [class.chosen-cell]="highestResultColumnIdx.includes(cellIdx)"
+            [class.to-delete]="
               columnToDelete === cellIdx || rowIndex === rowToDelete
             "
-          [class.highlight]="
+            [class.highlight]="
               highlightedTableElementIdx.idx[0] === rowIndex &&
               highlightedTableElementIdx.idx[1] === cellIdx
             "
-          *ngIf="
+            *ngIf="
               !(
                 modifiedTableElementIdx.tableElement ===
                   tableOperationConstants.cell &&
@@ -183,53 +184,55 @@
               );
               else tableDataUpdateInputTemplate
             "
-          class="text-blue-600 text-center w-20"
-          (mouseleave)="clearHighlightedTableElement()"
-          (click)="
+            class="text-blue-600 text-center w-20"
+            (mouseleave)="clearHighlightedTableElement()"
+            (click)="
               modifyTableElement(tableOperationConstants.cell, [
                 rowIndex,
                 cellIdx
               ])
             "
-        >
-          {{ item }}
-        </td>
-      </ng-container>
-    </tr>
+          >
+            {{ item }}
+          </td>
+        </ng-container>
+      </tr>
 
-    <tr *ngIf="displayResults">
-      <th colspan="2">{{ "results" | titlecase }}</th>
-      <td
-        [class.chosen-result-cell]="highestResultColumnIdx.includes(colIdx)"
-        class="text-center text-blue-600"
-        *ngFor="let column of columnData; let colIdx = index"
-      >
-        {{ column.result }}
-      </td>
-    </tr>
-    <tr *ngIf="!displayResults">
-      <th class="add-criterion" [colSpan]="columnData.length + 2">
-        <div class="button-container">
-          <button
-            id="add-criterion-btn"
-            (click)="addRow()"
-            mat-flat-button
-            class="opacity-40 hover:opacity-100 bg-green-600"
-          >
-            <mat-icon>add</mat-icon>
-            {{ "add criterion" | titlecase }}
-          </button>
-          <button
-            class="ml-4 opacity-50 hover:opacity-100"
-            mat-mini-fab
-            id="calculate-btn"
-            (click)="calculateResult()"
-          >
-            <mat-icon>calculate</mat-icon>
-          </button>
-        </div>
-      </th>
-    </tr>
+      <tr *ngIf="displayResults">
+        <th colspan="2">{{ "results" | titlecase }}</th>
+        <td
+          [class.chosen-result-cell]="highestResultColumnIdx.includes(colIdx)"
+          class="text-center text-blue-600"
+          *ngFor="let column of columnData; let colIdx = index"
+        >
+          {{ column.result }}
+        </td>
+      </tr>
+      <tr *ngIf="!displayResults">
+        <th class="add-criterion" [colSpan]="columnData.length + 2">
+          <div class="button-container">
+            <button
+              id="add-criterion-btn"
+              (click)="addRow()"
+              (keydown.enter)="trapEnterKey($event)"
+              mat-flat-button
+              class="opacity-40 hover:opacity-100 bg-green-600"
+            >
+              <mat-icon>add</mat-icon>
+              {{ "add criterion" | titlecase }}
+            </button>
+            <button
+              class="ml-4 opacity-50 hover:opacity-100"
+              mat-mini-fab
+              id="calculate-btn"
+              (keydown.enter)="trapEnterKey($event)"
+              (click)="calculateResult()"
+            >
+              <mat-icon>calculate</mat-icon>
+            </button>
+          </div>
+        </th>
+      </tr>
     </tbody>
     <tfoot></tfoot>
   </table>
