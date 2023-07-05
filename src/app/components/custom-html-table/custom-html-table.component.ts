@@ -1,15 +1,15 @@
 import DataLabelsPlugin from "chartjs-plugin-datalabels";
-import {BaseChartDirective} from "ng2-charts";
-import {ChartConfiguration, ChartData, ChartEvent, ChartType} from "chart.js";
-import {NgChartsModule} from "ng2-charts";
-import {MatDialog, MatDialogModule} from "@angular/material/dialog";
-import {Component, HostListener, OnInit, ViewChild} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {TableOperationConstants} from "src/app/models/enums";
-import {MatInput, MatInputModule} from "@angular/material/input";
-import {ConfirmDeletionComponent} from "../modals/confirm-deletion/confirm-deletion.component";
-import {MatButtonModule} from "@angular/material/button";
-import {MatIconModule} from "@angular/material/icon";
+import { BaseChartDirective } from "ng2-charts";
+import { ChartConfiguration, ChartData, ChartEvent, ChartType } from "chart.js";
+import { NgChartsModule } from "ng2-charts";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { TableOperationConstants } from "src/app/models/enums";
+import { MatInput, MatInputModule } from "@angular/material/input";
+import { ConfirmDeletionComponent } from "../modals/confirm-deletion/confirm-deletion.component";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 import {
   CdkDragDrop,
   DragDropModule,
@@ -20,29 +20,25 @@ import {
   TableData,
   TableRowData,
 } from "../../models/table-row-data.model";
-import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
-import {AssertArrayEqualityPipe} from "../../pipes/assert-array-equality.pipe";
-import {Observable, Subscription, timer} from "rxjs";
-import {Select, Store} from "@ngxs/store";
-import {TableActions} from "src/app/stores/actions/table.action";
-import {
-  Firestore,
-} from "@angular/fire/firestore";
-import {TableStateModel} from "src/app/stores/states/table.state";
-import {AuthStateModel} from "src/app/stores/states/auth.state";
-import {User} from "@angular/fire/auth";
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {Router} from "@angular/router";
-import {SaveTableDataComponent} from "../modals/save-table-data/save-table-data.component";
-import {DetermineRetrievedTableDataUIControlPipe} from "../../pipes/determine-retrieved-table-data-ui-control.pipe";
-import {AppReduxStateModel} from "../../models/app-redux-state.model";
-import {
-  CacheResultBeforeRedirectionComponent
-} from "../modals/cache-result-before-redirection/cache-result-before-redirection.component";
-import {VideoTutorialComponent} from "../modals/video-tutorial/video-tutorial.component";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
-import {ApplicationStateModel} from "../../stores/states/app.state";
-import {TableDataService} from "../../services/table-data.service";
+import { FormControl, ReactiveFormsModule, Validators } from "@angular/forms";
+import { AssertArrayEqualityPipe } from "../../pipes/assert-array-equality.pipe";
+import { Observable, Subscription, timer } from "rxjs";
+import { Select, Store } from "@ngxs/store";
+import { TableActions } from "src/app/stores/actions/table.action";
+import { Firestore } from "@angular/fire/firestore";
+import { TableStateModel } from "src/app/stores/states/table.state";
+import { AuthStateModel } from "src/app/stores/states/auth.state";
+import { User } from "@angular/fire/auth";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { Router } from "@angular/router";
+import { SaveTableDataComponent } from "../modals/save-table-data/save-table-data.component";
+import { DetermineRetrievedTableDataUIControlPipe } from "../../pipes/determine-retrieved-table-data-ui-control.pipe";
+import { AppReduxStateModel } from "../../models/app-redux-state.model";
+import { CacheResultBeforeRedirectionComponent } from "../modals/cache-result-before-redirection/cache-result-before-redirection.component";
+import { VideoTutorialComponent } from "../modals/video-tutorial/video-tutorial.component";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { ApplicationStateModel } from "../../stores/states/app.state";
+import { TableDataService } from "../../services/table-data.service";
 
 @Component({
   selector: "app-custom-html-table",
@@ -99,22 +95,20 @@ export class CustomHtmlTableComponent implements OnInit {
 
   // events
   public chartClicked({
-                        event,
-                        active,
-                      }: {
+    event,
+    active,
+  }: {
     event?: ChartEvent;
     active?: {}[];
-  }): void {
-  }
+  }): void {}
 
   public chartHovered({
-                        event,
-                        active,
-                      }: {
+    event,
+    active,
+  }: {
     event?: ChartEvent;
     active?: {}[];
-  }): void {
-  }
+  }): void {}
 
   public tableOperationConstants = TableOperationConstants;
   public columnToDelete!: number | null;
@@ -134,10 +128,8 @@ export class CustomHtmlTableComponent implements OnInit {
       state.user.currentUser
   )
   currentUser$!: Observable<User | null>;
-  @Select(
-    (state: AppReduxStateModel) =>
-      state.application
-  ) appState$!: Observable<ApplicationStateModel>;
+  @Select((state: AppReduxStateModel) => state.application)
+  appState$!: Observable<ApplicationStateModel>;
   appStateVal!: ApplicationStateModel;
   @Select(
     (state: { table: TableStateModel; user: AuthStateModel }) =>
@@ -154,8 +146,7 @@ export class CustomHtmlTableComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private tableDataService: TableDataService
-  ) {
-  }
+  ) {}
 
   public submitForm() {
     switch (this.modifiedTableElementIdx.tableElement) {
@@ -506,17 +497,17 @@ export class CustomHtmlTableComponent implements OnInit {
   public modifiedTableElementIdx: {
     tableElement: TableOperationConstants | null;
     idx: number[];
-  } = {tableElement: null, idx: []};
+  } = { tableElement: null, idx: [] };
   // * dictionary to indicate the table element that is currently being highlighted
   public highlightedTableElementIdx: {
     tableElement: TableOperationConstants | null;
     idx: number[];
-  } = {tableElement: null, idx: []};
+  } = { tableElement: null, idx: [] };
   // * dictionary to indicate the table element that is currently being highlighted
   public cachedHighlightedTableElementIdx: {
     tableElement: TableOperationConstants | null;
     idx: number[];
-  } = {tableElement: null, idx: []};
+  } = { tableElement: null, idx: [] };
 
   /*
     event handler when the user drag and drops to change the order of column headers
@@ -529,24 +520,28 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.tableDataService.clearTableSubject.subscribe(
-      clearTableCommand => {
-        if (clearTableCommand) {
-          this.restartTableState();
-        }
+    this.tableDataService.clearTableSubject.subscribe((clearTableCommand) => {
+      if (clearTableCommand) {
+        this.restartTableState();
       }
-    )
+    });
     this.appState$.subscribe((appState) => {
       this.appStateVal = appState;
-      if (appState.dismissTutorialPermanently || appState.dismissTutorialForSession) {
+      if (
+        appState.dismissTutorialPermanently ||
+        appState.dismissTutorialForSession
+      ) {
         return;
       } else {
-        if (appState.dismissTutorialPermanently === false && appState.dismissTutorialForSession === false) {
+        if (
+          appState.dismissTutorialPermanently === false &&
+          appState.dismissTutorialForSession === false
+        ) {
           // * user is anon
           this.displayTutorial();
         }
       }
-    })
+    });
     this.currentUser$.subscribe((user) => {
       this.currentUserVal = user;
     });
@@ -605,12 +600,12 @@ export class CustomHtmlTableComponent implements OnInit {
     if (value && this.tableDataUpdateFormControl.valid) {
       if (
         this.modifiedTableElementIdx.tableElement ===
-        TableOperationConstants.cell &&
+          TableOperationConstants.cell &&
         Array.isArray(this.modifiedTableElementIdx.idx)
       ) {
         this.tableData[this.modifiedTableElementIdx.idx[0]].fieldValues[
           this.modifiedTableElementIdx.idx[1]
-          ] = value;
+        ] = value;
       } else if (
         this.modifiedTableElementIdx.tableElement ===
         TableOperationConstants.fieldWeight
@@ -636,8 +631,8 @@ export class CustomHtmlTableComponent implements OnInit {
   */
   private seedTable() {
     if (this.columnData.length === 0) {
-      this.columnData.push({columnName: "Option 1", result: 0});
-      this.columnData.push({columnName: "Option 2", result: 0});
+      this.columnData.push({ columnName: "Option 1", result: 0 });
+      this.columnData.push({ columnName: "Option 2", result: 0 });
     }
     if (this.tableData.length === 0) {
       this.tableData.push({
@@ -666,7 +661,7 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public addCandidate(): void {
     this.clearHighlightedTableElement();
-    this.columnData.push({columnName: "new", result: 0});
+    this.columnData.push({ columnName: "new", result: 0 });
     this.tableData.forEach((tableData) => {
       tableData.fieldValues.push(null);
     });
@@ -701,7 +696,7 @@ export class CustomHtmlTableComponent implements OnInit {
       return;
     }
     this.clearHighlightedTableElement();
-    this.modifiedTableElementIdx = {tableElement, idx};
+    this.modifiedTableElementIdx = { tableElement, idx };
     // have to defer the action to the next loop otherwise the ViewChild will be undefined
     setTimeout(() => {
       this.headerRenamingInputComponent.focus();
@@ -726,7 +721,7 @@ export class CustomHtmlTableComponent implements OnInit {
       return;
     }
     // this should be good enough to add the highlight class to the table element
-    this.highlightedTableElementIdx = {tableElement, idx};
+    this.highlightedTableElementIdx = { tableElement, idx };
     // * cache the highlighted table element so that it can be reactivated
     this.cachedHighlightedTableElementIdx = this.highlightedTableElementIdx;
   }
@@ -761,7 +756,7 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public dismissDisplayMessage(time: number) {
     timer(time).subscribe(() => {
-      this.displayMessage = {status: "", message: ""};
+      this.displayMessage = { status: "", message: "" };
     });
   }
 
@@ -802,11 +797,11 @@ export class CustomHtmlTableComponent implements OnInit {
       message:
         this.highestResultColumnIdx.length > 1
           ? `According to the data you entered, the best options are ${this.highestResultColumnIdx
-            .map((idx) => this.columnData[idx].columnName)
-            .join(", ")}`
+              .map((idx) => this.columnData[idx].columnName)
+              .join(", ")}`
           : `According to the data you entered, the best option is ${
-            this.columnData[this.highestResultColumnIdx[0]].columnName
-          }`,
+              this.columnData[this.highestResultColumnIdx[0]].columnName
+            }`,
     };
   }
 
@@ -878,11 +873,11 @@ export class CustomHtmlTableComponent implements OnInit {
   }
 
   public resetHighlightedTableElement(): void {
-    this.highlightedTableElementIdx = {tableElement: null, idx: []};
+    this.highlightedTableElementIdx = { tableElement: null, idx: [] };
   }
 
   public resetModifiedTableElement(): void {
-    this.modifiedTableElementIdx = {tableElement: null, idx: []};
+    this.modifiedTableElementIdx = { tableElement: null, idx: [] };
   }
 
   public resetColumnData(): void {
@@ -964,5 +959,11 @@ export class CustomHtmlTableComponent implements OnInit {
 
   public sendClearTableCommand() {
     this.tableDataService.clearTable();
+  }
+
+  public trapEnterKey(event: Event) {
+    if (this.highlightedTableElementIdx.tableElement !== null) {
+      event.preventDefault();
+    }
   }
 }
