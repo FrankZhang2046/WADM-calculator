@@ -24,22 +24,16 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideHttpClient(),
     importProvidersFrom(
-      NgxsModule.forRoot([TableState, AuthState, ApplicationState])
-    ),
-    importProvidersFrom(NgxsReduxDevtoolsPluginModule.forRoot()),
-    importProvidersFrom(
-      provideFirebaseApp(() => initializeApp(firebaseConfig))
-    ),
-    importProvidersFrom(
+      NgxsModule.forRoot([TableState, AuthState, ApplicationState]),
+      NgxsReduxDevtoolsPluginModule.forRoot(),
+      provideFirebaseApp(() => initializeApp(firebaseConfig)),
       provideFirestore(() => {
         const firestore = getFirestore();
         if (!environment.production) {
           connectFirestoreEmulator(firestore, "localhost", 8080);
         }
         return firestore;
-      })
-    ),
-    importProvidersFrom(
+      }),
       provideAuth(() => {
         const auth = getAuth();
         if (!environment.production) {
