@@ -17,6 +17,11 @@ import { AuthState } from "./stores/states/auth.state";
 import { environment } from "../environments/environment";
 import { HttpClientModule, provideHttpClient } from "@angular/common/http";
 import { ApplicationState } from "./stores/states/app.state";
+import {
+  connectStorageEmulator,
+  getStorage,
+  provideStorage,
+} from "@angular/fire/storage";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +32,13 @@ export const appConfig: ApplicationConfig = {
       NgxsModule.forRoot([TableState, AuthState, ApplicationState]),
       NgxsReduxDevtoolsPluginModule.forRoot(),
       provideFirebaseApp(() => initializeApp(firebaseConfig)),
+      provideStorage(() => {
+        const firebaseStorage = getStorage();
+        if (!environment.production) {
+          connectStorageEmulator(firebaseStorage, "localhost", 9199);
+        }
+        return firebaseStorage;
+      }),
       provideFirestore(() => {
         const firestore = getFirestore();
         if (!environment.production) {
