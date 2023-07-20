@@ -1,0 +1,5 @@
+<div class="text-black">
+  <input type="file" (change)="showPreview($event)" />
+  <button (click)="onUpload()">upload to storage</button>
+  <img [src]="selectedImage" *ngIf="selectedImage" alt="" />
+</div>
