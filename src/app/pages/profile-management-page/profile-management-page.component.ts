@@ -1,7 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
-import { ref, Storage, uploadBytesResumable } from "@angular/fire/storage";
+import {
+  ref,
+  Storage,
+  uploadBytes,
+  uploadBytesResumable,
+} from "@angular/fire/storage";
 import { finalize, Observable } from "rxjs";
 import { Select } from "@ngxs/store";
 import { AppReduxStateModel } from "../../models/app-redux-state.model";
@@ -46,8 +51,26 @@ export class ProfileManagementPageComponent implements OnInit {
       this.storage,
       `images/${this.currentUserVal.uid}/profile-image`
     );
-    uploadBytesResumable(storageRef, this.selectedImage).then((snapshot) => {
-      console.log(snapshot);
+    uploadBytesResumable(storageRef, this.dataURItoBlob(this.selectedImage), {
+      contentType: "image/png",
+    });
+  }
+
+  public dataURItoBlob(dataURI: any) {
+    if (typeof dataURI !== "string") {
+      throw new Error("Invalid argument: dataURI must be a string");
+    }
+    dataURI = dataURI.split(",");
+    var type = dataURI[0].split(":")[1].split(";")[0],
+      byteString = atob(dataURI[1]),
+      byteStringLength = byteString.length,
+      arrayBuffer = new ArrayBuffer(byteStringLength),
+      intArray = new Uint8Array(arrayBuffer);
+    for (var i = 0; i < byteStringLength; i++) {
+      intArray[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([intArray], {
+      type: type,
     });
   }
 }
