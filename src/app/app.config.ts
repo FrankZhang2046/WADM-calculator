@@ -22,6 +22,11 @@ import {
   getStorage,
   provideStorage,
 } from "@angular/fire/storage";
+import {
+  connectFunctionsEmulator,
+  getFunctions,
+  provideFunctions,
+} from "@angular/fire/functions";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -32,6 +37,13 @@ export const appConfig: ApplicationConfig = {
       NgxsModule.forRoot([TableState, AuthState, ApplicationState]),
       NgxsReduxDevtoolsPluginModule.forRoot(),
       provideFirebaseApp(() => initializeApp(firebaseConfig)),
+      provideFunctions(() => {
+        const functions = getFunctions();
+        if (!environment.production) {
+          connectFunctionsEmulator(functions, "localhost", 5001);
+        }
+        return functions;
+      }),
       provideStorage(() => {
         const firebaseStorage = getStorage();
         if (!environment.production) {
