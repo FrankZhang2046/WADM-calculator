@@ -1,5 +1,20 @@
 <div class="text-black">
-  <input type="file" (change)="showPreview($event)" />
+  <input type="file" (change)="fileChangeEvent($event)" />
   <button (click)="onUpload()">upload to storage</button>
-  <img [src]="selectedImage" *ngIf="selectedImage" alt="" />
+  <img [src]="selectedImage" class="w-[200px]" *ngIf="selectedImage" alt="" />
+
+  <div>
+    image cropper
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+    >
+    </image-cropper>
+    <img [src]="croppedImage" alt="" />
+  </div>
 </div>

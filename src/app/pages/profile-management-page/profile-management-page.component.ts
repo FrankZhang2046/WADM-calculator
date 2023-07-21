@@ -11,11 +11,12 @@ import { finalize, Observable } from "rxjs";
 import { Select } from "@ngxs/store";
 import { AppReduxStateModel } from "../../models/app-redux-state.model";
 import { User } from "@angular/fire/auth";
+import { ImageCroppedEvent, ImageCropperModule } from "ngx-image-cropper";
 
 @Component({
   selector: "app-profile-management-page",
   standalone: true,
-  imports: [CommonModule, MatInputModule],
+  imports: [CommonModule, MatInputModule, ImageCropperModule],
   templateUrl: "./profile-management-page.component.html",
   styleUrls: ["./profile-management-page.component.scss"],
 })
@@ -24,6 +25,8 @@ export class ProfileManagementPageComponent implements OnInit {
   @Select((state: AppReduxStateModel) => state.user.currentUser)
   currentUser$!: Observable<User>;
   public currentUserVal!: User;
+  imageChangedEvent: any = "";
+  croppedImage: any = "";
 
   constructor(private storage: Storage) {}
 
@@ -72,5 +75,19 @@ export class ProfileManagementPageComponent implements OnInit {
     return new Blob([intArray], {
       type: type,
     });
+  }
+
+  imageCropped($event: ImageCroppedEvent) {
+    this.croppedImage = $event.base64;
+  }
+
+  imageLoaded() {}
+
+  cropperReady() {}
+
+  loadImageFailed() {}
+
+  fileChangeEvent($event: Event) {
+    this.imageChangedEvent = $event;
   }
 }
