@@ -12,6 +12,7 @@ import { routes } from "./app.routes";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { NgxsModule } from "@ngxs/store";
 import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
+import { ImageCropperModule } from "ngx-image-cropper";
 import { TableState } from "./stores/states/table.state";
 import { AuthState } from "./stores/states/auth.state";
 import { environment } from "../environments/environment";
@@ -34,6 +35,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideHttpClient(),
     importProvidersFrom(
+      ImageCropperModule,
       NgxsModule.forRoot([TableState, AuthState, ApplicationState]),
       NgxsReduxDevtoolsPluginModule.forRoot(),
       provideFirebaseApp(() => initializeApp(firebaseConfig)),
