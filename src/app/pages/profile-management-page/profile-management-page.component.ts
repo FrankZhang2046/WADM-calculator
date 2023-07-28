@@ -12,6 +12,7 @@ import { Select } from "@ngxs/store";
 import { AppReduxStateModel } from "../../models/app-redux-state.model";
 import { User } from "@angular/fire/auth";
 import { ImageCroppedEvent, ImageCropperModule } from "ngx-image-cropper";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "app-profile-management-page",
@@ -28,7 +29,7 @@ export class ProfileManagementPageComponent implements OnInit {
   imageChangedEvent: any = "";
   croppedImage: any = "";
 
-  constructor(private storage: Storage) {}
+  constructor(private storage: Storage, private sanitizer: DomSanitizer) {}
 
   showPreview(event: any) {
     if (event.target.files && event.target.files[0]) {
@@ -78,7 +79,9 @@ export class ProfileManagementPageComponent implements OnInit {
   }
 
   imageCropped($event: ImageCroppedEvent) {
-    this.croppedImage = $event.base64;
+    this.croppedImage = this.sanitizer.bypassSecurityTrustResourceUrl(
+      $event.objectUrl!
+    );
   }
 
   imageLoaded() {}
