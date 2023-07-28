@@ -13,11 +13,12 @@ import { AppReduxStateModel } from "../../models/app-redux-state.model";
 import { User } from "@angular/fire/auth";
 import { ImageCroppedEvent, ImageCropperModule } from "ngx-image-cropper";
 import { DomSanitizer } from "@angular/platform-browser";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
   selector: "app-profile-management-page",
   standalone: true,
-  imports: [CommonModule, MatInputModule, ImageCropperModule],
+  imports: [CommonModule, MatInputModule, ImageCropperModule, MatButtonModule],
   templateUrl: "./profile-management-page.component.html",
   styleUrls: ["./profile-management-page.component.scss"],
 })

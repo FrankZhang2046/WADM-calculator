@@ -1,10 +1,16 @@
-<div class="text-black">
-  <input type="file" (change)="fileChangeEvent($event)" />
-  <button (click)="onUpload()">upload to storage</button>
-  <img [src]="selectedImage" class="w-[200px]" *ngIf="selectedImage" alt="" />
+<div class="text-black flex flex-col w-[60%] align-center">
+  <div class="flex">
+    <input type="file" (change)="fileChangeEvent($event)" />
+    <button mat-flat-button (click)="onUpload()">upload to storage</button>
+    <!--    <img-->
+    <!--      [src]="selectedImage"-->
+    <!--      class="border-red-600"-->
+    <!--      *ngIf="selectedImage"-->
+    <!--      alt=""-->
+    <!--    />-->
+  </div>
 
-  <div>
-    image cropper
+  <div class="flex">
     <image-cropper
       [imageChangedEvent]="imageChangedEvent"
       [maintainAspectRatio]="true"
