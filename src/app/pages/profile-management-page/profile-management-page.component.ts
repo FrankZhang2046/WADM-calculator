@@ -16,6 +16,8 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { UploadProfileImageComponent } from "../../components/modals/upload-profile-image/upload-profile-image.component";
 
 @Component({
   selector: "app-profile-management-page",
@@ -23,7 +25,6 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
   imports: [
     CommonModule,
     MatInputModule,
-    ImageCropperModule,
     MatButtonModule,
     MatTooltipModule,
     ReactiveFormsModule,
@@ -32,27 +33,27 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
   styleUrls: ["./profile-management-page.component.scss"],
 })
 export class ProfileManagementPageComponent implements OnInit {
-  public selectedImage: any;
   @Select((state: AppReduxStateModel) => state.user.currentUser)
   currentUser$!: Observable<User>;
   public currentUserVal!: User;
-  imageChangedEvent: any = "";
-  croppedImage: any = "";
-  croppedImageContentType!: string;
   public userDisplayName = new FormControl<string>("");
 
-  constructor(private storage: Storage, private sanitizer: DomSanitizer) {}
+  constructor(
+    private storage: Storage,
+    private sanitizer: DomSanitizer,
+    private matDialog: MatDialog
+  ) {}
 
-  showPreview(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => (this.selectedImage = e.target.result);
-      reader.readAsDataURL(event.target.files[0]);
-      this.selectedImage = event.target.files[0];
-    } else {
-      this.selectedImage = null;
-    }
-  }
+  // showPreview(event: any) {
+  //   if (event.target.files && event.target.files[0]) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e: any) => (this.selectedImage = e.target.result);
+  //     reader.readAsDataURL(event.target.files[0]);
+  //     this.selectedImage = event.target.files[0];
+  //   } else {
+  //     this.selectedImage = null;
+  //   }
+  // }
 
   public ngOnInit(): void {
     this.currentUser$.subscribe((user) => {
@@ -60,34 +61,6 @@ export class ProfileManagementPageComponent implements OnInit {
         this.currentUserVal = user;
         this.userDisplayName.setValue(this.currentUserVal.displayName);
       }
-    });
-  }
-
-  onUpload() {
-    const storageRef = ref(
-      this.storage,
-      `images/${this.currentUserVal.uid}/profile-image`
-    );
-    uploadBytesResumable(storageRef, this.dataURItoBlob(this.selectedImage), {
-      contentType: "image/png",
-    });
-  }
-
-  public dataURItoBlob(dataURI: any) {
-    if (typeof dataURI !== "string") {
-      throw new Error("Invalid argument: dataURI must be a string");
-    }
-    dataURI = dataURI.split(",");
-    var type = dataURI[0].split(":")[1].split(";")[0],
-      byteString = atob(dataURI[1]),
-      byteStringLength = byteString.length,
-      arrayBuffer = new ArrayBuffer(byteStringLength),
-      intArray = new Uint8Array(arrayBuffer);
-    for (var i = 0; i < byteStringLength; i++) {
-      intArray[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([intArray], {
-      type: type,
     });
   }
 
@@ -105,20 +78,10 @@ export class ProfileManagementPageComponent implements OnInit {
     }
   }
 
-  imageCropped($event: ImageCroppedEvent) {
-    this.croppedImage = this.sanitizer.bypassSecurityTrustResourceUrl(
-      $event.objectUrl!
-    );
-    this.croppedImageContentType = $event.blob!.type;
-  }
-
-  imageLoaded() {}
-
-  cropperReady() {}
-
-  loadImageFailed() {}
-
-  fileChangeEvent($event: Event) {
-    this.imageChangedEvent = $event;
+  public uploadProfileImage() {
+    this.matDialog.open(UploadProfileImageComponent, {
+      width: "600px",
+      height: "fit-content",
+    });
   }
 }

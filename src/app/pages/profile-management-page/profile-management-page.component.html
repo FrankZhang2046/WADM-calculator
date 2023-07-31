@@ -5,6 +5,7 @@
     <div class="flex items-center justify-between">
       <div class="font-extrabold text-lg">Edit Profile</div>
       <img
+        (click)="uploadProfileImage()"
         matTooltip="click to upload new profile image"
         class="object-cover h-14 rounded-full hover:cursor-pointer"
         src="assets/images/anon-profile-pic.jpeg"
@@ -31,23 +32,4 @@
       </button>
     </div>
   </div>
-  <!--  <div class="flex">-->
-  <!--    <input type="file" (change)="fileChangeEvent($event)" />-->
-  <!--    <button mat-flat-button (click)="onUpload()">upload to storage</button>-->
-  <!--  </div>-->
-
-  <!--  <div>-->
-  <!--    <image-cropper-->
-  <!--      style="width: 500px; height: 500px"-->
-  <!--      [imageChangedEvent]="imageChangedEvent"-->
-  <!--      [maintainAspectRatio]="true"-->
-  <!--      [aspectRatio]="1"-->
-  <!--      (imageCropped)="imageCropped($event)"-->
-  <!--      (imageLoaded)="imageLoaded()"-->
-  <!--      (cropperReady)="cropperReady()"-->
-  <!--      (loadImageFailed)="loadImageFailed()"-->
-  <!--    >-->
-  <!--    </image-cropper>-->
-  <!--    <img style="height: 400px" [src]="croppedImage" alt="" />-->
-  <!--  </div>-->
 </div>
