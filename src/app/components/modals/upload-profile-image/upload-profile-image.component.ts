@@ -7,8 +7,9 @@ import { ref, Storage, uploadBytesResumable } from "@angular/fire/storage";
 import { Select } from "@ngxs/store";
 import { AppReduxStateModel } from "../../../models/app-redux-state.model";
 import { Observable } from "rxjs";
-import { User } from "@angular/fire/auth";
+import { updateProfile, User } from "@angular/fire/auth";
 import { MatDialogRef } from "@angular/material/dialog";
+import { getDownloadURL } from "@angular/fire/storage";
 
 @Component({
   selector: "app-upload-profile-image",
@@ -49,10 +50,18 @@ export class UploadProfileImageComponent {
 
     uploadBytesResumable(storageRef, blobImage, {
       contentType: this.croppedImageContentType,
-    }).then((res) => {
-      console.log(`res is: `, res);
-      this.matDialogRef.close();
-    });
+    })
+      .then((res) => {
+        console.log(`res is: `, res);
+        return getDownloadURL(storageRef);
+      })
+      .then((url) => {
+        console.log(`download url is: `, url);
+        return updateProfile(this.currentUserVal, { photoURL: url as string });
+      })
+      .then((res) => {
+        this.matDialogRef.close();
+      });
   }
 
   public dataURItoBlob(dataURI: any) {
