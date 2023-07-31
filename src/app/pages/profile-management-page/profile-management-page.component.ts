@@ -29,6 +29,7 @@ export class ProfileManagementPageComponent implements OnInit {
   public currentUserVal!: User;
   imageChangedEvent: any = "";
   croppedImage: any = "";
+  croppedImageBlob!: Blob;
 
   constructor(private storage: Storage, private sanitizer: DomSanitizer) {}
 
@@ -83,6 +84,7 @@ export class ProfileManagementPageComponent implements OnInit {
     this.croppedImage = this.sanitizer.bypassSecurityTrustResourceUrl(
       $event.objectUrl!
     );
+    this.croppedImageBlob = $event.blob!;
   }
 
   imageLoaded() {}
