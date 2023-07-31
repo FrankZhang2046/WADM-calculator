@@ -10,11 +10,12 @@ import {
 import { finalize, Observable } from "rxjs";
 import { Select } from "@ngxs/store";
 import { AppReduxStateModel } from "../../models/app-redux-state.model";
-import { User } from "@angular/fire/auth";
+import { updateProfile, User } from "@angular/fire/auth";
 import { ImageCroppedEvent, ImageCropperModule } from "ngx-image-cropper";
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 
 @Component({
   selector: "app-profile-management-page",
@@ -25,6 +26,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     ImageCropperModule,
     MatButtonModule,
     MatTooltipModule,
+    ReactiveFormsModule,
   ],
   templateUrl: "./profile-management-page.component.html",
   styleUrls: ["./profile-management-page.component.scss"],
@@ -37,6 +39,7 @@ export class ProfileManagementPageComponent implements OnInit {
   imageChangedEvent: any = "";
   croppedImage: any = "";
   croppedImageContentType!: string;
+  public userDisplayName = new FormControl<string>("");
 
   constructor(private storage: Storage, private sanitizer: DomSanitizer) {}
 
@@ -55,6 +58,7 @@ export class ProfileManagementPageComponent implements OnInit {
     this.currentUser$.subscribe((user) => {
       if (user) {
         this.currentUserVal = user;
+        this.userDisplayName.setValue(this.currentUserVal.displayName);
       }
     });
   }
@@ -85,6 +89,20 @@ export class ProfileManagementPageComponent implements OnInit {
     return new Blob([intArray], {
       type: type,
     });
+  }
+
+  /**
+   * method to update authenticated user's display name
+   */
+  public updateDisplayName() {
+    if (
+      this.userDisplayName.value &&
+      this.userDisplayName.value !== this.currentUserVal.displayName
+    ) {
+      updateProfile(this.currentUserVal, {
+        displayName: this.userDisplayName.value,
+      }).then((result) => console.log(`display name update result: `, result));
+    }
   }
 
   imageCropped($event: ImageCroppedEvent) {
