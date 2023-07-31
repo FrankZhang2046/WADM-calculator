@@ -14,11 +14,18 @@ import { User } from "@angular/fire/auth";
 import { ImageCroppedEvent, ImageCropperModule } from "ngx-image-cropper";
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatButtonModule } from "@angular/material/button";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @Component({
   selector: "app-profile-management-page",
   standalone: true,
-  imports: [CommonModule, MatInputModule, ImageCropperModule, MatButtonModule],
+  imports: [
+    CommonModule,
+    MatInputModule,
+    ImageCropperModule,
+    MatButtonModule,
+    MatTooltipModule,
+  ],
   templateUrl: "./profile-management-page.component.html",
   styleUrls: ["./profile-management-page.component.scss"],
 })
