@@ -1,0 +1,22 @@
+<div class="text-black bg-white p-4 flex flex-col align-center">
+  <div class="flex">
+    <input type="file" (change)="fileChangeEvent($event)" />
+  </div>
+
+  <div class="flex items-center justify-center">
+    <image-cropper
+      style="width: 400px; height: 400px"
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+    >
+    </image-cropper>
+  </div>
+  <button mat-flat-button (click)="onUpload()" color="primary">
+    {{ "upload to storage" | titlecase }}
+  </button>
+</div>

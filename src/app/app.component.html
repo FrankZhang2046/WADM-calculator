@@ -37,7 +37,11 @@
     >
       <img
         class="object-cover h-full rounded-full"
-        src="assets/images/anon-profile-pic.jpeg"
+        [src]="
+          currentUserVal?.photoURL !== null
+            ? currentUserVal?.photoURL
+            : 'assets/images/anon-profile-pic.jpeg'
+        "
         alt=""
       />
     </div>

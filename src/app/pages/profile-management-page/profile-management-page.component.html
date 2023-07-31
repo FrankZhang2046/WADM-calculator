@@ -1,26 +1,39 @@
-<div class="text-black flex flex-col w-[60%] align-center">
-  <div class="flex">
-    <input type="file" (change)="fileChangeEvent($event)" />
-    <button mat-flat-button (click)="onUpload()">upload to storage</button>
-    <!--    <img-->
-    <!--      [src]="selectedImage"-->
-    <!--      class="border-red-600"-->
-    <!--      *ngIf="selectedImage"-->
-    <!--      alt=""-->
-    <!--    />-->
-  </div>
-
-  <div class="flex">
-    <image-cropper
-      [imageChangedEvent]="imageChangedEvent"
-      [maintainAspectRatio]="true"
-      [aspectRatio]="1"
-      (imageCropped)="imageCropped($event)"
-      (imageLoaded)="imageLoaded()"
-      (cropperReady)="cropperReady()"
-      (loadImageFailed)="loadImageFailed()"
-    >
-    </image-cropper>
-    <img [src]="croppedImage" alt="" />
+<div class="text-black flex w-full justify-center">
+  <div
+    class="flex flex-col self-center w-80 mt-4 bg-emerald-300 rounded-lg min-h-fit p-4"
+  >
+    <div class="flex items-center justify-between">
+      <div class="font-extrabold text-lg">Edit Profile</div>
+      <img
+        (click)="uploadProfileImage()"
+        matTooltip="click to upload new profile image"
+        class="object-cover h-14 rounded-full hover:cursor-pointer"
+        [src]="
+          currentUserVal?.photoURL !== null
+            ? currentUserVal.photoURL
+            : 'assets/images/anon-profile-pic.jpeg'
+        "
+        alt=""
+      />
+    </div>
+    <div class="flex justify-between">
+      <div>
+        <div class="font-bold">Display Name</div>
+        <input
+          [formControl]="userDisplayName"
+          matInput
+          type="text"
+          class="h-8 mb-.5 pl-1"
+        />
+      </div>
+      <button
+        mat-flat-button
+        color="primary"
+        class="self-end"
+        (click)="updateDisplayName()"
+      >
+        Update
+      </button>
+    </div>
   </div>
 </div>
