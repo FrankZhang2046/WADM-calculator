@@ -5,7 +5,10 @@
 
   <div class="flex items-center justify-center">
     <image-cropper
-      style="width: 400px; height: 400px"
+      [ngStyle]="{
+        width: imageWidth,
+        height: imageHeight
+      }"
       [imageChangedEvent]="imageChangedEvent"
       [maintainAspectRatio]="true"
       [aspectRatio]="1"
@@ -16,7 +19,12 @@
     >
     </image-cropper>
   </div>
-  <button mat-flat-button (click)="onUpload()" color="primary">
+  <button
+    [disabled]="!croppedImage"
+    mat-flat-button
+    (click)="onUpload()"
+    color="primary"
+  >
     {{ "upload to storage" | titlecase }}
   </button>
 </div>
