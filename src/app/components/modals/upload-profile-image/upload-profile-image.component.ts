@@ -95,5 +95,15 @@ export class UploadProfileImageComponent {
 
   fileChangeEvent($event: Event) {
     this.imageChangedEvent = $event;
+    let file: any;
+    let reader = new FileReader();
+    reader.onloadstart = function (e) {
+      console.log("onloadstart fired");
+    };
+
+    file = ($event.target as HTMLInputElement).files![0];
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   }
 }
