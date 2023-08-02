@@ -23,6 +23,8 @@ export class UploadProfileImageComponent {
   currentUser$!: Observable<User>;
   public currentUserVal!: User;
   public selectedImage: any;
+  public imageWidth!: string;
+  public imageHeight!: string;
   imageChangedEvent: any = "";
   croppedImage: any = "";
   croppedImageContentType!: string;
@@ -99,6 +101,14 @@ export class UploadProfileImageComponent {
     let reader = new FileReader();
     reader.onloadstart = function (e) {
       console.log("onloadstart fired");
+    };
+    reader.onloadend = (e) => {
+      let img = new Image();
+      img.onload = () => {
+        this.imageWidth = "400px";
+        this.imageHeight = (400 / img.width) * img.height + "px";
+      };
+      img.src = reader.result as string;
     };
 
     file = ($event.target as HTMLInputElement).files![0];

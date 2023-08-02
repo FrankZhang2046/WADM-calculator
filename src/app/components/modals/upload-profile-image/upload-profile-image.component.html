@@ -5,7 +5,10 @@
 
   <div class="flex items-center justify-center">
     <image-cropper
-      style="width: 400px; height: 400px"
+      [ngStyle]="{
+        width: imageWidth,
+        height: imageHeight
+      }"
       [imageChangedEvent]="imageChangedEvent"
       [maintainAspectRatio]="true"
       [aspectRatio]="1"
