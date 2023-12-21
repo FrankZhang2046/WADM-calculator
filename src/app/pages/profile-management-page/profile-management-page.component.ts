@@ -1,12 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
-import {
-  ref,
-  Storage,
-  uploadBytes,
-  uploadBytesResumable,
-} from "@angular/fire/storage";
+import { Storage } from "@angular/fire/storage";
 import { finalize, Observable } from "rxjs";
 import { Select } from "@ngxs/store";
 import { AppReduxStateModel } from "../../models/app-redux-state.model";

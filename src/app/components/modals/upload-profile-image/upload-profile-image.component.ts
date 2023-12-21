@@ -3,13 +3,17 @@ import { CommonModule } from "@angular/common";
 import { ImageCroppedEvent, ImageCropperModule } from "ngx-image-cropper";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { MatButtonModule } from "@angular/material/button";
-import { ref, Storage, uploadBytesResumable } from "@angular/fire/storage";
+import {
+  ref,
+  Storage,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "@angular/fire/storage";
 import { Select } from "@ngxs/store";
 import { AppReduxStateModel } from "../../../models/app-redux-state.model";
 import { Observable } from "rxjs";
 import { updateProfile, User } from "@angular/fire/auth";
 import { MatDialogRef } from "@angular/material/dialog";
-import { getDownloadURL } from "@angular/fire/storage";
 
 @Component({
   selector: "app-upload-profile-image",
